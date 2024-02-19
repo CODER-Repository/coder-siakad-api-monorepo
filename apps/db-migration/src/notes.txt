@@ -1,0 +1,15 @@
+Notes
+- Report Evaluation Lecturer -> Primary Key == "ELR-123"
+			     -> Table Name  == "Report Evaluation Lecturer"
+- Report Category -> Dibuat enum saja
+
+- Class -> Primary Key == "CL-1"
+	-> Ruang kelas nya belum ada
+	-> Kolom schedule untuk apa?
+
+- Admin -> admin_name ganti full_name
+
+- Student -> tambahkan kolom email supaya kalau select tidak perlu join atau user_id diganti email
+
+- Semester -> Primary Key dibuat prefix contoh semester ganjil 2022 == "2022A"
+					       semester genap 2022 == "2022B"
