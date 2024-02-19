@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    container_name: siakad-db
+    shm_size: 256MB
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "6432:5432"
+    volumes:
+      - postgres_siakad_data:/var/lib/postgresql/data
+    networks:
+        - siakad-network
+  redis:
+    image: redis:6
+    container_name: siakad-redis
+    ports:
+      - "7379:6379"
+    networks:
+        - siakad-network
+
+networks:
+  siakad-network:
+    external: true

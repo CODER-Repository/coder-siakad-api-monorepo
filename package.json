@@ -8,12 +8,27 @@
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "prepare": "husky",
         "precommit": "lint-staged",
-        "validate-commit-msg": "node ./packages/siakad.commit-validator/validate-commit.js"
+        "commitmsg": "husky-run .husky/commit-msg"
     },
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+            "commit-msg": "npm run commitmsg"
+        }
+    },
+    "commitlint": {
+        "rules": {
+            "references-empty": [
+                2,
+                "never"
+            ]
+        },
+        "parserPreset": {
+            "parserOpts": {
+                "issuePrefixes": [
+                    "CSK-"
+                ]
+            }
         }
     },
     "lint-staged": {
