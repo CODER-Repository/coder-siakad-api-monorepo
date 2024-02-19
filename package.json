@@ -16,21 +16,6 @@
             "commit-msg": "npm run commitmsg"
         }
     },
-    "commitlint": {
-        "rules": {
-            "references-empty": [
-                2,
-                "never"
-            ]
-        },
-        "parserPreset": {
-            "parserOpts": {
-                "issuePrefixes": [
-                    "CSK-"
-                ]
-            }
-        }
-    },
     "lint-staged": {
         "*.ts": [
             "tsc --noEmit",
@@ -44,8 +29,12 @@
     "devDependencies": {
         "@commitlint/cli": "^18.6.1",
         "@commitlint/config-conventional": "^18.6.2",
+        "@dwmt/commitlint-config-jira-type": "^2.0.0",
+        "@dwmt/commitlint-plugin-jira-type": "^2.0.0",
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
+        "commitlint-config-jira": "^1.6.4",
+        "commitlint-plugin-jira-rules": "^1.6.4",
         "dotenv-cli": "^7.3.0",
         "husky": "^9.0.11",
         "lint-staged": "^15.2.2",
