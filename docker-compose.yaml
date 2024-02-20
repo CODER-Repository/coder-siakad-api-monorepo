@@ -2,13 +2,14 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:12
+    image: postgres:13
     restart: always
     container_name: siakad-db
     shm_size: 256MB
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: coder-siakad
     ports:
       - "6432:5432"
     volumes:
