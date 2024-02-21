@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS student (
     birth_date DATE NOT NULL,
     address_id VARCHAR(10) NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
-    user_id UUID NOT NULL,
-    CONSTRAINT check_email_format CHECK (email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+    user_id UUID NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS student_nim_email_fullname_idx ON student (nim, email, full_name);

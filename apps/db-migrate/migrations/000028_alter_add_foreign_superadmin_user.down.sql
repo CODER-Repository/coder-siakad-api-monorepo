@@ -1,0 +1,1 @@
+ALTER TABLE super_admin DROP CONSTRAINT IF EXISTS fk_superadmin_user;

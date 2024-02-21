@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
   postgres:
@@ -10,20 +10,41 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: coder-siakad
+    healthcheck:
+      test: pg_isready -U postgres -d postgres
+      interval: 10s
+      timeout: 3s
+      retries: 5
     ports:
       - "6432:5432"
     volumes:
-      - postgres_siakad_data:/var/lib/postgresql/data
+      - postgres_siakad:/var/lib/postgresql/data
     networks:
-        - siakad-network
+      - siakad-network
+
+  migrate:
+    build:
+      context: apps/db-migrate
+      dockerfile: Dockerfile
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
+
   redis:
     image: redis:6
     container_name: siakad-redis
     ports:
       - "7379:6379"
     networks:
-        - siakad-network
+      - siakad-network
+
+volumes:
+  postgres_siakad:
 
 networks:
   siakad-network:
-    external: true

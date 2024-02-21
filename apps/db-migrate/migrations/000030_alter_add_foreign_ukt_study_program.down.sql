@@ -1,0 +1,1 @@
+ALTER TABLE ukt DROP CONSTRAINT IF EXISTS fk_ukt_study_program;

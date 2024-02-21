@@ -1,0 +1,1 @@
+ALTER TABLE administrator DROP CONSTRAINT IF EXISTS fk_administrator_user_id;

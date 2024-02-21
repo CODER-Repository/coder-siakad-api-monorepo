@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS announcement (
     content TEXT NOT NULL,
     type announcement_type DEFAULT 'event'::announcement_type,
     priority INT DEFAULT 1,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
