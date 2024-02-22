@@ -1,6 +1,16 @@
 version: '3.3'
 
 services:
+  sample-service:
+    build:
+      context: .
+      dockerfile: ./apps/sample-service/Dockerfile
+    container_name: sample-service
+    ports:
+      - "5000:5000"
+    networks:
+      - siakad-network
+
   postgres:
     image: postgres:13
     restart: always
