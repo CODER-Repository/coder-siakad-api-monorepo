@@ -48,5 +48,8 @@
     "workspaces": [
         "apps/*",
         "packages/*"
-    ]
+    ],
+    "dependencies": {
+        "@siakad/express.lib-shared": "^1.0.0"
+    }
 }
