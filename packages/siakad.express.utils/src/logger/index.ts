@@ -1,2 +1,2 @@
-export { Logger } from './logger';
 export { HttpLogger } from './http-logger';
+export { Logger } from './logger';

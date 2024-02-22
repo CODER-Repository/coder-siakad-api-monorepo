@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 // This all come from shared packages inside the folder packages in root dir
-import { Logger, HttpLogger } from '@siakad/express.lib-shared';
+import { HttpLogger, Logger } from '@siakad/express.utils';
 
 const app: Express = express();
 const port = 5000;

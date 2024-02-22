@@ -44,12 +44,9 @@
     "engines": {
         "node": ">=18"
     },
-    "packageManager": "npm@9.5.1",
+    "packageManager": "npm@10.2.3",
     "workspaces": [
         "apps/*",
         "packages/*"
-    ],
-    "dependencies": {
-        "@siakad/express.lib-shared": "^1.0.0"
-    }
+    ]
 }

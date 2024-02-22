@@ -3,8 +3,8 @@ version: '3.3'
 services:
   sample-service:
     build:
-      context: apps/sample-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/sample-service/Dockerfile
     container_name: sample-service
     ports:
       - "5000:5000"
