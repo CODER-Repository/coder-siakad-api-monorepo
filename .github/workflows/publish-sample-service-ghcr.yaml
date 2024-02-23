@@ -22,7 +22,7 @@ jobs:
         with:
           registry: ghcr.io
           username: rifqio
-          password: ${{ secrets.GH_PAT }}
+          password: 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
 
       - name: Checkout Repository
         uses: actions/checkout@v3
