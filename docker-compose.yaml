@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
   sample-service:
+    image: ghcr.io/coder-repository/sample-service:latest
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./apps/sample-service/Dockerfile
