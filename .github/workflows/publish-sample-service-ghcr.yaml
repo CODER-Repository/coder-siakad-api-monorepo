@@ -3,7 +3,7 @@ name: Docker Image Publish GHCR
 on:
   push:
     paths:
-      - '/apps/sample-service/**'
+      - 'apps/sample-service/**'
 
 jobs:
   build_and_publish_sample_service:
