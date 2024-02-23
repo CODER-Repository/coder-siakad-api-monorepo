@@ -2,6 +2,7 @@ name: Docker Image Publish GHCR
 
 on:
   push:
+    branches: [ "staging/sprint-1" ]
     paths:
       - 'apps/sample-service/**'
 
