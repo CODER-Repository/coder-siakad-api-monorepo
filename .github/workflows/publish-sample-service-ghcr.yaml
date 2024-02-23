@@ -3,8 +3,8 @@ name: Docker Image Sample Service
 on:
   push:
     branches: [ "staging/sprint-1" ]
-#    paths:
-#      - 'apps/sample-service/**'
+    paths:
+      - 'apps/sample-service/**'
 
 jobs:
   build_and_publish_sample_service:
@@ -12,15 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Increment version and store it in a variable
-      - name: Set Image Version
-        id: set_version
-        run: echo "::set-output name=version::$(($(cat version.txt)+1))"
-
       - name: Build and push image
         run: |
           docker login --username rifqio --password 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 ghcr.io
           docker-compose build sample-service
-          docker tag ghcr.io/coder-repository/sample-service:latest ghcr.io/coder-repository/sample-service:${{ steps.set_version.outputs.version }}
-          docker push ghcr.io/coder-repository/sample-service:${{ steps.set_version.outputs.version }}
+          docker push ghcr.io/coder-repository/sample-service:latest
 
