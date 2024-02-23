@@ -1,0 +1,212 @@
+
+Enum "announcement_type" {
+  "event"
+  "system-maintenance"
+  "achievement"
+  "deadline"
+  "policy-change"
+  "opportunity"
+  "graduation"
+  "emergency"
+}
+
+Table "address" {
+  "street" text
+  "city" varchar(100)
+  "zip_code" varchar(10)
+  "country" varchar(30)
+  "nim" varchar(30) [not null]
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+
+Indexes {
+  nim [type: btree, name: "address_nim_idx"]
+}
+}
+
+Table "administrator" {
+  "nip" varchar(30) [not null]
+  "full_name" varchar(100) [not null]
+  "phone_number" varchar(15) [not null]
+  "user_id" uuid
+}
+
+Table "announcement" {
+  "announcement_id" uuid [not null]
+  "content" text [not null]
+  "type" announcement_type [default: `'event'::announcement_type`]
+  "priority" int4 [default: 1]
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "class" {
+  "class_id" varchar(15) [not null]
+  "course_id" varchar(15) [not null]
+  "lecturer_id" varchar(15) [not null]
+  "semester_id" varchar(5) [not null]
+  "classroom_id" varchar(15) [not null]
+  "schedule" varchar(100) [not null]
+}
+
+Table "classroom" {
+  "classroom_id" varchar(15) [not null]
+  "classroom_name" varchar(50) [not null]
+  "faculty_id" int2 [not null]
+}
+
+Table "course" {
+  "course_id" varchar(15) [not null]
+  "course_name" varchar(100) [not null]
+  "credit_hours" int4
+
+Indexes {
+  (course_id, course_name) [type: btree, unique, name: "course_course_id_course_name_idx"]
+}
+}
+
+Table "evaluation_lecturer" {
+  "evaluation_id" int4 [not null, default: `nextval('evaluation_lecturer_evaluation_id_seq'::regclass)`]
+  "nim" varchar(30)
+  "lecturer_id" varchar(10) [not null]
+  "semester_id" varchar(5) [not null]
+  "rating" int4 [default: 0]
+  "feedback" text
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "evaluation_report_lecturer" {
+  "evaluation_report_id" varchar(30) [not null]
+  "nim" varchar(30) [not null]
+  "lecturer_id" varchar(10) [not null]
+  "semester_id" int4 [not null]
+  "rating" int4 [default: 0]
+  "feedback" text
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+
+Indexes {
+  (nim, lecturer_id, semester_id) [type: btree, name: "student_lecturer_semester_id_idx"]
+}
+}
+
+Table "faculty" {
+  "faculty_id" int4 [not null, default: `nextval('faculty_faculty_id_seq'::regclass)`]
+  "faculty_name" varchar(50) [not null]
+}
+
+Table "grade_category" {
+  "gc_id" int4 [not null, default: `nextval('grade_category_gc_id_seq'::regclass)`]
+  "category" varchar(100) [not null]
+}
+
+Table "krs" {
+  "krs_id" int4 [not null, default: `nextval('krs_krs_id_seq'::regclass)`]
+  "nim" varchar(30) [not null]
+  "course_id" varchar(15) [not null]
+  "semester_id" varchar(5) [not null]
+  "grade" int8
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+
+Indexes {
+  (nim, course_id, semester_id) [type: btree, name: "krs_student_course_id_idx"]
+}
+}
+
+Table "report" {
+  "report_id" int4 [not null, default: `nextval('report_report_id_seq'::regclass)`]
+  "category_id" int4 [not null]
+  "report_name" varchar(100) [not null]
+  "description" text [not null]
+  "feedback" text
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "schema_migrations" {
+  "version" int8 [not null]
+  "dirty" bool [not null]
+}
+
+Table "semester" {
+  "semester_id" varchar(5) [not null]
+  "year" int4 [not null]
+  "start_date" date
+  "end_date" date
+}
+
+Table "student" {
+  "nim" varchar(30) [not null]
+  "email" varchar(100) [not null]
+  "full_name" varchar(100) [not null]
+  "major_id" varchar(30) [not null]
+  "entry_year" date [not null]
+  "birth_date" date [not null]
+  "address_id" varchar(10) [not null]
+  "phone_number" varchar(15) [not null]
+  "user_id" uuid [not null]
+
+Indexes {
+  (nim, email, full_name) [type: btree, name: "student_nim_email_fullname_idx"]
+}
+}
+
+Table "study_program" {
+  "study_program_id" int4 [not null, default: `nextval('study_program_study_program_id_seq'::regclass)`]
+  "study_program_name" text [not null]
+}
+
+Table "super_admin" {
+  "spadmin_id" int4 [not null, default: `nextval('super_admin_spadmin_id_seq'::regclass)`]
+  "fullname" varchar(100) [not null]
+  "phone" varchar(15) [not null]
+  "user_id" uuid
+}
+
+Table "ukt" {
+  "ukt_id" varchar(15) [not null]
+  "study_program_id" int4
+  "amount" int8
+  "payment_deadline" timestamptz(6)
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+}
+
+Table "user" {
+  "user_id" uuid [not null, default: `gen_random_uuid()`]
+  "username" varchar(50) [not null]
+  "email" varchar(50) [not null]
+  "password" varchar(100)
+  "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+  "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+
+Indexes {
+  (user_id, username, email) [type: btree, name: "user_user_id_username_email_idx"]
+}
+}
+
+Ref "fk_student_address_id":"student"."nim" < "address"."nim" [update: no action, delete: no action]
+
+Ref "fk_administrator_user_id":"user"."user_id" < "administrator"."user_id" [update: no action, delete: no action]
+
+Ref "fk_class_classroom":"classroom"."classroom_id" < "class"."classroom_id" [update: no action, delete: no action]
+
+Ref "fk_class_course":"course"."course_id" < "class"."course_id" [update: no action, delete: no action]
+
+Ref "fk_class_semester":"semester"."semester_id" < "class"."semester_id" [update: no action, delete: no action]
+
+Ref "fk_classroom_faculty":"faculty"."faculty_id" < "classroom"."faculty_id" [update: no action, delete: no action]
+
+Ref "fk_krs_course":"course"."course_id" < "krs"."course_id" [update: no action, delete: no action]
+
+Ref "fk_krs_nim":"student"."nim" < "krs"."nim" [update: no action, delete: no action]
+
+Ref "fk_krs_semester":"semester"."semester_id" < "krs"."semester_id" [update: no action, delete: no action]
+
+Ref "fk_student_user_id":"user"."user_id" < "student"."user_id" [update: no action, delete: no action]
+
+Ref "fk_superadmin_user":"user"."user_id" < "super_admin"."user_id" [update: no action, delete: no action]
+
+Ref "fk_ukt_study_program":"study_program"."study_program_id" < "ukt"."study_program_id" [update: no action, delete: no action]

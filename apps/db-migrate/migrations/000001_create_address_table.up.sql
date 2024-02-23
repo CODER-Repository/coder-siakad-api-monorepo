@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS address (
+    nim VARCHAR(30) NOT NULL PRIMARY KEY,
     street TEXT,
     city VARCHAR(100),
     zip_code VARCHAR(10),
     country VARCHAR(30),
-    nim VARCHAR(30) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
