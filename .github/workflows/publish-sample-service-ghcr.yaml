@@ -3,8 +3,8 @@ name: Docker Image Sample Service
 on:
   push:
     branches: [ "staging/sprint-1" ]
-    paths:
-      - 'apps/sample-service/**'
+#    paths:
+#      - 'apps/sample-service/**'
 
 jobs:
   build_and_publish_sample_service:
