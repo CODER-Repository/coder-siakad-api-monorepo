@@ -1,5 +1,7 @@
 ## Installation
 
+If you prefer to do it manual way rather than using docker here's the guide.
+
 Install go-migrate using scoop package manager if you are using windows
 
 ```bash
@@ -41,4 +43,8 @@ make migrate-down
 ```
 
 Further information about the docs please refer to
+
 https://github.com/golang-migrate/migrate/blob/master/GETTING_STARTED.md
+
+These migration is based on this erd
+https://dbdiagram.io/d/Coder-Siakad-ERD-V2-65d81f545cd04127749f7c3d
