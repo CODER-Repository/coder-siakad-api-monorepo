@@ -14,4 +14,5 @@ app.get('/', (req: Request, res: Response): void => {
 app.listen(port, () => {
     Logger.info(`Server is running at http://localhost:${port}`);
     console.log('Testing Gh Version Tagging');
+    console.log('Testing Gh Version Tagging');
 });
