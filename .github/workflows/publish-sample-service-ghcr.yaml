@@ -21,8 +21,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: rifqio
-          password: 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
+          username: coder-automation
+          password: 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
 
       - name: Checkout Repository
         uses: actions/checkout@v3
