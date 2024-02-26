@@ -1,0 +1,24 @@
+{
+    "statusCode": 400,
+    "status": false,
+    "error": "Bad Request",
+    "message": "Validation Error",
+    "data": {
+        "errors": {
+            "email": {
+                "message": "Email is required",
+                "name": "ValidatorError",
+                "properties": {
+                    "message": "Email is required",
+                    "type": "required",
+                    "path": "email"
+                },
+                "kind": "required",
+                "path": "email"
+            }
+        },
+        "_message": "User validation failed",
+        "message": "User validation failed: email: Email is required",
+        "name": "ValidationError"
+    }
+}

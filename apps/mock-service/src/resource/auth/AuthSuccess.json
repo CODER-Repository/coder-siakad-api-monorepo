@@ -1,0 +1,8 @@
+{
+    "header": "ew0KICAidHlwIjoiSldUIiwNCiAgImFsZyI6IkhTMjU2Ig0KfQ.ew0KICAiaWQiOiI5NjQ5MmQ1OS0wYWQ1LTRjMDAtODkyZC01OTBhZDVhYzAwZjMiLA0KICAic3ViIjoiMDEyMzQ1Njc4OSIsDQogICJuYW1lIjoiSm9obiBEb2UiLAogICJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLAogICJyb2xlIjoiU3R1ZGVudCIsDQogICJpYXQiOjE2ODEwNDA1MTUNCn0.oD2MC5Ebd82105hOJpoaYHM6YdbTW3OOspDEP9S318I",
+    "body": {
+        "statusCode": 200,
+        "status": true,
+        "message": "Login Success"
+    }
+}
