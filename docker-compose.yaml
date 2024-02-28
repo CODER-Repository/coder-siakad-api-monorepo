@@ -13,6 +13,18 @@ services:
     networks:
       - siakad-network
 
+  mock-service:
+    image: ghcr.io/coder-repository/mock-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/mock-service/Dockerfile
+    container_name: mock-service
+    ports:
+      - "5001:5001"
+    networks:
+      - siakad-network
+
   postgres:
     image: postgres:13
     restart: always
