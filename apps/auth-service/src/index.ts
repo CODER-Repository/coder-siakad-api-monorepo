@@ -1,10 +1,9 @@
-// index.ts
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 import express, { Express } from 'express';
-import { HttpLogger } from '@siakad/express.utils';
+import { HttpLogger, Logger } from '@siakad/express.utils'; // Mengimpor Logger
 import methodOverride from 'method-override';
 import { AppDataSource } from './db-connection';
 
@@ -18,17 +17,17 @@ app.use(HttpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-app.use('/', router);
+app.use('/v1', router);
 
 // Initialize Database and Start Server
 const startServer = async () => {
     try {
         await AppDataSource.initialize();
         app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
+            Logger.info(`Server is running on port ${port}`); // Menggunakan Logger.info
         });
     } catch (error) {
-        console.error('Error connecting to database:', error);
+        Logger.error('Error connecting to database:', error); // Menggunakan Logger.error
     }
 };
 

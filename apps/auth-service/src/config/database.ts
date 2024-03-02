@@ -1,10 +1,12 @@
 import { Sequelize } from 'sequelize';
+import { config } from 'dotenv';
+config();
 
-const sequelize = new Sequelize('coder-siakad', 'postgres', 'postgres', {
-    host: 'localhost',
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
     dialect: 'postgres',
-    port: 6432,
-    logging: false,
+    port: parseInt(process.env.DB_PORT, 10),
+    logging: true,
     define: {
         timestamps: true,
         underscored: true,
