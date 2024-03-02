@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
-import { HttpLogger, Logger } from '@siakad/express.utils';
+import { Logger } from '@siakad/express.utils';
 
 interface ApiResponse<T> {
     statusCode: number;
@@ -25,7 +25,7 @@ export class AuthController {
             };
             res.json(response); 
         } catch (error) {
-            console.error("Error fetching users:", error);
+            Logger.error(`Error fetching users: Message: ${error.message} | Stack: ${error.stack}`);
             res.boom.badImplementation();
         }
     }
@@ -61,7 +61,7 @@ export class AuthController {
             };
             res.status(201).json(response);
         } catch (error) {
-            console.error("Error registering user:", error);
+            Logger.error(`Error registering user: Message: ${error.message} | Stack: ${error.stack}`);
             res.boom.badImplementation();
         }
     }
@@ -91,7 +91,7 @@ export class AuthController {
             };
             res.status(200).json(response);
         } catch (error) {
-            console.error("Error logging in:", error);
+            Logger.error(`Error logging in: Message: ${error.message} | Stack: ${error.stack}`);
             res.boom.badImplementation();
         }
     }
