@@ -58,5 +58,6 @@ services:
 volumes:
   postgres_siakad:
 
+
 networks:
   siakad-network:
