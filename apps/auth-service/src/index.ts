@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '.env') });
+import boom from 'express-boom'; // Mengimpor boom
+
 
 import express, { Express } from 'express';
 import { HttpLogger, Logger } from '@siakad/express.utils'; // Mengimpor Logger
@@ -10,6 +12,7 @@ import { AppDataSource } from './db-connection';
 import router from './routes/auth-route';
 
 const app: Express = express();
+app.use(boom()); // Menggunakan boom`
 const port = process.env.PORT || 5000;
 
 // Middleware

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 
+
 interface ApiResponse<T> {
     statusCode: number;
     status: boolean;
@@ -25,12 +26,7 @@ export class AuthController {
             res.json(response); 
         } catch (error) {
             console.error("Error fetching users:", error);
-            const response: ApiResponse<null> = {
-                statusCode: 500,
-                status: false,
-                error: "Internal Server Error",
-            };
-            res.status(500).json(response);
+            res.boom.badImplementation();
         }
     }
 
@@ -40,23 +36,13 @@ export class AuthController {
         try {
             const existingUser = await User.findOne({ where: { username } });
             if (existingUser) {
-                const response: ApiResponse<null> = {
-                    statusCode: 400,
-                    status: false,
-                    error: "Username already exists",
-                };
-                res.status(400).json(response);
+                res.boom.badRequest("Username already exists"); // Menggunakan res.boom.badRequest()
                 return;
             }
 
             const existingEmail = await User.findOne({ where: { email } });
             if (existingEmail) {
-                const response: ApiResponse<null> = {
-                    statusCode: 400,
-                    status: false,
-                    error: "Email already exists",
-                };
-                res.status(400).json(response);
+                res.boom.badRequest("Email already exists"); // Menggunakan res.boom.badRequest()
                 return;
             }
 
@@ -67,21 +53,16 @@ export class AuthController {
                 email,
                 password: hashedPassword
             });
-
-            const response: ApiResponse<null> = {
+            const response: ApiResponse<string> = {
                 statusCode: 201,
                 status: true,
+                data: "User registered successfully",
                 message: "User registered successfully",
             };
             res.status(201).json(response);
         } catch (error) {
             console.error("Error registering user:", error);
-            const response: ApiResponse<null> = {
-                statusCode: 500,
-                status: false,
-                error: "Internal Server Error",
-            };
-            res.status(500).json(response);
+            res.boom.badImplementation();
         }
     }
 
@@ -91,43 +72,27 @@ export class AuthController {
         try {
             const user = await User.findOne({ where: { username } });
             if (!user) {
-                const response: ApiResponse<null> = {
-                    statusCode: 404,
-                    status: false,
-                    error: "User not found",
-                };
-                res.status(404).json(response);
+                res.boom.notFound("User not found"); // Menggunakan res.boom.notFound()
                 return;
             }
 
             const passwordMatch = await bcrypt.compare(password, user.password || '');
             if (!passwordMatch) {
-                const response: ApiResponse<null> = {
-                    statusCode: 401,
-                    status: false,
-                    error: "Invalid password",
-                };
-                res.status(401).json(response);
+                res.boom.unauthorized("Invalid password"); // Menggunakan res.boom.unauthorized()
                 return;
             }
 
             const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1h' });
-
             const response: ApiResponse<{ token: string }> = {
                 statusCode: 200,
                 status: true,
                 data: { token },
                 message: "User logged in successfully",
             };
-            res.json(response);
+            res.status(200).json(response);
         } catch (error) {
             console.error("Error logging in:", error);
-            const response: ApiResponse<null> = {
-                statusCode: 500,
-                status: false,
-                error: "Internal Server Error",
-            };
-            res.status(500).json(response);
+            res.boom.badImplementation();
         }
     }
 }
