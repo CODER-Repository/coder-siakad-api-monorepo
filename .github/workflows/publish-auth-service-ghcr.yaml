@@ -29,7 +29,10 @@ jobs:
 
       - name: Determine the next version
         id: version
-        run: echo "::set-output name=randomString::$(date +'%d%m%y%H')"
+        run: echo "::set-output name=version::$(($(echo ${{ github.run_number }}) + 1))"
+#      - name: Determine the next version
+#        id: version
+#        run: echo "::set-output name=randomString::$(date +'%d%m%y%H')"
 
       - name: Build and push image
         uses: docker/build-push-action@v2
