@@ -1,0 +1,15 @@
+export { Address } from './address.entity';
+export { Administrator } from './administrator.entity';
+export { Announcement } from './announcement.entity';
+export { Class } from './class.entity';
+export { EvaluationLecturer } from './evaluation_lecturer.entity';
+export { EvaluationReportLecturer } from './evaluation_report_lecturer.entity';
+export { GradeCategory } from './grade_category.entity';
+export { KRS } from './krs.entity';
+export { Report } from './report.entity';
+export { Semester } from './semester.entity';
+export { Student } from './student.entity';
+export { UKT } from './ukt.entity';
+export { User } from './user.entity';
+export { Role } from './role.entity';
+export { RoleUser } from './role_user.entity';
