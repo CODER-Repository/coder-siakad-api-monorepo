@@ -13,6 +13,18 @@ services:
     networks:
       - siakad-network
 
+  user-service:
+    image: ghcr.io/coder-repository/user-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "5000:5000"
+    networks:
+      - siakad-network
+
   postgres:
     image: postgres:13
     restart: always
