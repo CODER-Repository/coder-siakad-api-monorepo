@@ -1,37 +1,33 @@
 import dotenv from 'dotenv';
-import path from 'path';
-dotenv.config({ path: path.resolve(__dirname, '.env') });
-import boom from 'express-boom'; // Mengimpor boom
 
+dotenv.config();
 
+import boom from 'express-boom';
 import express, { Express } from 'express';
-import { HttpLogger, Logger } from '@siakad/express.utils'; // Mengimpor Logger
-import methodOverride from 'method-override';
-import { AppDataSource } from './db-connection';
+import { HttpLogger, Logger } from '@siakad/express.utils';
+import { DatabaseConnection } from '@siakad/express.database';
 
 import router from './routes/auth-route';
 
 const app: Express = express();
-app.use(boom()); // Menggunakan boom`
 const port = process.env.PORT || 5000;
 
 // Middleware
+app.use(boom());
 app.use(HttpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
-app.use('/v1', router);
+app.use('/api/v1/auth', router);
 
 // Initialize Database and Start Server
-const startServer = async () => {
+// TODO: Implement graceful shutdown
+app.listen(port, async (): Promise<void> => {
     try {
-        await AppDataSource.initialize();
-        app.listen(port, () => {
-            Logger.info(`Server is running on port ${port}`); // Menggunakan Logger.info
-        });
+        await DatabaseConnection();
+        Logger.info(`Server is running on port ${port}`);
     } catch (error) {
-        Logger.error('Error connecting to database:', error); // Menggunakan Logger.error
+        Logger.error(
+            `Error starting server: Message: ${error.message} | Stack: ${error.stack}`
+        );
     }
-};
-
-startServer();
+});

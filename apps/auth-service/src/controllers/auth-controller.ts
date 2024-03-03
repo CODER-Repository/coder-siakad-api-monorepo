@@ -1,97 +1,117 @@
-import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/User";
-import { Logger } from '@siakad/express.utils';
+import { Request, Response } from 'express';
+import { EntityManager } from 'typeorm';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-interface ApiResponse<T> {
-    statusCode: number;
-    status: boolean;
-    data?: T;
-    message?: string;
-    error?: string | string[];
-}
+import {
+    dbContext,
+    AppDataSource,
+    User,
+    RoleUser
+} from '@siakad/express.database';
+import { BaseResponse } from '@siakad/express.server';
+import { Logger, ROLE_ID } from '@siakad/express.utils';
+import { LoginUserDTO, RegisterUserDTO } from '../interface/auth-interface';
 
 export class AuthController {
-    static async getUser(req: Request, res: Response): Promise<void> {
+    static async registerUser(
+        req: Request<{}, {}, RegisterUserDTO>,
+        res: Response
+    ): Promise<void> {
+        const context = '[AuthController.registerUser]';
+        const { username, email, password, role_id } = req.body;
         try {
-            const users = await User.findAll();
-            const userEmails = users.map(user => user.email);
-            const response: ApiResponse<string[]> = {
-                statusCode: 200,
-                status: true,
-                data: userEmails,
-                message: "Users fetched successfully",
-            };
-            res.json(response); 
-        } catch (error) {
-            Logger.error(`Error fetching users: Message: ${error.message} | Stack: ${error.stack}`);
-            res.boom.badImplementation();
-        }
-    }
+            const existingUserOrEmail = await dbContext.User().findOne({
+                where: [{ username }, { email }]
+            });
 
-    static async registerUser(req: Request, res: Response): Promise<void> {
-        const { username, email, password } = req.body;
-
-        try {
-            const existingUser = await User.findOne({ where: { username } });
-            if (existingUser) {
-                res.boom.badRequest("Username already exists"); // Menggunakan res.boom.badRequest()
-                return;
-            }
-
-            const existingEmail = await User.findOne({ where: { email } });
-            if (existingEmail) {
-                res.boom.badRequest("Email already exists"); // Menggunakan res.boom.badRequest()
+            if (existingUserOrEmail) {
+                res.boom.badRequest('Username or email already exists');
                 return;
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
+            await AppDataSource.transaction(
+                async (transaction: EntityManager) => {
+                    const user = new User();
+                    user.username = username;
+                    user.email = email;
+                    user.password = hashedPassword;
+                    await transaction.save(user);
+                    console.log(user, 'HERE');
+                    const roleUser = new RoleUser();
+                    roleUser.user_id = user.user_id;
+                    roleUser.role_id = role_id || ROLE_ID.Student;
 
-            await User.create({
-                username,
-                email,
-                password: hashedPassword
-            });
-            const response: ApiResponse<string> = {
-                statusCode: 201,
-                status: true,
-                data: "User registered successfully",
-                message: "User registered successfully",
-            };
-            res.status(201).json(response);
+                    await transaction.save(roleUser);
+                }
+            );
+
+            Logger.info(`${context} | User registered successfully`);
+            res.status(201).json(
+                BaseResponse.createdResponse('User registered successfully')
+            );
         } catch (error) {
-            Logger.error(`Error registering user: Message: ${error.message} | Stack: ${error.stack}`);
+            Logger.error(
+                `${context} | Error registering user: Message: ${error.message} | Stack: ${error.stack}`
+            );
             res.boom.badImplementation();
         }
     }
 
-    static async login(req: Request, res: Response): Promise<void> {
+    static async login(
+        req: Request<{}, {}, LoginUserDTO>,
+        res: Response
+    ): Promise<void> {
+        const context = '[AuthController.login]';
         const { username, password } = req.body;
 
         try {
             const user = await User.findOne({ where: { username } });
             if (!user) {
-                res.boom.notFound("User not found"); // Menggunakan res.boom.notFound()
+                Logger.error(`${context} | User not found for ${username}`);
+                res.boom.notFound('Email or password is not valid'); // Menggunakan res.boom.notFound()
                 return;
             }
 
-            const passwordMatch = await bcrypt.compare(password, user.password || '');
+            const passwordMatch = await bcrypt.compare(
+                password,
+                user.password || ''
+            );
             if (!passwordMatch) {
-                res.boom.unauthorized("Invalid password"); // Menggunakan res.boom.unauthorized()
+                Logger.error(`${context} | Invalid password for ${username}`);
+                res.boom.unauthorized('Email or password is not valid'); // Menggunakan res.boom.unauthorized()
                 return;
             }
 
-            const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET || 'your_secret_key', { expiresIn: '1h' });
-            const response: ApiResponse<{ token: string }> = {
-                statusCode: 200,
-                status: true,
-                data: { token },
-                message: "User logged in successfully",
-            };
-            res.status(200).json(response);
+            const jwtPayload = await dbContext.UserRoleView().findOne({
+                where: { user_id: user.user_id }
+            });
+
+            const token = jwt.sign(
+                {
+                    userId: jwtPayload.user_id,
+                    email: jwtPayload.email,
+                    username: jwtPayload.username,
+                    role: jwtPayload.role_name,
+                    roleId: jwtPayload.role_id
+                },
+                process.env.JWT_SECRET || 'your_secret_key',
+                {
+                    expiresIn: '1h'
+                }
+            );
+
+            res.json(
+                BaseResponse.successResponse(
+                    { token },
+                    'User logged in successfully'
+                )
+            );
         } catch (error) {
-            Logger.error(`Error logging in: Message: ${error.message} | Stack: ${error.stack}`);
+            Logger.error(
+                `${context} | Error logging in: Message: ${error.message} | Stack: ${error.stack}`
+            );
             res.boom.badImplementation();
         }
     }

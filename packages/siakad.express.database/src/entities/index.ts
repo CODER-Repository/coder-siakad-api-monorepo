@@ -11,3 +11,5 @@ export { Semester } from './semester.entity';
 export { Student } from './student.entity';
 export { UKT } from './ukt.entity';
 export { User } from './user.entity';
+export { Role } from './role.entity';
+export { RoleUser } from './role_user.entity';

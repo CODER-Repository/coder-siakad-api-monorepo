@@ -13,6 +13,20 @@ services:
     networks:
       - siakad-network
 
+  auth-service:
+    image: ghcr.io/coder-repository/auth-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:13
     restart: always
