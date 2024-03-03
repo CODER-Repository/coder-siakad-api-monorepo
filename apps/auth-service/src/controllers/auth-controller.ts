@@ -3,16 +3,12 @@ import { EntityManager } from 'typeorm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import {
-    dbContext,
-    AppDataSource,
-    User,
-    RoleUser
-} from '@siakad/express.database';
+import { dbContext, AppDataSource } from '@siakad/express.database';
 import { BaseResponse } from '@siakad/express.server';
 import { Logger, ROLE_ID } from '@siakad/express.utils';
 import { LoginUserDTO, RegisterUserDTO } from '../interface/auth-interface';
 
+// TODO: implement request validation
 export class AuthController {
     static async registerUser(
         req: Request<{}, {}, RegisterUserDTO>,
@@ -33,13 +29,13 @@ export class AuthController {
             const hashedPassword = await bcrypt.hash(password, 10);
             await AppDataSource.transaction(
                 async (transaction: EntityManager) => {
-                    const user = new User();
+                    const user = dbContext.User().create();
                     user.username = username;
                     user.email = email;
                     user.password = hashedPassword;
                     await transaction.save(user);
 
-                    const roleUser = new RoleUser();
+                    const roleUser = dbContext.RoleUser().create();
                     roleUser.user_id = user.user_id;
                     roleUser.role_id = role_id || ROLE_ID.Student;
 
@@ -67,7 +63,9 @@ export class AuthController {
         const { username, password } = req.body;
 
         try {
-            const user = await User.findOne({ where: { username } });
+            const user = await dbContext
+                .User()
+                .findOne({ where: { username } });
             if (!user) {
                 Logger.error(`${context} | User not found for ${username}`);
                 res.boom.notFound('Email or password is not valid'); // Menggunakan res.boom.notFound()
