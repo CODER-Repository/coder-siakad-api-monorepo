@@ -38,7 +38,7 @@ export class AuthController {
                     user.email = email;
                     user.password = hashedPassword;
                     await transaction.save(user);
-                    console.log(user, 'HERE');
+
                     const roleUser = new RoleUser();
                     roleUser.user_id = user.user_id;
                     roleUser.role_id = role_id || ROLE_ID.Student;
@@ -74,10 +74,7 @@ export class AuthController {
                 return;
             }
 
-            const passwordMatch = await bcrypt.compare(
-                password,
-                user.password || ''
-            );
+            const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 Logger.error(`${context} | Invalid password for ${username}`);
                 res.boom.unauthorized('Email or password is not valid'); // Menggunakan res.boom.unauthorized()
