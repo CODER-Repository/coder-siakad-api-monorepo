@@ -1,45 +1,35 @@
-import express, { Express, Request, Response } from 'express';
-// This all come from shared packages inside the folder packages in root dir
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+import boom from 'express-boom';
+import express, { Express } from 'express';
 import { HttpLogger, Logger } from '@siakad/express.utils';
-import { BaseResponse } from '@siakad/express.server';
+import { DatabaseConnection } from '@siakad/express.database';
+
+import router from './routes/user-route';
 
 const app: Express = express();
-const port = 5002;
+const port = process.env.PORT || 5002;
 
-const USER_API_PREFIX = '/user/v1';
 
+// Middleware
+app.use(boom());
 app.use(HttpLogger);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// TODO: Add auth middleware
+app.use('/api/v1/user', router);
 
-app.get('/', (req: Request, res: Response): Response => {
-  const mockResponse = {
-    data: [],
-    message: 'Hello World'
-  };
-
-  return res.json(
-    BaseResponse.successResponse(mockResponse.data, mockResponse.message)
-  );
-});
-
-// Edit User
-app.put(
-  `${USER_API_PREFIX}/:userId`,
-  (req: Request, res: Response): Response => {
-    const userId = req.params.userId;
-    const { usename, email } = req.body;
-    const query = `UPDATE user SET username = '${usename}', email = '${email}', WHERE user_id = ${userId}`;
-
-    const mockResponse = {
-      data: [],
-      message: 'Hello World'
-    };
-
-    return res.json(
-      BaseResponse.successResponse(mockResponse.data, mockResponse.message)
+// Initialize Database and Start Server
+// TODO: Implement graceful shutdown
+app.listen(port, async (): Promise<void> => {
+  try {
+    await DatabaseConnection();
+    Logger.info(`Server is running on port ${port}`);
+  } catch (error) {
+    Logger.error(
+      `Error starting server: Message: ${error.message} | Stack: ${error.stack}`
     );
   }
-);
-
-app.listen(port, () => {
-  Logger.info(`Server is running at http://localhost:${port}`);
 });
