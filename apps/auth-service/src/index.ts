@@ -10,7 +10,7 @@ import { DatabaseConnection } from '@siakad/express.database';
 import router from './routes/auth-route';
 
 const app: Express = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 // Middleware
 app.use(boom());
