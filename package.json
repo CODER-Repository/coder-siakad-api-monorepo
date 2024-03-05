@@ -48,5 +48,8 @@
     "workspaces": [
         "apps/*",
         "packages/*"
-    ]
+    ],
+    "dependencies": {
+        "@siakad/express.utils": "^0.0.0"
+    }
 }
