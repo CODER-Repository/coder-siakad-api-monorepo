@@ -10,7 +10,7 @@ const app: Express = express();
 const server = http.createServer(app);
 
 const baseRoute = '/api/v1';
-const PORT = 5001;
+const PORT = 5002;
 
 const terminusOptions = {
     signals: ['SIGINT', 'SIGTERM'],

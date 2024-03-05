@@ -1,7 +1,7 @@
 {
     "statusCode": 200,
     "status": true,
-    "result": {
+    "data": {
         "current_gpa": 3.9,
         "total_credit_course_taken": 24,
         "current_semester": 2,
