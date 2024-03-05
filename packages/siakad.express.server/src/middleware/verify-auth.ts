@@ -3,6 +3,7 @@ import { Logger } from '@siakad/express.utils';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import path from 'path';
+import { BaseResponse } from '../response';
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
@@ -26,13 +27,15 @@ export const VerifyAuth = (req: Request, res: Response, next: NextFunction) => {
     try {
         const { JWT_SECRET } = process.env;
         if (!JWT_SECRET) {
-            res.boom.badImplementation('JWT_SECRET not found');
+            res.status(500).json(BaseResponse.internalServerErrorResponse());
             return;
         }
 
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
-            res.boom.unauthorized('Token not found');
+            res.status(401).json(
+                BaseResponse.unauthorizedResponse('Unauthorized')
+            );
             return;
         }
 

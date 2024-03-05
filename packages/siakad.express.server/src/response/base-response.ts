@@ -1,3 +1,5 @@
+import { Result } from 'express-validator';
+
 export const BaseResponse = {
     successResponse: (
         data: string | object | Array<object>,
@@ -19,9 +21,30 @@ export const BaseResponse = {
         };
     },
 
-    errorResponse: (statusCode: number, message: string) => {
+    errorResponse: (
+        statusCode: number,
+        message: string,
+        errors: Result<string>
+    ) => {
         return {
             statusCode,
+            status: false,
+            error: message,
+            errors: errors || null
+        };
+    },
+
+    internalServerErrorResponse: () => {
+        return {
+            statusCode: 500,
+            status: false,
+            error: 'Internal server error'
+        };
+    },
+
+    unauthorizedResponse: (message: string) => {
+        return {
+            statusCode: 401,
             status: false,
             error: message
         };
