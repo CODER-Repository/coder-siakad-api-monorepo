@@ -12,8 +12,8 @@
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
-        "target": "es6"
+        "resolveJsonModule": true
     },
-    "include": ["./src/**/*", "src/db-connection.ts"],
+    "include": ["./src/**/*"],
     "exclude": ["dist", "build", "node_modules"]
 }

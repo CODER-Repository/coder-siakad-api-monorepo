@@ -1,11 +1,11 @@
-name: Docker Image Sample Service
+name: Docker Mock Service
 
 on:
   push:
     branches:
       - "staging/sprint-1"
     paths:
-      - 'apps/sample-service/**'
+      - 'apps/mock-service/**'
 
 jobs:
   build_and_publish_sample_service:
@@ -35,6 +35,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./apps/sample-service/Dockerfile
+          file: ./apps/mock-service/Dockerfile
           push: true
-          tags: ghcr.io/coder-repository/sample-service:${{ steps.random_tag.outputs.random_tag }}
+          tags: ghcr.io/coder-repository/mock-service:${{ steps.random_tag.outputs.random_tag }}
