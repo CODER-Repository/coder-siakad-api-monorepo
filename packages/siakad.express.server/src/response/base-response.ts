@@ -17,5 +17,13 @@ export const BaseResponse = {
             status: true,
             message
         };
+    },
+
+    errorResponse: (statusCode: number, message: string) => {
+        return {
+            statusCode,
+            status: false,
+            error: message
+        };
     }
 };

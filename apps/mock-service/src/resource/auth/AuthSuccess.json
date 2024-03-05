@@ -1,8 +1,10 @@
 {
-    "header": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4NmQ5OGE2Yy1kNTViLTQyMWUtOTA3NC0xZWI0OTFjZGMyN2UiLCJlbWFpbCI6ImpvaG5kb2VAc3R1ZGVudC5hYy5pZCIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwiaWF0IjoxNzA5NDQzODYzLCJleHAiOjE3MDk0NDc0NjN9.F4qmKxjBLDD1agvfgoEZgWB6WteKvQ-6_qDbRgbaJ6I",
     "body": {
         "statusCode": 200,
         "status": true,
+        "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZTk1ZGVkOC1iNWEzLTQ3M2YtYjYxNC0wNWU4ZWY5MmRlZGMiLCJlbWFpbCI6ImFkbWluQHN0dWRlbnQuYWMuaWQiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwicm9sZUlkIjoiQURNIiwiaWF0IjoxNzA5NjQ5NTU2LCJleHAiOjE3MDk2NTMxNTZ9.Lwv2IjSaoFoJwjjxyuFYLTdeA-PAbtdYqRu4Sdkl2yA"
+        },
         "message": "Login Success"
     }
 }
