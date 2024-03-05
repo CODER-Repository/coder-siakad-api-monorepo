@@ -10,8 +10,36 @@ services:
     container_name: sample-service
     ports:
       - "5000:5000"
+    environment:
+      - PORT=5000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
     networks:
       - siakad-network
+
+  auth-service:
+    image: ghcr.io/coder-repository/auth-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
 
   mock-service:
     image: ghcr.io/coder-repository/mock-service:latest
@@ -69,6 +97,7 @@ services:
 
 volumes:
   postgres_siakad:
+
 
 networks:
   siakad-network:

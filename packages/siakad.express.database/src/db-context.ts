@@ -11,8 +11,12 @@ import {
     Semester,
     Student,
     UKT,
-    User
+    User,
+    Role,
+    RoleUser
 } from './entities';
+
+import { UserRoleView } from './views';
 
 interface DbContext {
     User: () => typeof User;
@@ -26,8 +30,12 @@ interface DbContext {
     GradeCategory: () => typeof GradeCategory;
     KRS: () => typeof KRS;
     Report: () => typeof Report;
+    Role: () => typeof Role;
+    RoleUser: () => typeof RoleUser;
     Semester: () => typeof Semester;
     UKT: () => typeof UKT;
+    // Views
+    UserRoleView: () => typeof UserRoleView;
 }
 
 export class DbContextClass implements DbContext {
@@ -42,8 +50,12 @@ export class DbContextClass implements DbContext {
     GradeCategory = () => GradeCategory;
     KRS = () => KRS;
     Report = () => Report;
+    Role = () => Role;
+    RoleUser = () => RoleUser;
     Semester = () => Semester;
     UKT = () => UKT;
+    // Views
+    UserRoleView = () => UserRoleView;
 }
 
 export const dbContext = new DbContextClass();
