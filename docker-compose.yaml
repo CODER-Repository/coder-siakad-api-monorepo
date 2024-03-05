@@ -85,7 +85,7 @@ services:
     links:
       - postgres
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
+      - DATABASE_URL=postgresql://oktariorifqi:WbVHOqg0m6Gw@ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech/coder-siakad?sslmode=require
 
   redis:
     image: redis:6
