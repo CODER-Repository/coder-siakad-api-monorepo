@@ -10,7 +10,6 @@ const Namespace = 'AuthController';
 
 router.post('/login', (req: Request, res: Response): Response => {
     Logger.info(`[${Namespace}]`, 'Success login');
-    res.header('Authorization', `Bearer ${AuthSuccess.header}`);
     return res.json(AuthSuccess.body);
 });
 
