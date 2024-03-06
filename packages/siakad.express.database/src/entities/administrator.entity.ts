@@ -11,6 +11,6 @@ export class Administrator extends BaseEntity {
     @Column({ type: 'varchar', length: 15, unique: true })
     phone_number!: string;
 
-    @Column({ type: 'bigint' })
-    user_id!: number;
+    @Column({ type: 'uuid' })
+    user_id!: string;
 }

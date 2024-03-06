@@ -1,5 +1,5 @@
 ### Success Login Routes
-POST http://localhost:4000/v1/login
+POST http://localhost:8500/api/v1/auth/login
 Content-Type: application/json
 
 {

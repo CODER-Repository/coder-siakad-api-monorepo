@@ -13,9 +13,6 @@
         "dev": "tsc -w",
         "lint": "eslint \"src/**/*.ts*\" --max-warnings 0"
     },
-    "jest": {
-        "preset": "@repo/jest-presets/jest/node"
-    },
     "devDependencies": {
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",

@@ -5,6 +5,13 @@ export const ROLE_ID = {
     Lecturer: 'LCT'
 };
 
+export enum ROLE_ID_ENUM {
+    SuperAdmin = 'SP_ADM',
+    Admin = 'ADM',
+    Student = 'STD',
+    Lecturer = 'LCT'
+}
+
 export const SEMESTER_ID = {
     '2018_GANJIL': '2018A',
     '2018_GENAP': '2018B',

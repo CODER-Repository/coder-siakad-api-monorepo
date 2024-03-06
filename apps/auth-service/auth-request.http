@@ -3,10 +3,11 @@ POST http://localhost:5001/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "johndoe",
-  "email": "johndoe@student.ac.id",
+  "username": "admin",
+  "name" : "Admin",
+  "email": "admin@student.ac.id",
   "password" : "password",
-  "role_id": "STD"
+  "role_id": "ADM"
 }
 
 ### Login User
@@ -14,6 +15,6 @@ POST http://localhost:5001/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "johndoe",
+  "username": "admin",
   "password": "password"
 }

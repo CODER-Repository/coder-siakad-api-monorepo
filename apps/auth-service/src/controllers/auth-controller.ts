@@ -1,25 +1,23 @@
 import { Request, Response } from 'express';
 import { EntityManager } from 'typeorm';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
-import { dbContext, AppDataSource } from '@siakad/express.database';
+import { AppDataSource } from '@siakad/express.database';
 import { BaseResponse } from '@siakad/express.server';
 import { Logger, ROLE_ID } from '@siakad/express.utils';
 import { LoginUserDTO, RegisterUserDTO } from '../interface/auth-interface';
+import { AuthService } from '../service/auth-service';
 
-// TODO: implement request validation
 export class AuthController {
     static async registerUser(
         req: Request<{}, {}, RegisterUserDTO>,
         res: Response
     ): Promise<void> {
         const context = '[AuthController.registerUser]';
-        const { username, email, password, role_id } = req.body;
+        const { username, name, email, password, role_id } = req.body;
         try {
-            const existingUserOrEmail = await dbContext.User().findOne({
-                where: [{ username }, { email }]
-            });
+            const existingUserOrEmail =
+                await AuthService.findExistingEmailOrUsername(username, email);
 
             if (existingUserOrEmail) {
                 res.boom.badRequest('Username or email already exists');
@@ -29,17 +27,33 @@ export class AuthController {
             const hashedPassword = await bcrypt.hash(password, 10);
             await AppDataSource.transaction(
                 async (transaction: EntityManager) => {
-                    const user = dbContext.User().create();
-                    user.username = username;
-                    user.email = email;
-                    user.password = hashedPassword;
-                    await transaction.save(user);
+                    const user = await AuthService.createUser(
+                        transaction,
+                        req.body,
+                        hashedPassword
+                    );
 
-                    const roleUser = dbContext.RoleUser().create();
-                    roleUser.user_id = user.user_id;
-                    roleUser.role_id = role_id || ROLE_ID.Student;
+                    if (role_id === ROLE_ID.Student) {
+                        await AuthService.handleStudentRole(
+                            transaction,
+                            user,
+                            name
+                        );
+                    }
 
-                    await transaction.save(roleUser);
+                    if (role_id === ROLE_ID.Admin) {
+                        await AuthService.handleAdminRole(
+                            transaction,
+                            user,
+                            name
+                        );
+                    }
+
+                    await AuthService.createRoleUser(
+                        transaction,
+                        user,
+                        role_id
+                    );
                 }
             );
 
@@ -63,9 +77,7 @@ export class AuthController {
         const { username, password } = req.body;
 
         try {
-            const user = await dbContext
-                .User()
-                .findOne({ where: { username } });
+            const user = await AuthService.findExistingUsername(username);
             if (!user) {
                 Logger.error(`${context} | User not found for ${username}`);
                 res.boom.notFound('Email or password is not valid'); // Menggunakan res.boom.notFound()
@@ -79,23 +91,7 @@ export class AuthController {
                 return;
             }
 
-            const jwtPayload = await dbContext.UserRoleView().findOne({
-                where: { user_id: user.user_id }
-            });
-
-            const token = jwt.sign(
-                {
-                    userId: jwtPayload.user_id,
-                    email: jwtPayload.email,
-                    username: jwtPayload.username,
-                    role: jwtPayload.role_name,
-                    roleId: jwtPayload.role_id
-                },
-                process.env.JWT_SECRET || 'your_secret_key',
-                {
-                    expiresIn: '1h'
-                }
-            );
+            const token = await AuthService.generateJWTPayload(user);
 
             res.json(
                 BaseResponse.successResponse(

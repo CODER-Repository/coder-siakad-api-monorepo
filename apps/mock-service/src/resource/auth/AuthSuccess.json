@@ -1,8 +1,10 @@
 {
-    "header": "ew0KICAidHlwIjoiSldUIiwNCiAgImFsZyI6IkhTMjU2Ig0KfQ.ew0KICAiaWQiOiI5NjQ5MmQ1OS0wYWQ1LTRjMDAtODkyZC01OTBhZDVhYzAwZjMiLA0KICAic3ViIjoiMDEyMzQ1Njc4OSIsDQogICJuYW1lIjoiSm9obiBEb2UiLAogICJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLAogICJyb2xlIjoiU3R1ZGVudCIsCiAgInJvbGVfaWQiOiJTVEQiLA0KICAiaWF0IjoxNjgxMDQwNTE1DQp9.MwhAr9gSiLdKNBDziBCb0MY4QHHhQM2BfUHoLj2oAaE",
     "body": {
         "statusCode": 200,
         "status": true,
+        "data": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZTk1ZGVkOC1iNWEzLTQ3M2YtYjYxNC0wNWU4ZWY5MmRlZGMiLCJlbWFpbCI6ImFkbWluQHN0dWRlbnQuYWMuaWQiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwicm9sZUlkIjoiQURNIiwiaWF0IjoxNzA5NjQ5NTU2LCJleHAiOjE3MDk2NTMxNTZ9.Lwv2IjSaoFoJwjjxyuFYLTdeA-PAbtdYqRu4Sdkl2yA"
+        },
         "message": "Login Success"
     }
 }
