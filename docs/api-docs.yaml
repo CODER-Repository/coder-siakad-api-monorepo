@@ -1,0 +1,184 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Rifqio/Coder-Siakad/1.0.0
+  - description: SIAKAD Api Docs
+    url: http://35.219.79.107:8500
+info:
+  description: Coder - SIAKAD API Documentation
+  version: "1.0.0"
+  title: SIAKAD-API Docs
+tags:
+  - name: announcement
+    description: Get All Announcement
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /api/v1/announcement:
+    get:
+      tags:
+        - announcement
+      parameters:
+        - in: query
+          name: page
+          description: starting page
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: page_size
+          description: maximum number of records
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 25
+      responses:
+        '200':
+          description: get list of announcement
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AnnouncementList'
+    post:
+      tags:
+        - announcement
+      summary: create an announcement
+      responses:
+        '201':
+          description: announcement created
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AnnouncementCreatedResponse'
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnouncementPayload'
+        description: Inventory item to add
+components:
+  schemas:
+    Pagination:
+      type: object
+      required:
+        - total_rows
+        - total_page
+        - current_page
+        - page_size
+      properties:
+        total_rows:
+          type: integer
+          example: 20
+        total_page:
+          type: integer
+          example: 4
+        current_page:
+          type: integer
+          example: 1
+        page_size:
+          type: integer
+          example: 5
+    AnnouncementList:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - type
+        - priority
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 7217f2ee-45b3-4faf-a5a4-19c5be902b0c
+        title:
+          type: string
+          example: Elementummagnis
+        description:
+          type: string
+          example: Elementummagnis dis parturient montes nascetur ridiculus mus mauris vitae ultra
+        type:
+          type: string
+          example: event
+        priority:
+          type: string
+          example: "1"
+        created_at:
+          type: string
+          format: date-time
+          example: '2021-07-01T07:00:00.000Z'
+    AnnouncementResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - data
+        - message
+        - pagination
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        status:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnnouncementList'
+        message:
+          type: string
+          example: Success Fetching Announcement
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AnnouncementCreatedResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Success Creating Announcement
+    AnnouncementPayload:
+      type: object
+      required:
+        - title
+        - description
+        - type
+        - priority
+      properties:
+        id:
+          type: string
+          example: Morbihabitasse
+        description:
+          type: string
+          example: Commodoet ultrices neque ornare aenean euismod elementum nisi quis eleifend
+        type:
+          type: string
+          enum:
+            - event
+            - system-maintenance
+            - achievement
+            - deadline
+            - policy-change
+            - opportunity
+            - graduation
+            - emergency
+          example: event
+        priority:
+          type: integer
+          format: int32
+          example: 1
