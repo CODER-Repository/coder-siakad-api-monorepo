@@ -10,9 +10,13 @@ info:
   title: SIAKAD-API Docs
 tags:
   - name: announcement
-    description: Get All Announcement
-  - name: developers
-    description: Operations available to regular developers
+    description: Announcement API
+  - name: auth
+    description: Authentication API
+  - name: dashboard
+    description: Dashboard API
+  - name: schedule
+    description: Schedule API
 paths:
   /api/v1/announcement:
     get:
@@ -40,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/AnnouncementList'
+                $ref: '#/components/schemas/AnnouncementResponse'
     post:
       tags:
         - announcement
@@ -51,15 +55,121 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/AnnouncementCreatedResponse'
+                $ref: '#/components/schemas/AnnouncementCreatedResponse'
         '400':
           description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementBadRequestResponse'
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/AnnouncementPayload'
-        description: Inventory item to add
+  /api/v1/auth/register:
+    post:
+      tags:
+        - auth
+      summary: register user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPayload'
+      responses:
+        '201':
+          description: to create a user must include the admin bearer token
+          headers:
+            Authorization:
+              description: Bearer Token
+              schema:
+                type: string
+                example: Bearer <token>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreatedResponse'
+        '400':
+          description: 'invalid input, object invalid'
+          headers:
+            Authorization:
+              description: Bearer Token
+              schema:
+                type: string
+                example: Bearer <token>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBadRequestResponse'
+        '401':
+          description: 'Unauthorized if not admin'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+  /api/v1/auth/login:
+    post:
+      tags:
+        - auth
+      summary: login user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPayload'
+      responses:
+        '200':
+          description: login success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccessResponse'
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBadRequestResponse'
+        '404':
+          description: 'user not found resposne'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserNotFoundResponse'
+  /api/v1/dashboard:
+    get:
+      tags:
+        - dashboard
+      summary: get dashboard data
+      responses:
+        '200':
+          description: get dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+  /api/v1/schedule:
+    get:
+      tags:
+        - schedule
+      summary: Get schedule
+      parameters:
+        - name: today
+          in: query
+          description: Include today's schedule
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Get schedule response. Returns either weekly or today's schedule based on the 'today' query parameter.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ScheduleWeeklyResponse'
+                  - $ref: '#/components/schemas/ScheduleTodayResponse'
 components:
   schemas:
     Pagination:
@@ -152,6 +262,195 @@ components:
         message:
           type: string
           example: Success Creating Announcement
+    AnnouncementBadRequestResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - message
+        - error
+        - errors
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Invalid Request Parameter
+        error:
+          type: string
+          example: Bad Request
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+              - msg
+              - path
+            properties:
+              msg:
+                type: string
+                example: 'title is required'
+              path:
+                type: string
+                example: title
+    RegisterPayload:
+      type: object
+      required:
+        - username
+        - password
+        - email
+        - name
+        - role_id
+      properties:
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          example: password
+        email:
+          type: string
+          example: johndoe@student.ac.id
+        name:
+          type: string
+          example: John Doe
+        role_id:
+          type: string
+          enum:
+            - STD
+            - LCT
+            - ADM
+            - SP_ADM
+          example: STD
+    UserCreatedResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: User Registered Successfully
+    UserBadRequestResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - message
+        - error
+        - errors
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Invalid Request Parameter
+        error:
+          type: string
+          example: Bad Request
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+              - msg
+              - path
+            properties:
+              msg:
+                type: string
+                example: 'username is required'
+              path:
+                type: string
+                example: username
+    LoginPayload:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: johndoe
+        password:
+          type: string
+          example: password
+    LoginSuccessResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - message
+        - data
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Login Success
+        data:
+          type: object
+          required:
+            - token
+            - user
+          properties:
+            token:
+              type: string
+              example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4NmQ5OGE2Yy1kNTViLTQyMWUtOTA3NC0xZWI0OTFjZGMyN2UiLCJlbWFpbCI6ImpvaG5kb2VAc3R1ZGVudC5hYy5pZCIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwiaWF0IjoxNzA5NDQzODYzLCJleHAiOjE3MDk0NDc0NjN9.F4qmKxjBLDD1agvfgoEZgWB6WteKvQ-6_qDbRgbaJ6I
+    LoginUserNotFoundResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - error
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        status:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Username or Password Not Found
+    UnauthorizedResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - error
+      properties:
+        statusCode:
+          type: integer
+          example: 401
+        status:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: Unauthorized
     AnnouncementPayload:
       type: object
       required:
@@ -160,7 +459,7 @@ components:
         - type
         - priority
       properties:
-        id:
+        title:
           type: string
           example: Morbihabitasse
         description:
@@ -182,3 +481,181 @@ components:
           type: integer
           format: int32
           example: 1
+    DashboardResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - data
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - current_gpa
+            - total_credit_course_taken
+            - current_semester
+            - unpaid_fees
+          properties:
+            current_gpa:
+              type: number
+              example: 3.5
+            total_credit_course_taken:
+              type: integer
+              example: 20
+            current_semester:
+              type: string
+              example: 2
+            unpaid_fees:
+              type: number
+              example: 8500000
+    ScheduleWeeklyResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - data
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - monday
+            - tuesday
+            - wednesday
+            - thursday
+            - friday
+          properties:
+            monday:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScheduleList'
+            tuesday:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScheduleList'
+            wednesday:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScheduleList'
+            thursday:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScheduleList'
+            friday:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScheduleList'
+    ScheduleTodayResponse:
+      type: object
+      required:
+        - statusCode
+        - status
+        - data
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            date:
+              type: string
+              example: "2023-07-01T11:30"
+            schedule:
+              type: array
+              items:
+                $ref: '#/components/schemas/TodayScheduleList'
+        message:
+          type: string
+          example: Success Fetching Schedule
+    ScheduleList:
+      type: object
+      required:
+        - schedule_id
+        - course_id
+        - course_name
+        - course_time
+        - time_start
+        - time_end
+        - room
+        - faculty
+      properties:
+        schedule_id:
+          type: integer
+          example: 1
+        course_id:
+          type: string
+          example: WEB-101
+        course_name:
+          type: string
+          example: Pemrograman Web
+        time_start:
+          type: string
+          example: 08:00
+        time_end:
+          type: string
+          example: 10:00
+        course_room:
+          type: string
+          example: A-101
+        faculty:
+          type: string
+          example: FMIPA
+    TodayScheduleList:
+      type: object
+      required:
+        - schedule_id
+        - course_id
+        - course_name
+        - course_time
+        - time_start
+        - time_end
+        - room
+        - faculty
+        - status
+      properties:
+        schedule_id:
+          type: integer
+          example: 1
+        course_id:
+          type: string
+          example: WEB-101
+        course_name:
+          type: string
+          example: Pemrograman Web
+        time_start:
+          type: string
+          example: 08:00
+        time_end:
+          type: string
+          example: 10:00
+        room:
+          type: string
+          example: A-101
+        faculty:
+          type: string
+          example: FMIPA
+        status:
+          type: string
+          enum:
+            - On Going
+            - Upcoming
+            - Finished
+          example: On Going
