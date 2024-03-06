@@ -5,6 +5,7 @@ import { createTerminus } from '@godaddy/terminus';
 import AuthRoutes from './routes/AuthRoutes';
 import DashboardRoutes from './routes/DashboardRoutes';
 import ScheduleRoute from './routes/ScheduleRoute';
+import AnnouncementRoute from './routes/AnnouncementRoute';
 
 const app: Express = express();
 const server = http.createServer(app);
@@ -34,6 +35,7 @@ app.use(HttpLogger);
 app.use(`${baseRoute}/auth`, AuthRoutes);
 app.use(`${baseRoute}/dashboard`, DashboardRoutes);
 app.use(`${baseRoute}/schedule`, ScheduleRoute);
+app.use(`${baseRoute}/announcement`, AnnouncementRoute);
 
 createTerminus(server, terminusOptions);
 server.listen(PORT, () => {

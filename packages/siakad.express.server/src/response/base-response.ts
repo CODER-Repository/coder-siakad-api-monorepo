@@ -21,16 +21,12 @@ export const BaseResponse = {
         };
     },
 
-    errorResponse: (
-        statusCode: number,
-        message: string,
-        errors: Result<string>
-    ) => {
+    badRequestResponse: (message: string, errors: any) => {
         return {
-            statusCode,
+            statusCode: 400,
             status: false,
             error: message,
-            errors: errors || null
+            errors
         };
     },
 
