@@ -25,4 +25,7 @@ export class Student extends BaseEntity {
 
     @Column({ type: 'varchar', length: 15 })
     phone_number!: string;
+
+    @Column({ type: 'uuid' })
+    user_id!: string;
 }

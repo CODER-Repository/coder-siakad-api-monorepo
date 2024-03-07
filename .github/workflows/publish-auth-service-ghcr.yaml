@@ -1,0 +1,43 @@
+name: Docker Image Auth Service
+
+on:
+  push:
+    branches:
+      - "staging/sprint-1"
+    paths:
+      - 'apps/auth-service/**'
+
+jobs:
+  build_and_publish_sample_service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: coder-automation
+          password: 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
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Determine the next version
+        id: version
+        run: echo "::set-output name=version::$(($(echo ${{ github.run_number }}) + 1))"
+#      - name: Determine the next version
+#        id: version
+#        run: echo "::set-output name=randomString::$(date +'%d%m%y%H')"
+
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./apps/auth-service/Dockerfile
+          push: true
+          tags: ghcr.io/coder-repository/auth-service:${{ steps.version.outputs.version }}

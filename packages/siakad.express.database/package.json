@@ -21,6 +21,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
+        "@siakad/express.utils": "*",
         "dotenv": "^16.4.5",
         "pg": "^8.11.3",
         "reflect-metadata": "^0.2.1",
