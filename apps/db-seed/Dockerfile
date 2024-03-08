@@ -1,47 +1,10 @@
-# Use the official PHP image as base
-FROM php:8.1-fpm
+# Stage 1: Build
+FROM php:8.3-cli-alpine as builder
 
-# Install system dependencies and PHP extensions POSTGRES
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libzip-dev \
-    libonig-dev \
-    libxml2-dev \
-    libxslt-dev \
-    libwebp-dev \
-    libpng-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libxpm-dev \
-    libvpx-dev \
-    libgd-dev \
-    libexif-dev \
-    libxslt1-dev \
-    libzip-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    postgresql-client \
-    libpq-dev
-
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-# Install Postgre PDO
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+# Install system dependencies and PHP extensions for PostgreSQL
+RUN apk add --no-cache postgresql-client libpq-dev libzip-dev zip unzip \
+    && docker-php-ext-install pdo pdo_pgsql pgsql \
+    && apk del postgresql-client libzip-dev zip unzip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -53,9 +16,24 @@ WORKDIR /seeder
 COPY composer.lock composer.json ./
 
 # Install dependencies
-RUN composer install --no-autoloader --no-scripts
+RUN composer install --no-scripts --optimize-autoloader
 
 # Copy existing application directory contents
 COPY . .
 
-CMD ["php-fpm", "&&", "php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Stage 2: Slim Image
+FROM php:8.3-cli-alpine
+
+# Install PostgreSQL client
+RUN apk add --no-cache postgresql-client libpq-dev
+
+# Copy only necessary files from the builder
+COPY --from=builder /seeder /seeder
+COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-*/ /usr/local/lib/php/extensions/no-debug-non-zts-*/
+
+# Enable the PostgreSQL extension
+RUN docker-php-ext-install pdo pdo_pgsql pgsql
+
+WORKDIR /seeder
+
+CMD ["php", "artisan", "db:seed", "--force"]

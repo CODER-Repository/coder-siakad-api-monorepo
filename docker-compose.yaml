@@ -75,6 +75,8 @@ services:
       - siakad-network
 
   migrate:
+    image: ghcr.io/coder-repository/db-migrate:latest
+    platform: linux/amd64
     build:
       context: apps/db-migrate
       dockerfile: Dockerfile
@@ -88,6 +90,8 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
 
   seed:
+    image: ghcr.io/coder-repository/db-seed:latest
+    platform: linux/amd64
     build:
       context: apps/db-seed
       dockerfile: Dockerfile
@@ -98,14 +102,12 @@ services:
     links:
       - postgres
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_DATABASE=coder-siakad
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-
 
   redis:
     image: redis:6
