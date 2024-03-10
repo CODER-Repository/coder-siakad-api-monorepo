@@ -28,7 +28,7 @@ services:
       dockerfile: ./apps/user-service/Dockerfile
     container_name: user-service
     ports:
-      - "5002:5002"
+      - "5003:5003"
     environment:
       - PORT=5002
       - DB_HOST=postgres
@@ -120,8 +120,10 @@ services:
       - siakad-network
     depends_on:
       - postgres
+      - migrate
     links:
       - postgres
+      - migrate
     environment:
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres

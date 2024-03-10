@@ -6,7 +6,6 @@ import { BaseResponse } from '@siakad/express.server';
 import { Logger, ROLE_ID } from '@siakad/express.utils';
 import { UserDTO, UserParamsDTO } from '../interface/user-interface';
 
-// TODO: implement request validation
 export class UserController {
   static async updateUser(
     req: Request<UserParamsDTO, {}, UserDTO>,

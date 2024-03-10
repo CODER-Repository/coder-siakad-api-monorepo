@@ -10,19 +10,16 @@ import { DatabaseConnection } from '@siakad/express.database';
 import router from './routes/user-route';
 
 const app: Express = express();
-const port = process.env.PORT || 5002;
-
+const port = process.env.PORT || 5003;
 
 // Middleware
 app.use(boom());
 app.use(HttpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// TODO: Add auth middleware
+
 app.use('/api/v1/user', router);
 
-// Initialize Database and Start Server
-// TODO: Implement graceful shutdown
 app.listen(port, async (): Promise<void> => {
   try {
     await DatabaseConnection();
