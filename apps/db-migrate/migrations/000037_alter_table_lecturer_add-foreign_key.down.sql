@@ -1,0 +1,1 @@
+ALTER TABLE lecturer DROP CONSTRAINT IF EXISTS fk_user_id;
