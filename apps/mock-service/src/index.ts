@@ -14,19 +14,19 @@ const baseRoute = '/api/v1';
 const PORT = 5002;
 
 const terminusOptions = {
-    signals: ['SIGINT', 'SIGTERM'],
-    healthCheck: () => Promise.resolve(),
-    onSignal: async (): Promise<void> => {
-        Logger.info('[MockService] Starting graceful shutdown...');
-        await server.close();
-    },
-    onShutdown: async (): Promise<void> => {
-        return new Promise<void>((resolve) => {
-            Logger.info('[MockService] Shutdown complete');
-            resolve();
-        });
-    },
-    timeout: 5000
+  signals: ['SIGINT', 'SIGTERM'],
+  healthCheck: () => Promise.resolve(),
+  onSignal: async (): Promise<void> => {
+    Logger.info('[MockService] Starting graceful shutdown...');
+    await server.close();
+  },
+  onShutdown: async (): Promise<void> => {
+    return new Promise<void>((resolve) => {
+      Logger.info('[MockService] Shutdown complete');
+      resolve();
+    });
+  },
+  timeout: 5000
 };
 
 app.use(express.json());
@@ -39,5 +39,5 @@ app.use(`${baseRoute}/announcement`, AnnouncementRoute);
 
 createTerminus(server, terminusOptions);
 server.listen(PORT, () => {
-    Logger.info(`[MockServer] Listening on port: ${PORT}`);
+  Logger.info(`[MockServer] Listening on port: ${PORT}`);
 });

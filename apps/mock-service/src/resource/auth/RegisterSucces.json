@@ -1,8 +1,8 @@
 {
-    "statusCode": 201,
-    "status": true,
-    "data": {
-        "email": "juanarocha@gmail.com"
-    },
-    "message": "User Registered Successfully"
+  "statusCode": 201,
+  "status": true,
+  "data": {
+    "email": "juanarocha@gmail.com"
+  },
+  "message": "User Registered Successfully"
 }

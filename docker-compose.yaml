@@ -20,6 +20,27 @@ services:
     networks:
       - siakad-network
 
+  user-service:
+    image: ghcr.io/coder-repository/user-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "5003:5003"
+    environment:
+      - PORT=5002
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+
   auth-service:
     image: ghcr.io/coder-repository/auth-service:latest
     platform: linux/amd64
@@ -99,8 +120,10 @@ services:
       - siakad-network
     depends_on:
       - postgres
+      - migrate
     links:
       - postgres
+      - migrate
     environment:
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
