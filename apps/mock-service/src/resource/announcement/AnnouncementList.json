@@ -1,53 +1,53 @@
 {
-    "statusCode": 200,
-    "status": true,
-    "data": [
-        {
-            "id": "7217f2ee-45b3-4faf-a5a4-19c5be902b0c",
-            "title": "Elementummagnis",
-            "description": "Elementummagnis dis parturient montes nascetur ridiculus mus mauris vitae ultra",
-            "type": "event",
-            "priority": "1",
-            "created_at": "2021-07-01T07:00:00.000Z"
-        },
-        {
-            "id": "47a13900-e64b-4c36-98ee-d845fe4755ea",
-            "title": "Dapibusfermentum",
-            "description": "Adridiculus mus mauris vitae ultricies leo integer malesuada nunc vel risus",
-            "type": "achievement",
-            "priority": "2",
-            "created_at": "2021-07-01T07:00:00.000Z"
-        },
-        {
-            "id": "aeb08428-9ece-48fb-9426-2f90f93f287f",
-            "title": "Semodio Tempus",
-            "description": "Semodio tempus viverra turpis massa sed elementum tempus egestas sed sed",
-            "type": "graduation",
-            "priority": "3",
-            "created_at": "2021-07-01T07:00:00.000Z"
-        },
-        {
-            "id": "85ff5ce5-5cb7-4cfb-81bc-a6fc8e598439",
-            "title": "Molestiehendrerit Ligulaneque",
-            "description": "Molestiehendrerit ligulaneque eget pretium quam vulputate dignissim suspendisse in est ante",
-            "type": "event",
-            "priority": "3",
-            "created_at": "2021-07-01T07:00:00.000Z"
-        },
-        {
-            "id": "b7ed07ab-c715-44a9-8fdb-dda38d53c3bd",
-            "title": "Aliquetdiam",
-            "description": "Sitadipiscing elit pellentesque habitant morbi tristique senectus et netus et",
-            "type": "opportunity",
-            "priority": "3",
-            "created_at": "2021-07-01T07:00:00.000Z"
-        }
-    ],
-    "message": "Success Fetching Announcement",
-    "pagination": {
-        "total_rows": 20,
-        "total_page": 4,
-        "current_page": 1,
-        "page_size": 5
+  "statusCode": 200,
+  "status": true,
+  "data": [
+    {
+      "id": "7217f2ee-45b3-4faf-a5a4-19c5be902b0c",
+      "title": "Elementummagnis",
+      "description": "Elementummagnis dis parturient montes nascetur ridiculus mus mauris vitae ultra",
+      "type": "event",
+      "priority": "1",
+      "created_at": "2021-07-01T07:00:00.000Z"
+    },
+    {
+      "id": "47a13900-e64b-4c36-98ee-d845fe4755ea",
+      "title": "Dapibusfermentum",
+      "description": "Adridiculus mus mauris vitae ultricies leo integer malesuada nunc vel risus",
+      "type": "achievement",
+      "priority": "2",
+      "created_at": "2021-07-01T07:00:00.000Z"
+    },
+    {
+      "id": "aeb08428-9ece-48fb-9426-2f90f93f287f",
+      "title": "Semodio Tempus",
+      "description": "Semodio tempus viverra turpis massa sed elementum tempus egestas sed sed",
+      "type": "graduation",
+      "priority": "3",
+      "created_at": "2021-07-01T07:00:00.000Z"
+    },
+    {
+      "id": "85ff5ce5-5cb7-4cfb-81bc-a6fc8e598439",
+      "title": "Molestiehendrerit Ligulaneque",
+      "description": "Molestiehendrerit ligulaneque eget pretium quam vulputate dignissim suspendisse in est ante",
+      "type": "event",
+      "priority": "3",
+      "created_at": "2021-07-01T07:00:00.000Z"
+    },
+    {
+      "id": "b7ed07ab-c715-44a9-8fdb-dda38d53c3bd",
+      "title": "Aliquetdiam",
+      "description": "Sitadipiscing elit pellentesque habitant morbi tristique senectus et netus et",
+      "type": "opportunity",
+      "priority": "3",
+      "created_at": "2021-07-01T07:00:00.000Z"
     }
+  ],
+  "message": "Success Fetching Announcement",
+  "pagination": {
+    "total_rows": 20,
+    "total_page": 4,
+    "current_page": 1,
+    "page_size": 5
+  }
 }

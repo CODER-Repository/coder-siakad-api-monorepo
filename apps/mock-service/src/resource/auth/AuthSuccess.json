@@ -1,10 +1,10 @@
 {
-    "body": {
-        "statusCode": 200,
-        "status": true,
-        "data": {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZTk1ZGVkOC1iNWEzLTQ3M2YtYjYxNC0wNWU4ZWY5MmRlZGMiLCJlbWFpbCI6ImFkbWluQHN0dWRlbnQuYWMuaWQiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwicm9sZUlkIjoiQURNIiwiaWF0IjoxNzA5NjQ5NTU2LCJleHAiOjE3MDk2NTMxNTZ9.Lwv2IjSaoFoJwjjxyuFYLTdeA-PAbtdYqRu4Sdkl2yA"
-        },
-        "message": "Login Success"
-    }
+  "body": {
+    "statusCode": 200,
+    "status": true,
+    "data": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZTk1ZGVkOC1iNWEzLTQ3M2YtYjYxNC0wNWU4ZWY5MmRlZGMiLCJlbWFpbCI6ImFkbWluQHN0dWRlbnQuYWMuaWQiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwicm9sZUlkIjoiQURNIiwiaWF0IjoxNzA5NjQ5NTU2LCJleHAiOjE3MDk2NTMxNTZ9.Lwv2IjSaoFoJwjjxyuFYLTdeA-PAbtdYqRu4Sdkl2yA"
+    },
+    "message": "Login Success"
+  }
 }

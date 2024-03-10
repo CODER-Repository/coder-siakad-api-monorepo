@@ -9,13 +9,13 @@ const router = express.Router();
 const Namespace = 'AuthController';
 
 router.post('/login', (req: Request, res: Response): Response => {
-    Logger.info(`[${Namespace}]`, 'Success login');
-    return res.json(AuthSuccess.body);
+  Logger.info(`[${Namespace}]`, 'Success login');
+  return res.json(AuthSuccess.body);
 });
 
 router.post('/register', (req: Request, res: Response): Response => {
-    Logger.info(`[${Namespace}] Success register`);
-    return res.json(RegisterSuccess);
+  Logger.info(`[${Namespace}] Success register`);
+  return res.json(RegisterSuccess);
 });
 
 export default router;

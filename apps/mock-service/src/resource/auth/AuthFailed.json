@@ -1,29 +1,29 @@
 {
-    "statusCode": 400,
-    "status": "false",
-    "error": "Bad Request",
-    "message": "Validation Error",
-    "data": [
-        {
-            "message": "\"email\" must be a valid email",
-            "path": ["email"],
-            "type": "string.email",
-            "context": {
-                "value": "invalid-email",
-                "key": "email",
-                "label": "email"
-            }
-        },
-        {
-            "message": "\"password\" length must be at least 8 characters long",
-            "path": ["password"],
-            "type": "string.min",
-            "context": {
-                "value": "short",
-                "key": "password",
-                "label": "password",
-                "limit": 8
-            }
-        }
-    ]
+  "statusCode": 400,
+  "status": "false",
+  "error": "Bad Request",
+  "message": "Validation Error",
+  "data": [
+    {
+      "message": "\"email\" must be a valid email",
+      "path": ["email"],
+      "type": "string.email",
+      "context": {
+        "value": "invalid-email",
+        "key": "email",
+        "label": "email"
+      }
+    },
+    {
+      "message": "\"password\" length must be at least 8 characters long",
+      "path": ["password"],
+      "type": "string.min",
+      "context": {
+        "value": "short",
+        "key": "password",
+        "label": "password",
+        "limit": 8
+      }
+    }
+  ]
 }

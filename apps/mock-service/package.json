@@ -1,26 +1,26 @@
 {
-    "name": "mock-service",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "build": "tsc",
-        "dev": "nodemon ./src/index.ts"
-    },
-    "dependencies": {
-        "@godaddy/terminus": "^4.12.1",
-        "@siakad/express.server": "*",
-        "@siakad/express.utils": "*",
-        "express": "^4.18.2"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.21",
-        "@types/node": "^20.11.20",
-        "nodemon": "^3.0.3",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.3.3"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC"
+  "name": "mock-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon ./src/index.ts"
+  },
+  "dependencies": {
+    "@godaddy/terminus": "^4.12.1",
+    "@siakad/express.server": "*",
+    "@siakad/express.utils": "*",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.20",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
