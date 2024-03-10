@@ -1,52 +1,55 @@
 {
-    "name": "coder-siakad-api-monorepo",
-    "private": true,
-    "scripts": {
-        "build": "turbo build",
-        "dev": "turbo dev",
-        "lint": "turbo lint",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-        "prepare": "husky",
-        "precommit": "lint-staged",
-        "commitmsg": "husky-run .husky/commit-msg"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged",
-            "commit-msg": "npm run commitmsg"
-        }
-    },
-    "lint-staged": {
-        "*.ts": [
-            "eslint --fix",
-            "prettier --write",
-            "git add"
-        ],
-        "*.{json,md}": [
-            "prettier --write"
-        ]
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^18.6.1",
-        "@commitlint/config-conventional": "^18.6.2",
-        "@dwmt/commitlint-config-jira-type": "^2.0.0",
-        "@dwmt/commitlint-plugin-jira-type": "^2.0.0",
-        "@repo/eslint-config": "*",
-        "@repo/typescript-config": "*",
-        "commitlint-config-jira": "^1.6.4",
-        "commitlint-plugin-jira-rules": "^1.6.4",
-        "dotenv-cli": "^7.3.0",
-        "husky": "^9.0.11",
-        "lint-staged": "^15.2.2",
-        "prettier": "^3.1.1",
-        "turbo": "latest"
-    },
-    "engines": {
-        "node": ">=18"
-    },
-    "packageManager": "npm@10.2.3",
-    "workspaces": [
-        "apps/*",
-        "packages/*"
+  "name": "coder-siakad-api-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "precommit": "lint-staged",
+    "commitmsg": "husky-run .husky/commit-msg"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "npm run commitmsg"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
     ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.6.1",
+    "@commitlint/config-conventional": "^18.6.2",
+    "@dwmt/commitlint-config-jira-type": "^2.0.0",
+    "@dwmt/commitlint-plugin-jira-type": "^2.0.0",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "commitlint-config-jira": "^1.6.4",
+    "commitlint-plugin-jira-rules": "^1.6.4",
+    "dotenv-cli": "^7.3.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.1.1",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.2.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@siakad/express.utils": "^0.0.0"
+  }
 }
