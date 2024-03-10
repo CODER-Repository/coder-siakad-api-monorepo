@@ -13,7 +13,7 @@ CREATE SEQUENCE schedule_id_sequence START 1;
 CREATE TABLE schedule (
     schedule_id VARCHAR(20) PRIMARY KEY DEFAULT CONCAT('SCH-', nextval('schedule_id_sequence')),
     lecturer_id VARCHAR(15) NOT NULL,
-    nim VARCHAR(15) NOT NULL,
+    nim VARCHAR(30) NOT NULL,
     course_id VARCHAR(15) NOT NULL,
     class_id VARCHAR(15) NOT NULL,
     semester_id VARCHAR(5) NOT NULL,
