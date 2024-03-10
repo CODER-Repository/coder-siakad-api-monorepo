@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export const ROLE_ID = {
   Admin: 'ADM',
   SuperAdmin: 'SP_ADM',
@@ -27,4 +28,13 @@ export const SEMESTER_ID = {
   '2023_GENAP': '2023B',
   '2024_GANJIL': '2024A',
   '2024_GENAP': '2024B'
+};
+
+export const PORT_SERVICE = {
+  authService: 5001,
+  mockService: 5002,
+  userService: 5003,
+  paymentService: 5004,
+  scheduleService: 5005
+  // add more
 };

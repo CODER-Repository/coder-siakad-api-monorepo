@@ -13,3 +13,4 @@ export { UKT } from './ukt.entity';
 export { User } from './user.entity';
 export { Role } from './role.entity';
 export { RoleUser } from './role_user.entity';
+export { Schedule } from './schedule.entity';

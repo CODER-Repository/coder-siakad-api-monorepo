@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import { HttpLogger, Logger } from '@siakad/express.utils';
+import { HttpLogger, Logger, PORT_SERVICE } from '@siakad/express.utils';
 import http from 'http';
 import { createTerminus } from '@godaddy/terminus';
 import AuthRoutes from './routes/AuthRoutes';
@@ -11,7 +11,7 @@ const app: Express = express();
 const server = http.createServer(app);
 
 const baseRoute = '/api/v1';
-const PORT = 5002;
+const PORT = PORT_SERVICE.mockService;
 
 const terminusOptions = {
   signals: ['SIGINT', 'SIGTERM'],
