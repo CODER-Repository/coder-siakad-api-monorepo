@@ -1,0 +1,9 @@
+{
+    "status": true,
+    "statusCode": 201,
+    "data": {
+        "id": "PAY202303101530",
+        "payment_status": "Pending"
+    },
+    "message": "Payment request created successfully"
+}

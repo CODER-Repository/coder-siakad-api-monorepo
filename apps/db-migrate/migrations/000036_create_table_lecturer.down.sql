@@ -1,1 +1,2 @@
 DROP TABLE IF EXISTS lecturer;
+DROP TYPE IF EXISTS gender;

@@ -1,0 +1,31 @@
+{
+    "status": true,
+    "statusCode": 200,
+    "data": [
+        {
+            "id": "PAY202303101530",
+            "payment_bill_date": "2021-01-01",
+            "payment_due_date": "2021-01-31",
+            "payment_billed_amount": 1000000,
+            "payment_paid_amount": 0,
+            "description": "SPP Ganjil 2022/2023",
+            "payment_status": "Unpaid"
+        },
+        {
+            "id": "PAY202303111530",
+            "payment_bill_date": "2021-02-01",
+            "payment_due_date": "2021-02-28",
+            "payment_billed_amount": 2000000,
+            "payment_paid_amount": 0,
+            "description": "SPP Genap 2022/2023",
+            "payment_status": "Unpaid"
+        }
+    ],
+    "message": "Success Fetching Unpaid Bills Data",
+    "pagination": {
+        "total_rows": 3,
+        "total_page": 1,
+        "current_page": 1,
+        "page_size": 10
+    }
+}
