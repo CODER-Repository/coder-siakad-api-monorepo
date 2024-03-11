@@ -40,19 +40,29 @@ export class ScheduleController {
       const todaySchedule = await ScheduleService.getTodaySchedule();
       console.log(todaySchedule);
 
-      if (!todaySchedule) {
+      if (!todaySchedule || todaySchedule.length === 0) {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
         );
         res
           .status(200)
-          .json(BaseResponse.successResponse({}, resMessage.emptyData));
+          .json(
+            BaseResponse.successResponse(
+              { date: new Date().toISOString(), schedule: [] },
+              resMessage.emptyData
+            )
+          );
         return;
       }
 
       res
         .status(200)
-        .json(BaseResponse.successResponse(todaySchedule, resMessage.success));
+        .json(
+          BaseResponse.successResponse(
+            { date: new Date().toISOString(), schedule: todaySchedule },
+            resMessage.emptyData
+          )
+        );
     } catch (error) {
       Logger.error(
         `${contextLogger.getTodayScheduleController} | Error: ${error.message}`
