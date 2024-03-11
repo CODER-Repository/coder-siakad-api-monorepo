@@ -12,11 +12,11 @@ export class ScheduleController {
       const schedules = await ScheduleService.getCurrentSchedule();
       if (!schedules) {
         Logger.error(
-          `${contextLogger.getCurrentScheduleController} | ${resMessage.notFound}`
+          `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
         );
         res
           .status(200)
-          .json(BaseResponse.successResponse({}, resMessage.notFound));
+          .json(BaseResponse.successResponse({}, resMessage.emptyData));
         return;
       }
 
@@ -42,11 +42,11 @@ export class ScheduleController {
 
       if (!todaySchedule) {
         Logger.error(
-          `${contextLogger.getCurrentScheduleController} | ${resMessage.notFound}`
+          `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
         );
         res
           .status(200)
-          .json(BaseResponse.successResponse({}, resMessage.notFound));
+          .json(BaseResponse.successResponse({}, resMessage.emptyData));
         return;
       }
 
