@@ -1,9 +1,9 @@
-import { dbContext } from '@siakad/express.database';
+import { dbContext, Schedule } from '@siakad/express.database';
 import { CurrentSchedule } from '../interface/schedule-interface';
-import { Logger, contextLogger } from '@siakad/express.utils';
+import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
 export class ScheduleService {
-  static async getAllSchedules(): Promise<CurrentSchedule> {
+  static async getCurrentSchedule(): Promise<CurrentSchedule> {
     try {
       const schedules = await dbContext.Schedule().find();
 
@@ -31,7 +31,30 @@ export class ScheduleService {
 
       return result;
     } catch (error) {
-      Logger.error(`${contextLogger.getAllSchedule} | Error: ${error.message}`);
+      Logger.error(
+        `${contextLogger.getCurrentScheduleService} | Error: ${error.message}`
+      );
+      throw error;
+    }
+  }
+
+  static async getTodaySchedule(): Promise<any> {
+    try {
+      const today: Day = new Date()
+        .toLocaleString('en-US', { weekday: 'long' })
+        .toLocaleLowerCase() as Day;
+      const schedules = await Schedule.find({ where: { type: today } });
+
+      const todaySchedule = schedules.map((schedule) => ({
+        schedule_id: schedule.schedule_id,
+        course_id: schedule.course_id,
+        time_start: schedule.start_time,
+        time_end: schedule.end_time
+      }));
+
+      return todaySchedule;
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`);
       throw error;
     }
   }

@@ -4,14 +4,16 @@ import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
 
 export class ScheduleController {
-  static async getSchedule(
+  static async getCurrentSchedule(
     req: Request<{}, {}, {}, {}>,
     res: Response
   ): Promise<void> {
     try {
-      const schedules = await ScheduleService.getAllSchedules();
+      const schedules = await ScheduleService.getCurrentSchedule();
       if (!schedules) {
-        Logger.error(`${contextLogger.getSchedule} | ${resMessage.notFound}`);
+        Logger.error(
+          `${contextLogger.getCurrentScheduleController} | ${resMessage.notFound}`
+        );
         res
           .status(200)
           .json(BaseResponse.successResponse({}, resMessage.notFound));
@@ -22,8 +24,40 @@ export class ScheduleController {
         .status(200)
         .json(BaseResponse.successResponse(schedules, resMessage.success));
     } catch (error) {
-      Logger.error(`${contextLogger.getSchedule} | Error: ${error.message}`);
+      Logger.error(
+        `${contextLogger.getCurrentScheduleController} | Error: ${error.message}`
+      );
       res.boom.badImplementation(resMessage.badImplementation);
+      return;
+    }
+  }
+
+  static async getTodaySchedule(
+    req: Request<{}, {}, {}, {}>,
+    res: Response
+  ): Promise<void> {
+    try {
+      const todaySchedule = await ScheduleService.getTodaySchedule();
+      console.log(todaySchedule);
+
+      if (!todaySchedule) {
+        Logger.error(
+          `${contextLogger.getCurrentScheduleController} | ${resMessage.notFound}`
+        );
+        res
+          .status(200)
+          .json(BaseResponse.successResponse({}, resMessage.notFound));
+        return;
+      }
+
+      res
+        .status(200)
+        .json(BaseResponse.successResponse(todaySchedule, resMessage.success));
+    } catch (error) {
+      Logger.error(
+        `${contextLogger.getTodayScheduleController} | Error: ${error.message}`
+      );
+      res.status(500).json(BaseResponse.internalServerErrorResponse());
       return;
     }
   }
