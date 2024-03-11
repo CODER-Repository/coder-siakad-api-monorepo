@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export const ROLE_ID = {
   Admin: 'ADM',
   SuperAdmin: 'SP_ADM',
@@ -27,4 +28,39 @@ export const SEMESTER_ID = {
   '2023_GENAP': '2023B',
   '2024_GANJIL': '2024A',
   '2024_GENAP': '2024B'
+};
+
+export const PORT_SERVICE = {
+  authService: 5001,
+  mockService: 5002,
+  userService: 5003,
+  paymentService: 5004,
+  scheduleService: 5005
+  // add more
+};
+
+export const resMessage = {
+  badImplementation: 'Internal Server Error',
+  badRequest: 'Invalid input payload',
+  notFound: 'Data not found',
+  emptyData: 'Data is empty',
+  success: 'Successfully',
+  validationRole: 'Role is not allowed'
+  // add more
+};
+
+export const contextLogger = {
+  //Auth Service
+  userRegister: '[AuthController.registerUser]',
+  userLogin: '[AuthController.login]',
+
+  //Schedule Service
+  getSchedule: '[ScheduleController.getSchedule]',
+  getAllSchedule: '[ScheduleService.getAllSchedule]',
+  getScheduleByUserId: '[ScheduleController.getScheduleByUserId]',
+
+  //User Servicie
+  updateUser: '[UserController.updateUser]'
+
+  // add more
 };
