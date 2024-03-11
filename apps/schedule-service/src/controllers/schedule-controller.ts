@@ -11,7 +11,7 @@ export class ScheduleController {
       const schedules = await ScheduleService.getCurrentSchedule();
       if (!schedules) {
         Logger.error(
-          `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
+          `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`
         );
         JsonResponse(res, 200, resMessage.emptyData, {});
         return;
@@ -33,11 +33,10 @@ export class ScheduleController {
   ): Promise<void> {
     try {
       const todaySchedule = await ScheduleService.getTodaySchedule();
-      console.log(todaySchedule);
 
-      if (!todaySchedule || todaySchedule.length === 0) {
+      if (!todaySchedule) {
         Logger.error(
-          `${contextLogger.getTodayScheduleController} | ${resMessage.emptyData}`
+          `${contextLogger.getTodayScheduleController} | Error: ${resMessage.emptyData}`
         );
         JsonResponse(res, 200, resMessage.emptyData, {
           date: new Date().toISOString(),
