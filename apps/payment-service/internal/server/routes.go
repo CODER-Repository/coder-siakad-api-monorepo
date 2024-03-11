@@ -10,8 +10,7 @@ func (s *FiberServer) RegisterFiberRoutes() {
 		TimeZone: "Asia/Jakarta",
 	}))
 	s.App.Get("/", s.HelloWorldHandler)
-	s.App.Get("/health", s.healthHandler)
-	s.App.Get("/payment/v1/history", s.ShowPayment)
+	s.App.Get("/payment/v1/history", s.ShowPaymentHistory)
 }
 
 func (s *FiberServer) HelloWorldHandler(c *fiber.Ctx) error {
@@ -19,8 +18,4 @@ func (s *FiberServer) HelloWorldHandler(c *fiber.Ctx) error {
 		"message": "Hello World",
 	}
 	return c.JSON(resp)
-}
-
-func (s *FiberServer) healthHandler(c *fiber.Ctx) error {
-	return c.JSON(s.db.Health())
 }
