@@ -1,0 +1,5 @@
+### Get Weekly Schedule
+GET http://localhost:5001/api/v1/schedule
+
+### Get Today's Schedule
+GET http://localhost:5001/api/v1/schedule?today=true

@@ -10,6 +10,67 @@ services:
     container_name: sample-service
     ports:
       - "5000:5000"
+    environment:
+      - PORT=5000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+    networks:
+      - siakad-network
+
+  user-service:
+    image: ghcr.io/coder-repository/user-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "5003:5003"
+    environment:
+      - PORT=5002
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+
+  auth-service:
+    image: ghcr.io/coder-repository/auth-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+
+  mock-service:
+    image: ghcr.io/coder-repository/mock-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/mock-service/Dockerfile
+    container_name: mock-service
+    ports:
+      - "5002:5002"
     networks:
       - siakad-network
 
@@ -35,6 +96,8 @@ services:
       - siakad-network
 
   migrate:
+    image: ghcr.io/coder-repository/db-migrate:latest
+    platform: linux/amd64
     build:
       context: apps/db-migrate
       dockerfile: Dockerfile
@@ -47,11 +110,50 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
 
+  seed:
+    image: ghcr.io/coder-repository/db-seed:latest
+    platform: linux/amd64
+    build:
+      context: apps/db-seed
+      dockerfile: Dockerfile
+    networks:
+      - siakad-network
+    depends_on:
+      - postgres
+      - migrate
+    links:
+      - postgres
+      - migrate
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=coder-siakad
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+
   redis:
     image: redis:6
     container_name: siakad-redis
     ports:
       - "7379:6379"
+    networks:
+      - siakad-network
+
+  nginx:
+    image: nginx:latest
+    container_name: siakad-nginx
+    ports:
+      - "8500:80"
+    volumes:
+      - ./deployment/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+#      - sample-service
+#      - auth-service
+      - mock-service
+#      - postgres
+#      - migrate
+#      - redis
     networks:
       - siakad-network
 

@@ -1,0 +1,10 @@
+
+### Update User
+POST http://localhost:5001/api/v1/api/29e99e68-e255-40cf-8ba4-83588f82fb7f
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "johndoe@student.ac.id",
+  "role_id": "STD"
+}

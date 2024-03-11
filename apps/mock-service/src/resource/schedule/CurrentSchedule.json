@@ -1,0 +1,80 @@
+{
+  "status": true,
+  "statusCode": 200,
+  "data": {
+    "monday": [
+      {
+        "schedule_id": 1,
+        "course_id": "MATH-101",
+        "course_name": "Discrete Mathematics",
+        "time_start": "08:00",
+        "time_end": "10:00",
+        "room": "A-101",
+        "faculty": "FMIPA"
+      },
+      {
+        "schedule_id": 2,
+        "course_id": "MATH-102",
+        "course_name": "Calculus",
+        "time_start": "10:00",
+        "time_end": "12:00",
+        "room": "A-102",
+        "faculty": "FMIPA"
+      }
+    ],
+    "tuesday": [
+      {
+        "schedule_id": 3,
+        "course_id": "LANG-101",
+        "course_name": "English",
+        "time_start": "08:00",
+        "time_end": "10:00",
+        "room": "B-104",
+        "faculty": "FKIP"
+      }
+    ],
+    "wednesday": [
+      {
+        "schedule_id": 4,
+        "course_id": "MATH-101",
+        "course_name": "Discrete Mathematics",
+        "time_start": "08:00",
+        "time_end": "10:00",
+        "room": "A-101",
+        "faculty": "FMIPA"
+      },
+      {
+        "schedule_id": 5,
+        "course_id": "MATH-102",
+        "course_name": "Calculus",
+        "time_start": "10:00",
+        "time_end": "12:00",
+        "room": "A-102",
+        "faculty": "FMIPA"
+      }
+    ],
+    "thursday": [
+      {
+        "schedule_id": 6,
+        "course_id": "SCI-201",
+        "course_name": "Physics",
+        "time_start": "09:00",
+        "time_end": "11:00",
+        "room": "C-201",
+        "faculty": "FMIPA"
+      }
+    ],
+    "friday": [
+      {
+        "schedule_id": 7,
+        "course_id": "CHEM-101",
+        "course_name": "Chemistry",
+        "time_start": "10:00",
+        "time_end": "12:00",
+        "room": "D-102",
+        "faculty": "FMIPA"
+      }
+    ]
+  },
+  "message": "Success Getting Schedule Data"
+}
