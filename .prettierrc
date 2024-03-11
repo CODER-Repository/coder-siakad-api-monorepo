@@ -2,5 +2,6 @@
   "tabSize": 4,
   "singleQuote": true,
   "bracketSpacing": true,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "endOfLine": "auto"
 }
