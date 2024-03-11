@@ -56,6 +56,7 @@ export const contextLogger = {
 
   //Schedule Service
   getSchedule: '[ScheduleController.getSchedule]',
+  getAllSchedule: '[ScheduleService.getAllSchedule]',
   getScheduleByUserId: '[ScheduleController.getScheduleByUserId]',
 
   //User Servicie

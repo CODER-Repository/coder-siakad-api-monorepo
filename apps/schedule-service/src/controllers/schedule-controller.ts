@@ -10,7 +10,7 @@ export class ScheduleController {
   ): Promise<void> {
     try {
       const schedules = await ScheduleService.getAllSchedules();
-      if (!schedules || schedules.length === 0) {
+      if (!schedules) {
         Logger.error(`${contextLogger.getSchedule} | ${resMessage.notFound}`);
         res
           .status(200)
