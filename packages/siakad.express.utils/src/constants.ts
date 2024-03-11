@@ -38,3 +38,28 @@ export const PORT_SERVICE = {
   scheduleService: 5005
   // add more
 };
+
+export const resMessage = {
+  badImplementation: 'Internal Server Error',
+  badRequest: 'Invalid input payload',
+  notFound: 'Data not found',
+  emptyData: 'Data is empty',
+  success: 'Successfully',
+  validationRole: 'Role is not allowed'
+  // add more
+};
+
+export const contextLogger = {
+  //Auth Service
+  userRegister: '[AuthController.registerUser]',
+  userLogin: '[AuthController.login]',
+
+  //Schedule Service
+  getSchedule: '[ScheduleController.getSchedule]',
+  getScheduleByUserId: '[ScheduleController.getScheduleByUserId]',
+
+  //User Servicie
+  updateUser: '[UserController.updateUser]'
+
+  // add more
+};

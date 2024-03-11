@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BaseResponse } from '@siakad/express.server';
-import { Logger } from '@siakad/express.utils';
+import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
 
 export class ScheduleController {
@@ -8,29 +8,22 @@ export class ScheduleController {
     req: Request<{}, {}, {}, {}>,
     res: Response
   ): Promise<void> {
-    const context = '[ScheduleController.getSchedule]';
-
     try {
       const schedules = await ScheduleService.getAllSchedules();
       if (!schedules || schedules.length === 0) {
-        Logger.error(`${context} | No schedules found`);
+        Logger.error(`${contextLogger.getSchedule} | ${resMessage.notFound}`);
         res
           .status(200)
-          .json(BaseResponse.successResponse({}, 'Data not found'));
+          .json(BaseResponse.successResponse({}, resMessage.notFound));
         return;
       }
 
       res
         .status(200)
-        .json(
-          BaseResponse.successResponse(
-            schedules,
-            'Successfully retrieved schedules'
-          )
-        );
+        .json(BaseResponse.successResponse(schedules, resMessage.success));
     } catch (error) {
-      Logger.error(`${context} | Error: ${error.message}`);
-      res.boom.badImplementation('Internal Server Error');
+      Logger.error(`${contextLogger.getSchedule} | Error: ${error.message}`);
+      res.boom.badImplementation(resMessage.badImplementation);
       return;
     }
   }
