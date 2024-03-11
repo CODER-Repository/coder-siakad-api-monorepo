@@ -1,13 +1,13 @@
 version: '3.3'
 
 services:
-  sample-service:
-    image: ghcr.io/coder-repository/sample-service:latest
+  krs-service:
+    image: ghcr.io/coder-repository/krs-service:latest
     platform: linux/amd64
     build:
       context: .
-      dockerfile: ./apps/sample-service/Dockerfile
-    container_name: sample-service
+      dockerfile: ./apps/krs-service/Dockerfile
+    container_name: krs-service
     ports:
       - "5000:5000"
     environment:
