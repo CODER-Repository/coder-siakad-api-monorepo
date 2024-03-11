@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { BaseResponse } from '@siakad/express.server';
+import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
-
 export class ScheduleController {
   static async getCurrentSchedule(
     req: Request<{}, {}, {}, {}>,
@@ -14,15 +13,11 @@ export class ScheduleController {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
         );
-        res
-          .status(200)
-          .json(BaseResponse.successResponse({}, resMessage.emptyData));
+        JsonResponse(res, 200, resMessage.emptyData, {});
         return;
       }
 
-      res
-        .status(200)
-        .json(BaseResponse.successResponse(schedules, resMessage.success));
+      JsonResponse(res, 200, resMessage.success, schedules);
     } catch (error) {
       Logger.error(
         `${contextLogger.getCurrentScheduleController} | Error: ${error.message}`
@@ -42,27 +37,19 @@ export class ScheduleController {
 
       if (!todaySchedule || todaySchedule.length === 0) {
         Logger.error(
-          `${contextLogger.getCurrentScheduleController} | ${resMessage.emptyData}`
+          `${contextLogger.getTodayScheduleController} | ${resMessage.emptyData}`
         );
-        res
-          .status(200)
-          .json(
-            BaseResponse.successResponse(
-              { date: new Date().toISOString(), schedule: [] },
-              resMessage.emptyData
-            )
-          );
+        JsonResponse(res, 200, resMessage.emptyData, {
+          date: new Date().toISOString(),
+          schedule: []
+        });
         return;
       }
 
-      res
-        .status(200)
-        .json(
-          BaseResponse.successResponse(
-            { date: new Date().toISOString(), schedule: todaySchedule },
-            resMessage.emptyData
-          )
-        );
+      JsonResponse(res, 200, resMessage.emptyData, {
+        date: new Date().toISOString(),
+        schedule: todaySchedule
+      });
     } catch (error) {
       Logger.error(
         `${contextLogger.getTodayScheduleController} | Error: ${error.message}`
