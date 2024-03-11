@@ -30,6 +30,16 @@ export const SEMESTER_ID = {
   '2024_GENAP': '2024B'
 };
 
+export enum Day {
+  Sunday = 'sunday',
+  Monday = 'monday',
+  Tuesday = 'tuesday',
+  Wednesday = 'wednesday',
+  Thursday = 'thursday',
+  Friday = 'friday',
+  Saturday = 'saturday'
+}
+
 export const PORT_SERVICE = {
   authService: 5001,
   mockService: 5002,
@@ -55,9 +65,11 @@ export const contextLogger = {
   userLogin: '[AuthController.login]',
 
   //Schedule Service
-  getSchedule: '[ScheduleController.getSchedule]',
-  getAllSchedule: '[ScheduleService.getAllSchedule]',
-  getScheduleByUserId: '[ScheduleController.getScheduleByUserId]',
+  getTodayScheduleController: '[ScheduleController.getTodayScheduleController]',
+  getCurrentScheduleController:
+    '[ScheduleController.getCurrentScheduleController]',
+  getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
+  getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
 
   //User Servicie
   updateUser: '[UserController.updateUser]'
