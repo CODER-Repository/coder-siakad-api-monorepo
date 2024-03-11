@@ -3,7 +3,7 @@ import { EntityManager } from 'typeorm';
 
 import { dbContext, AppDataSource } from '@siakad/express.database';
 import { BaseResponse } from '@siakad/express.server';
-import { Logger, ROLE_ID } from '@siakad/express.utils';
+import { Logger, ROLE_ID, contextLogger } from '@siakad/express.utils';
 import { UserDTO, UserParamsDTO } from '../interface/user-interface';
 
 export class UserController {
@@ -11,7 +11,6 @@ export class UserController {
     req: Request<UserParamsDTO, {}, UserDTO>,
     res: Response
   ): Promise<void> {
-    const context = '[UserController.updateUser]';
     const { user_id: userId } = req.params;
     const { username, email, role_id } = req.body;
 
@@ -38,7 +37,7 @@ export class UserController {
         await transaction.save(roleUser);
       });
 
-      Logger.info(`${context} | User updated successfully`);
+      Logger.info(`${contextLogger.updateUser} | User updated successfully`);
       res
         .status(200)
         .json(
@@ -46,7 +45,7 @@ export class UserController {
         );
     } catch (error) {
       Logger.error(
-        `${context} | Error registering user: Message: ${error.message} | Stack: ${error.stack}`
+        `${contextLogger.updateUser} | Error registering user: Message: ${error.message} | Stack: ${error.stack}`
       );
       res.boom.badImplementation();
     }
