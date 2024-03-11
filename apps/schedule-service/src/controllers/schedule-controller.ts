@@ -17,6 +17,9 @@ export class ScheduleController {
         return;
       }
 
+      Logger.info(
+        `${contextLogger.getCurrentScheduleController} | ${resMessage.success}`
+      );
       JsonResponse(res, 200, resMessage.success, schedules);
     } catch (error) {
       Logger.error(
@@ -45,7 +48,10 @@ export class ScheduleController {
         return;
       }
 
-      JsonResponse(res, 200, resMessage.emptyData, {
+      Logger.info(
+        `${contextLogger.getTodayScheduleController} | ${resMessage.success}`
+      );
+      JsonResponse(res, 200, resMessage.success, {
         date: new Date().toISOString(),
         schedule: todaySchedule
       });
