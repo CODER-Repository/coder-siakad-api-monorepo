@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 enum Day {
   Sunday = 'sunday',
@@ -13,7 +13,7 @@ enum Day {
 
 @Entity({ name: 'schedule' })
 export class Schedule extends BaseEntity {
-  @Column({ name: 'schedule_id', length: 20 })
+  @PrimaryColumn({ name: 'schedule_id', length: 20 })
   schedule_id!: string;
 
   @Column({ name: 'lecturer_id', length: 15 })
