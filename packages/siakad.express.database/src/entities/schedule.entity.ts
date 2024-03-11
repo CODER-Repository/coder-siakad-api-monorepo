@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
-enum Day {
+export enum Day {
   Sunday = 'sunday',
   Monday = 'monday',
   Tuesday = 'tuesday',

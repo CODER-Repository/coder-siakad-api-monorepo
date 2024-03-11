@@ -3,6 +3,7 @@ import { ScheduleController } from '../controllers/schedule-controller';
 
 const scheduleRoute = Router();
 
-scheduleRoute.route('/').get(ScheduleController.getSchedule);
+scheduleRoute.route('/current').get(ScheduleController.getCurrentSchedule);
+scheduleRoute.route('/today').get(ScheduleController.getTodaySchedule);
 
 export default scheduleRoute;
