@@ -12,7 +12,10 @@ export class KRSController {
         const context = '[KRSController.showKRS]';
         try {
             const krs = await KRSService.showKRS();
-            BaseResponse.successResponse(krs, 'KRS retrieved successfully');
+            console.log(krs);
+            return res.json(
+                BaseResponse.successResponse(krs, 'KRS retrieved successfully')
+            );
         } catch (error) {
             Logger.error(`${context} | Error: ${error.message}`);
             res.boom.badRequest(error.message);
