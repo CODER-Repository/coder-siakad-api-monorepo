@@ -85,7 +85,7 @@ services:
     links:
       - postgres
     environment:
-      - DATABASE_URL=postgresql://oktariorifqi:WbVHOqg0m6Gw@ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech/coder-siakad?sslmode=require
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
 
   redis:
     image: redis:6
@@ -103,17 +103,18 @@ services:
     volumes:
       - ./deployment/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-#      - sample-service
-#      - auth-service
+      #      - sample-service
+      #      - auth-service
       - mock-service
-#      - postgres
-#      - migrate
-#      - redis
+    #      - postgres
+    #      - migrate
+    #      - redis
     networks:
       - siakad-network
 
 volumes:
   postgres_siakad:
+
 
 networks:
   siakad-network:
