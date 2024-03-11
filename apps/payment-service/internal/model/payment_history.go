@@ -3,6 +3,8 @@ package model
 import (
 	"context"
 	"database/sql"
+	"log"
+	"payment-service/internal/utils"
 	"time"
 )
 
@@ -34,25 +36,29 @@ type PaymentHistoryModel struct {
 	DB *sql.DB
 }
 
-func (m *PaymentHistoryModel) FindByNIM(nim string) ([]*PaymentHistory, error) {
-	query := `select * from payment_history where student_nim = $1`
-
+func (m *PaymentHistoryModel) FindByNIM(nim string, filter utils.Filters) ([]*PaymentHistory, utils.PaginationMetadata, error) {
+	query := `select count(*) over(), * from payment_history where student_nim = $1 limit $2 offset $3`
+	log.Println(filter)
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	rows, err := m.DB.QueryContext(ctx, query, nim)
+	args := []interface{}{nim, filter.Limit(), filter.Offset()}
+	rows, err := m.DB.QueryContext(ctx, query, args...)
+
 	if err != nil {
-		return nil, err
+		return nil, utils.PaginationMetadata{}, err
 	}
 
 	defer rows.Close()
 
+	var totalRows int
 	var payments []*PaymentHistory
 
 	for rows.Next() {
 		var payment PaymentHistory
 
 		err := rows.Scan(
+			&totalRows,
 			&payment.PaymentHistoryID,
 			&payment.InvoiceURL,
 			&payment.UktID,
@@ -70,17 +76,20 @@ func (m *PaymentHistoryModel) FindByNIM(nim string) ([]*PaymentHistory, error) {
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, utils.PaginationMetadata{}, err
 		}
 
 		payments = append(payments, &payment)
 	}
 
 	if rows.Err() != nil {
-		return nil, err
+		return nil, utils.PaginationMetadata{}, err
 	}
 
-	return payments, nil
+
+	paginationMetadata := utils.CalculatePaginationMetadata(totalRows, filter.Page, filter.PageSize)
+
+	return payments, paginationMetadata, nil
 }
 
 func (m *PaymentHistoryModel) Insert(payment *PaymentHistory) error {

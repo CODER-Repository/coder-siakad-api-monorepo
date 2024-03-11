@@ -1,18 +1,13 @@
 package server
 
-type PaginationMetadata struct {
-	TotalRows   int `json:"total_rows,omitempty"`
-	TotalPage   int `json:"total_page,omitempty"`
-	PageSize    int `json:"page_size,omitempty"`
-	CurrentPage int `json:"current_page,omitempty"`
-}
+import "payment-service/internal/utils"
 
 type Response struct {
-	Status     bool                `json:"status"`
-	StatusCode int                 `json:"statusCode"`
-	Data       interface{}         `json:"result"`
-	Message    string              `json:"message"`
-	Pagination *PaginationMetadata `json:"pagination,omitempty"`
+	Status     bool                      `json:"status"`
+	StatusCode int                       `json:"statusCode"`
+	Data       interface{}               `json:"result"`
+	Message    string                    `json:"message"`
+	Pagination *utils.PaginationMetadata `json:"pagination,omitempty"`
 }
 
 func NewResponse() Response {
@@ -21,5 +16,6 @@ func NewResponse() Response {
 		StatusCode: 200,
 		Data:       nil,
 		Message:    "",
+		Pagination: nil,
 	}
 }
