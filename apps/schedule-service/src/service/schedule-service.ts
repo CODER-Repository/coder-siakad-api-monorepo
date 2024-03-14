@@ -6,9 +6,10 @@ export class ScheduleService {
   static async getCurrentSchedule(classId: string, courseId: string, semesterId: string): Promise<CurrentSchedule> {
     try {
       const schedules = await dbContext.Schedule().find();
-      // const faculty = await dbContext.Building().findOne({ _id: semesterId })
-      // const room = await dbContext.Building().findOne({ _id: classId })
-      // const course = await dbContext.Semester().findOne({ _id: classId })
+      // TODO GET PROPERTY
+      // const faculty = await dbContext.Faculty().findOne({ where: { faculty_id: classId } });
+      // const room = await dbContext.Classroom().findOne({ where: { classroom_id: classId } });
+      // const course = await dbContext.Semester().findOne({ where: { semester_id: semesterId } });
 
       const result: CurrentSchedule = {
         monday: [],
