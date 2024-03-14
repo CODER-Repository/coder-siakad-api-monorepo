@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"database/sql"
+	"payment-service/internal/config"
 	"time"
 )
 
@@ -15,44 +16,48 @@ const (
 )
 
 type PaymentHistory struct {
-	PaymentHistoryID      *string        `json:"payment_history_id"`
-	InvoiceURL            *string        `json:"invoice_url"`
-	UktID                 *string        `json:"ukt_id"`
-	StudentNIM            *string        `json:"student_nim"`
-	Amount                *int64         `json:"amount"`
-	Description           *string        `json:"description"`
-	PaymentDate           *string        `json:"payment_date"`
-	PaymentVerifiedAt     *string        `json:"payment_verified_at"`
-	PaymentMethod         *string        `json:"payment_method"`
-	PaymentStatus         *PaymentStatus `json:"payment_status"`
-	ProofOfPaymentURL     *string        `json:"proof_of_payment_url"`
-	PaymentRejectedReason *string        `json:"payment_rejected_reason"`
-	CreatedAt             *string        `json:"created_at,omitempty"`
-	UpdatedAt             *string        `json:"updated_at,omitempty"`
+	PaymentHistoryID      *string       `json:"payment_history_id"`
+	InvoiceURL            *string       `json:"invoice_url"`
+	UktID                 *string       `json:"ukt_id"`
+	StudentNIM            string        `json:"student_nim"`
+	Amount                int64         `json:"amount"`
+	Description           string        `json:"description"`
+	PaymentDate           *string       `json:"payment_date"`
+	PaymentVerifiedAt     *string       `json:"payment_verified_at"`
+	PaymentMethod         *string       `json:"payment_method"`
+	PaymentStatus         PaymentStatus `json:"payment_status"`
+	ProofOfPaymentURL     *string       `json:"proof_of_payment_url"`
+	PaymentRejectedReason *string       `json:"payment_rejected_reason"`
+	CreatedAt             *string       `json:"created_at,omitempty"`
+	UpdatedAt             *string       `json:"updated_at,omitempty"`
 }
 type PaymentHistoryModel struct {
 	DB *sql.DB
 }
 
-func (m *PaymentHistoryModel) FindByNIM(nim string) ([]*PaymentHistory, error) {
-	query := `select * from payment_history where student_nim = $1`
-
+// Repository for payment history
+func (m *PaymentHistoryModel) FindByNIM(nim *string, filter config.Filters) ([]*PaymentHistory, config.PaginationMetadata, error) {
+	query := `select count(*) over(), * from payment_history where student_nim = $1 limit $2 offset $3`
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	rows, err := m.DB.QueryContext(ctx, query, nim)
+	args := []interface{}{nim, filter.Limit(), filter.Offset()}
+	rows, err := m.DB.QueryContext(ctx, query, args...)
+
 	if err != nil {
-		return nil, err
+		return nil, config.PaginationMetadata{}, err
 	}
 
 	defer rows.Close()
 
+	var totalRows int
 	var payments []*PaymentHistory
 
 	for rows.Next() {
 		var payment PaymentHistory
 
 		err := rows.Scan(
+			&totalRows,
 			&payment.PaymentHistoryID,
 			&payment.InvoiceURL,
 			&payment.UktID,
@@ -70,17 +75,19 @@ func (m *PaymentHistoryModel) FindByNIM(nim string) ([]*PaymentHistory, error) {
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, config.PaginationMetadata{}, err
 		}
 
 		payments = append(payments, &payment)
 	}
 
 	if rows.Err() != nil {
-		return nil, err
+		return nil, config.PaginationMetadata{}, err
 	}
 
-	return payments, nil
+	paginationMetadata := config.CalculatePaginationMetadata(totalRows, *filter.Page, *filter.PageSize)
+
+	return payments, paginationMetadata, nil
 }
 
 func (m *PaymentHistoryModel) Insert(payment *PaymentHistory) error {
