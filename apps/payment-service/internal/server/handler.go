@@ -34,6 +34,7 @@ func (s *FiberServer) ShowPaymentHistory(c *fiber.Ctx) error {
 		return failedValidationResponse(c, &validation.Errors)
 	}
 
+	log.Info("Fetching Payment History For NIM ", *nim)
 	data, pagination, err := s.models.PaymentHistory.FindByNIM(nim, requestQuery.Filters)
 
 	if data == nil {
@@ -72,30 +73,3 @@ func (s *FiberServer) ShowPaymentHistory(c *fiber.Ctx) error {
 	log.Info("Success Fetching Payment History")
 	return c.JSON(response)
 }
-
-//func (s *FiberServer) TestGenerateJWT(c *fiber.Ctx) error {
-//	day := time.Hour * 24
-//	claims := jwt.MapClaims{
-//		"userId": "86d98a6c-d55b-421e-9074-1eb491cdc27e",
-//		"email":  "johndoe@student.ac.id",
-//		"role":   "Student",
-//		"roleId": "STD",
-//		"nim":    "Lz5pCGMKCyaaA8vHgRMqEUJXPMcYdO",
-//		"exp":    time.Now().Add(day).Unix(),
-//		"iat":    time.Now().Unix(),
-//	}
-//
-//	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-//	t, err := token.SignedString([]byte(config.JWTSecret))
-//	if err != nil {
-//		log.Error("Error Generating JWT", err)
-//		return c.Status(500).JSON(fiber.Map{
-//			"message": err.Error(),
-//		})
-//	}
-//
-//	log.Info("Success Generating JWT")
-//	return c.JSON(fiber.Map{
-//		"token": t,
-//	})
-//}

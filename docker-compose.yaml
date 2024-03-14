@@ -88,9 +88,9 @@ services:
       - PORT=5004
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_USER=postgres
+      - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-      - DB_NAME=coder-siakad
+      - DB_DATABASE=coder-siakad
       - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     ports:
       - "5004:5004"
