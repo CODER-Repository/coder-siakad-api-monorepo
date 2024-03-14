@@ -3,9 +3,12 @@ import { CurrentSchedule } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
 export class ScheduleService {
-  static async getCurrentSchedule(): Promise<CurrentSchedule> {
+  static async getCurrentSchedule(classId: string, courseId: string, semesterId: string): Promise<CurrentSchedule> {
     try {
       const schedules = await dbContext.Schedule().find();
+      // const faculty = await dbContext.Building().findOne({ _id: semesterId })
+      // const room = await dbContext.Building().findOne({ _id: classId })
+      // const course = await dbContext.Semester().findOne({ _id: classId })
 
       const result: CurrentSchedule = {
         monday: [],
@@ -22,10 +25,13 @@ export class ScheduleService {
         result[day].push({
           schedule_id: schedule.schedule_id,
           course_id: schedule.course_id,
+          class_id: schedule.class_id,
+          semester_id: schedule.semester_id,
           time_start: schedule.start_time,
           time_end: schedule.end_time,
-          class_id: schedule.class_id,
-          semester_id: schedule.semester_id
+          // course_name: schedule.course_name,
+          // room : schedule.room,
+          // faculty: schedule.faculty,
         });
       });
 

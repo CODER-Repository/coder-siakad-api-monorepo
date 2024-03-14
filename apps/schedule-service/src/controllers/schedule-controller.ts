@@ -2,13 +2,22 @@ import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
+import { queryValidator } from '../utils/queryValidator';
 export class ScheduleController {
   static async getCurrentSchedule(
-    req: Request<{}, {}, {}, {}>,
+    //params, body, query, headers
+    req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
+    const { classId, courseId, semesterId } = req.query as typeof queryValidator;
+    if (!classId || !courseId || !semesterId) {
+      Logger.error(`${contextLogger.getCurrentScheduleController} | Error: Invalid query parameters`);
+      JsonResponse(res, 400, 'Query parameters classId, courseId, and semesterId are required', {});
+      return;
+    }
+
     try {
-      const schedules = await ScheduleService.getCurrentSchedule();
+      const schedules = await ScheduleService.getCurrentSchedule(classId, courseId, semesterId);
       if (!schedules) {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`
