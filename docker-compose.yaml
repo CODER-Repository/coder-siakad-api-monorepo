@@ -57,6 +57,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
+      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     networks:
       - siakad-network
     depends_on:
@@ -71,6 +72,28 @@ services:
     container_name: mock-service
     ports:
       - "5002:5002"
+    networks:
+      - siakad-network
+
+  payment-service:
+    image: ghcr.io/coder-repository/payment-service:latest
+    platform: linux/amd64
+    build:
+      context: apps/payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    depends_on:
+      - postgres
+    environment:
+      - PORT=5004
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
+    ports:
+      - "5004:5004"
     networks:
       - siakad-network
 
