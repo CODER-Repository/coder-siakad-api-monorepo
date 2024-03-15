@@ -31,7 +31,7 @@ class AnnouncementController extends Controller
                     ];
                 }
             }
-            
+
             return response()->json([ //Response gagal tervalidasi
                 'statusCode' => 400,
                 'status' => false,
@@ -40,20 +40,6 @@ class AnnouncementController extends Controller
                 'errors' => $errorDetails,
             ], 400);
         }
-
-        $announcement = Announcement::create([ //Eloquent Create
-            'announcement_id' => Str::uuid(),
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'type' => $request->input('type'),
-            'priority' => $request->input('priority'),
-        ]);
-
-        $response = [
-            'statusCode' => 201,
-            'status' => true,
-            'message' => 'Success Creating Announcement',
-        ];
 
         return response()->json([
             'statusCode' => 201,
