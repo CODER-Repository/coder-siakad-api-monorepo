@@ -19,6 +19,6 @@ export class Course extends BaseEntity {
     @OneToMany(() => Schedule, schedule => schedule.course_id)
     schedule!: Schedule;
 
-    @ManyToOne(() => Classroom, classroon => classroon.classroom_id)
+    @ManyToOne(() => Classroom, classroom => classroom.classroom_id)
     classroom!: Classroom;
 }
