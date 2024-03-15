@@ -13,6 +13,7 @@ func (s *FiberServer) RegisterFiberRoutes() {
 	verifyAuth := VerifyAuth()
 
 	s.App.Get("/", s.HealthCheck)
+	s.App.Post("/api/v1/payment", verifyAuth, s.AddPayment)
 	s.App.Get("/api/v1/payment/history", verifyAuth, s.ShowPaymentHistory)
 }
 
