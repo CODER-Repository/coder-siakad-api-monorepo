@@ -5,31 +5,7 @@ import { Logger, contextLogger, Day } from '@siakad/express.utils';
 export class ScheduleService {
   static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
     try {
-      // TODO USING JOIN
-      // const schedulesWithNim = await getScheduleByNim(nim);
-      const schedules = await dbContext.Schedule().find();
-      const schedulesWithDetails = [];
-
-      for (const schedule of schedules) {
-        const course = await dbContext.Course().findOne({ where: { course_id: schedule.course_id } });
-        const room = await dbContext.Classroom().findOne({ where: { classroom_id: course.classroom_id } });
-        const faculty = await dbContext.Faculty().findOne({ where: { faculty_id: room.faculty_id } });
-
-        const scheduleWithDetails = {
-          schedule_id: schedule.schedule_id,
-          course_id: schedule.course_id,
-          class_id: schedule.class_id,
-          semester_id: schedule.semester_id,
-          time_start: schedule.start_time,
-          time_end: schedule.end_time,
-          course_name: course.course_name,
-          room: room.classroom_name,
-          faculty: faculty.faculty_name
-        };
-
-        schedulesWithDetails.push(scheduleWithDetails);
-      }
-
+      const schedules = await dbContext.Schedule().findBy({ nim: nim });
       const result: CurrentSchedule = {
         monday: [],
         tuesday: [],
@@ -40,7 +16,13 @@ export class ScheduleService {
         sunday: []
       };
 
-      schedulesWithDetails.forEach((schedule) => {
+      // TODO USING JOIN RELATION
+      // const schedulesWithNim = await getScheduleByNim(nim);
+      // if (!schedulesWithNim || schedulesWithNim.length === 0) {
+      //   return result;
+      // }
+
+      schedules.forEach((schedule) => {
         const day = schedule.type.toLowerCase();
         result[day].push({
           schedule_id: schedule.schedule_id,
@@ -49,9 +31,9 @@ export class ScheduleService {
           semester_id: schedule.semester_id,
           time_start: schedule.start_time,
           time_end: schedule.end_time,
-          course_name: schedule.course_name,
-          room: schedule.room,
-          faculty: schedule.faculty,
+          // course_name: schedule.course_name,
+          // room: schedule.room,
+          // faculty: schedule.faculty,
         });
       });
 

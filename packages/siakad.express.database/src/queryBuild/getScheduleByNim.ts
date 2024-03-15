@@ -4,11 +4,22 @@ export const getScheduleByNim = async (nim: string): Promise<any[]> => {
     try {
         const schedules = await dbContext.Schedule()
             .createQueryBuilder('schedule')
-            .innerJoinAndSelect('schedule.students', 'student')
-            .innerJoinAndSelect('schedule.course', 'course')
-            .innerJoinAndSelect('course.classroom', 'room')
-            .innerJoinAndSelect('room.faculty', 'faculty')
+            .innerJoin('schedule.student', 'student', 'student.nim = :nim', { nim: nim })
+            .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+            .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
+            .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
             .where('student.nim = :nim', { nim: nim })
+            .select([
+                'schedule.schedule_id AS schedule_id',
+                'schedule.course_id AS course_id',
+                'schedule.class_id AS class_id',
+                'schedule.semester_id AS semester_id',
+                'schedule.start_time AS time_start',
+                'schedule.end_time AS time_end',
+                'course.course_name AS course_name',
+                'classroom.classroom_name AS room',
+                'faculty.faculty_name AS faculty'
+              ])
             .getRawMany();
 
         return schedules;

@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne } from 'typeorm';
+import { Course } from './course.entity';
+import { Faculty } from './faculty.entity';
 
 @Entity({ name: 'classroom' })
 export class Classroom extends BaseEntity {
@@ -10,4 +12,10 @@ export class Classroom extends BaseEntity {
 
     @Column({ type: 'int4' })
     faculty_id!: number;
+
+    @OneToMany(() => Course, course => course.course_id)
+    course!: Course;
+
+    @OneToOne(() => Faculty, faculty => faculty.faculty_id)
+    faculty!: Faculty;
 }
