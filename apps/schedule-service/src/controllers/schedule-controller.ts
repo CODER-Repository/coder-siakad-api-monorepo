@@ -9,15 +9,15 @@ export class ScheduleController {
     req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
-    const { classId, courseId, semesterId } = req.query as typeof queryValidator;
-    if (!classId || !courseId || !semesterId) {
+    const { nim } = req.query as typeof queryValidator;
+    if (!nim) {
       Logger.error(`${contextLogger.getCurrentScheduleController} | Error: Invalid query parameters`);
-      JsonResponse(res, 400, 'Query parameters classId, courseId, and semesterId are required', {});
+      JsonResponse(res, 400, 'Query parameters nim are required', {});
       return;
     }
 
     try {
-      const schedules = await ScheduleService.getCurrentSchedule(classId, courseId, semesterId);
+      const schedules = await ScheduleService.getCurrentSchedule(nim);
       if (!schedules) {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`

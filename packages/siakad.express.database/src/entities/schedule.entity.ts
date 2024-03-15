@@ -13,30 +13,30 @@ export enum Day {
 
 @Entity({ name: 'schedule' })
 export class Schedule extends BaseEntity {
-  @PrimaryColumn({ name: 'schedule_id', length: 20 })
+  @PrimaryColumn({ type: 'varchar', length: 20 })
   schedule_id!: string;
 
-  @Column({ name: 'lecturer_id', length: 15 })
+  @Column({ type:'varchar', length: 15 })
   lecturer_id!: string;
 
-  @Column({ name: 'nim', length: 30 })
+  @Column({ type:'varchar', length: 30 })
   nim!: string;
 
-  @Column({ name: 'course_id', length: 15 })
+  @Column({ type:'varchar', length: 15 })
   course_id!: string;
 
-  @Column({ name: 'class_id', length: 15 })
+  @Column({ type:'varchar', length: 15 })
   class_id!: string;
 
-  @Column({ name: 'semester_id', length: 5 })
+  @Column({ type:'varchar', length: 5 })
   semester_id!: string;
 
   @Column({ type: 'enum', enum: Day, default: Day.Sunday })
   type!: Day;
 
-  @Column({ name: 'start_time', type: 'time' })
+  @Column({ type: 'time' })
   start_time!: string;
 
-  @Column({ name: 'end_time', type: 'time' })
+  @Column({ type: 'time' })
   end_time!: string;
 }

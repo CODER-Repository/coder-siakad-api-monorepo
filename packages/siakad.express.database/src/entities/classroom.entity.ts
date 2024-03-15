@@ -8,6 +8,6 @@ export class Classroom extends BaseEntity {
     @Column({ type: 'varchar', length: 100 })
     classroom_name!: string;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int4' })
     faculty_id!: number;
 }
