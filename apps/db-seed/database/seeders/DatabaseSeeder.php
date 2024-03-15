@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClassRoomSeeder::class,
             AnnouncementSeeder::class,
+            StudyProgramSeeder::class,
         ]);
     }
 }

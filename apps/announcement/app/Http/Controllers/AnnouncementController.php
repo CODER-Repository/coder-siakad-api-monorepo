@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\AnnouncementResource;
 use App\Http\Request\AnnouncementCreateRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
+use App\Http\Services\PaginationValidationService;
 use App\Models\Announcement;
 
 class AnnouncementController extends Controller
@@ -48,35 +49,26 @@ class AnnouncementController extends Controller
             'type' => $request->input('type'),
             'priority' => $request->input('priority'),
         ]);
-
-        $response = [
-            'statusCode' => 201,
-            'status' => true,
-            'message' => 'Success Creating Announcement',
-        ];
-
+        
         return response()->json([
             'statusCode' => 201,
             'status' => true,
             'message' => 'Success Creating Announcement',]);
     }
 
-    public function get(Request $request)
+    public function get(Request $request, PaginationValidationService $paginationService)
     {
-        // Mengambil nilai 'page_size' dari query parameter, defaultnya 5 jika tidak ada
-        $pageSize = min($request->query('page_size', 5), 50);
-
-        // Mengambil nilai 'page' dari query parameter, defaultnya 1 jika tidak ada
-        $currentPage = $request->query('page', 1); // default halaman diubah menjadi 1
-
-        // Memastikan nilai halaman (page) yang diminta adalah angka positif > 1
-        if ($currentPage < 1) {
-            return response()->json([
-                'statusCode' => 400,
-                'status' => false,
-                'message' => 'Invalid page number. Page number must be a > 1 positive integer.'
-            ], 400);
+        // Validasi page size
+        $pageSize = $paginationService->validatePageSize($request);
+        if ($pageSize instanceof \Illuminate\Http\JsonResponse) {
+            return $pageSize;
         }
+
+        // Validasi page number
+        $currentPage = $paginationService->validatePageNumber($request);
+        if ($currentPage instanceof \Illuminate\Http\JsonResponse) {
+            return $currentPage;
+        }   
 
         // Mengambil daftar pengumuman dengan pagination menggunakan Eloquent ORM
         $announcements = Announcement::paginate($pageSize, ['*'], 'page', $currentPage);
@@ -97,5 +89,7 @@ class AnnouncementController extends Controller
 
         return response()->json($response);
     }
-
 }
+
+
+
