@@ -1,4 +1,4 @@
-package config
+package utils
 
 import (
 	"math"
@@ -6,8 +6,8 @@ import (
 )
 
 type Filters struct {
-	Page     *int `json:"page"`
-	PageSize *int `json:"pageSize"`
+	Page     *int `query:"page"`
+	PageSize *int `query:"page_size"`
 }
 
 type PaginationMetadata struct {

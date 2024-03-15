@@ -1,16 +1,16 @@
 package server
 
 import (
-	"payment-service/internal/config"
+	"payment-service/internal/utils"
 	"payment-service/internal/validator"
 )
 
 type Response struct {
-	Status     bool                       `json:"status"`
-	StatusCode int                        `json:"statusCode"`
-	Data       interface{}                `json:"data"`
-	Message    string                     `json:"message"`
-	Pagination *config.PaginationMetadata `json:"pagination,omitempty"`
+	Status     bool                      `json:"status"`
+	StatusCode int                       `json:"statusCode"`
+	Data       interface{}               `json:"data"`
+	Message    string                    `json:"message"`
+	Pagination *utils.PaginationMetadata `json:"pagination,omitempty"`
 }
 
 type ErrorResponse struct {

@@ -28,7 +28,11 @@ func New() (*FiberServer, error) {
 	}
 
 	server := &FiberServer{
-		App:    fiber.New(),
+		App: fiber.New(fiber.Config{
+			AppName:      "siakad-payment-service",
+			ReadTimeout:  15 * time.Second,
+			WriteTimeout: 30 * time.Second,
+		}),
 		db:     db,
 		models: model.NewModels(db),
 	}
@@ -46,7 +50,6 @@ func New() (*FiberServer, error) {
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-
 
 		log.Info("completing background task")
 

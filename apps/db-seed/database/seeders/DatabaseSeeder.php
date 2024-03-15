@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             FacultySeeder::class,
             UserSeeder::class,
             ClassRoomSeeder::class,
+            AnnouncementSeeder::class,
         ]);
     }
 }
