@@ -60,4 +60,42 @@ class AnnouncementController extends Controller
             'status' => true,
             'message' => 'Success Creating Announcement',]);
     }
+
+    public function get(Request $request)
+    {
+        // Mengambil nilai 'page_size' dari query parameter, defaultnya 5 jika tidak ada
+        $pageSize = min($request->query('page_size', 5), 50);
+
+        // Mengambil nilai 'page' dari query parameter, defaultnya 1 jika tidak ada
+        $currentPage = $request->query('page', 1); // default halaman diubah menjadi 1
+
+        // Memastikan nilai halaman (page) yang diminta adalah angka positif > 1
+        if ($currentPage < 1) {
+            return response()->json([
+                'statusCode' => 400,
+                'status' => false,
+                'message' => 'Invalid page number. Page number must be a > 1 positive integer.'
+            ], 400);
+        }
+
+        // Mengambil daftar pengumuman dengan pagination menggunakan Eloquent ORM
+        $announcements = Announcement::paginate($pageSize, ['*'], 'page', $currentPage);
+
+        // Membuat respons JSON yang berisi data pengumuman beserta informasi pagination
+        $response = [
+            'statusCode' => 200,
+            'status' => true,
+            'data' => $announcements->items(),
+            'message' => 'Success Fetching Announcement',
+            'pagination' => [
+                'total_rows' => $announcements->total(), // Jumlah total baris data yang tersedia.
+                'total_page' => $announcements->lastPage(), // Jumlah total halaman berdasarkan jumlah total baris dan ukuran halaman.
+                'current_page' => $announcements->currentPage(), //Halaman yang sedang ditampilkan saat ini.
+                'page_size' => $announcements->perPage(), // Jumlah item per halaman.
+            ]
+        ];
+
+        return response()->json($response);
+    }
+
 }
