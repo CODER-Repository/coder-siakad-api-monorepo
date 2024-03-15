@@ -9,20 +9,20 @@ import (
 )
 
 type PaymentHistory struct {
-	PaymentHistoryID      *string `json:"payment_history_id"`
-	InvoiceURL            *string `json:"invoice_url"`
-	UktID                 *string `json:"ukt_id"`
-	StudentNIM            string  `json:"student_nim"`
-	Amount                int64   `json:"amount"`
-	Description           string  `json:"description"`
-	PaymentDate           *string `json:"payment_date"`
-	PaymentVerifiedAt     *string `json:"payment_verified_at"`
-	PaymentMethod         *string `json:"payment_method"`
-	PaymentStatus         string  `json:"payment_status"`
-	ProofOfPaymentURL     *string `json:"proof_of_payment_url"`
-	PaymentRejectedReason *string `json:"payment_rejected_reason"`
-	CreatedAt             *string `json:"created_at,omitempty"`
-	UpdatedAt             *string `json:"updated_at,omitempty"`
+	PaymentHistoryID      *string   `json:"payment_history_id"`
+	InvoiceURL            *string   `json:"invoice_url"`
+	UktID                 *string   `json:"ukt_id"`
+	StudentNIM            string    `json:"student_nim"`
+	Amount                int       `json:"amount"`
+	Description           string    `json:"description"`
+	PaymentDate           time.Time `json:"payment_date"`
+	PaymentVerifiedAt     *string   `json:"payment_verified_at"`
+	PaymentMethod         *string   `json:"payment_method"`
+	PaymentStatus         string    `json:"payment_status"`
+	ProofOfPaymentURL     *string   `json:"proof_of_payment_url"`
+	PaymentRejectedReason *string   `json:"payment_rejected_reason"`
+	CreatedAt             *string   `json:"created_at,omitempty"`
+	UpdatedAt             *string   `json:"updated_at,omitempty"`
 }
 type PaymentHistoryModel struct {
 	DB *sql.DB
@@ -95,21 +95,9 @@ func (m *PaymentHistoryModel) FindByNIM(nim *string, paymentStatus *string, filt
 }
 
 func (m *PaymentHistoryModel) Insert(payment *PaymentHistory) error {
-	query := `insert into payment_history (
-                             invoice_url, 
-                             ukt_id, 
-                             student_nim, 
-                             amount, 
-                             description, 
-                             payment_date, 
-                             payment_verified_at, 
-                             payment_method, 
-                             payment_status, 
-                             proof_of_payment_url, 
-                             payment_rejected_reason
-                )
-			  values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-			  returning payment_history_id, payment_status, created_at`
+	query := `INSERT INTO payment_history (invoice_url, ukt_id, student_nim, amount, description, payment_date, payment_verified_at, payment_method, payment_status, proof_of_payment_url, payment_rejected_reason)
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+			  RETURNING payment_history_id, payment_status, created_at`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

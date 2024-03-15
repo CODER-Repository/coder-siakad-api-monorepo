@@ -5,19 +5,21 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"payment-service/internal/model"
 	"payment-service/internal/utils"
 	"payment-service/internal/validator"
 	"strconv"
+	"time"
 )
 
 func (s *FiberServer) AddPayment(c *fiber.Ctx) error {
-	//user, err := getUserFromContext(c)
-	//nim := user.NIM
+	user, err := getUserFromContext(c)
+	nim := user.NIM
 
-	//if err != nil {
-	//	log.Error("Error Getting User From Context ", err)
-	//	return internalServerErrorResponse(c)
-	//}
+	if err != nil {
+		log.Error("Error Getting User From Context ", err)
+		return internalServerErrorResponse(c)
+	}
 
 	amount, err := strconv.Atoi(c.FormValue("amount"))
 	if err != nil {
@@ -36,16 +38,31 @@ func (s *FiberServer) AddPayment(c *fiber.Ctx) error {
 	}
 
 	proofOfPaymentFile, err := c.FormFile("proof_of_payment")
+	if err != nil {
+		log.Error("Error Parsing Proof Of Payment File", err)
+		return c.Status(400).JSON(&ErrorResponse{
+			Status:     false,
+			StatusCode: 400,
+			Error:      "Invalid Request Parameter",
+			Errors: &[]validator.ValidationResponse{
+				{
+					Msg:  "proof_of_payment is required",
+					Path: "proof_of_payment",
+				},
+			},
+		})
+	}
+
 	paymentDTO := utils.PaymentRequestDTO{
 		Amount:         amount,
 		Description:    c.FormValue("description"),
 		PaymentMethod:  c.FormValue("payment_method"),
+		UktID:          c.FormValue("ukt_id"),
 		ProofOfPayment: proofOfPaymentFile,
 	}
 
 	validation := validator.New()
-
-	if utils.ValidateAddPayment(paymentDTO, proofOfPaymentFile, validation); !validation.Valid() {
+	if utils.ValidateAddPayment(paymentDTO, validation); !validation.Valid() {
 		log.Error("Error Validating Proof Of Payment", validation.Errors)
 		return failedValidationResponse(c, &validation.Errors)
 	}
@@ -53,14 +70,13 @@ func (s *FiberServer) AddPayment(c *fiber.Ctx) error {
 	sanitizedFileName := utils.SanitizeFilename(proofOfPaymentFile.Filename, "payment")
 
 	// Initialize Cloudinary Client
-	var ctx = context.Background()
 	cld, err := utils.CloudinaryUpload()
 	if err != nil {
 		log.Error("Error Initializing Cloudinary Client ", err)
 		return internalServerErrorResponse(c)
 	}
 
-	resp, err := cld.Upload.Upload(ctx, proofOfPaymentFile, uploader.UploadParams{
+	resp, err := cld.Upload.Upload(context.Background(), proofOfPaymentFile, uploader.UploadParams{
 		Folder:   "proof_of_payment",
 		PublicID: sanitizedFileName,
 	})
@@ -72,10 +88,28 @@ func (s *FiberServer) AddPayment(c *fiber.Ctx) error {
 
 	log.Info("Proof Of Payment Uploaded To Cloudinary ", resp.SecureURL)
 
+	// Generate Invoice ID, soon to be replaced with actual invoice url
+	invoiceUrl := utils.GenerateInvoiceID(*nim)
+	paymentData := model.PaymentHistory{
+		StudentNIM:        *nim,
+		Amount:            paymentDTO.Amount,
+		Description:       paymentDTO.Description,
+		PaymentMethod:     &paymentDTO.PaymentMethod,
+		ProofOfPaymentURL: &resp.SecureURL,
+		InvoiceURL:        &invoiceUrl,
+		UktID:             &paymentDTO.UktID,
+		PaymentStatus:     "pending",
+		PaymentDate:       time.Now(),
+	}
+
+	err = s.models.PaymentHistory.Insert(&paymentData)
+	if err != nil {
+		log.Error("Error Inserting Payment Data To Database ", err)
+		return internalServerErrorResponse(c)
+	}
+
 	respData := map[string]interface{}{
-		"amount":           paymentDTO.Amount,
-		"description":      paymentDTO.Description,
-		"payment_method":   paymentDTO.PaymentMethod,
+		"invoice_url":      paymentData.InvoiceURL,
 		"proof_of_payment": resp.SecureURL,
 	}
 

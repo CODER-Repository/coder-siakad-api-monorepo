@@ -23,6 +23,11 @@ func SanitizeFilename(filename string, prefix string) string {
 	return newFilename
 }
 
+func GenerateInvoiceID(nim string) string {
+	dateTimeFormat := time.Now().Format("020106150405") // DDMMYYHHMMSS format
+	return fmt.Sprintf("INV-%s-%s", dateTimeFormat, nim)
+}
+
 func CloudinaryUpload() (*cloudinary.Cloudinary, error) {
 	client, err := cloudinary.NewFromParams(config.CLOUDINARY_CLOUD_NAME, config.CLOUDINARY_API_KEY, config.CLOUDINARY_API_SECRET)
 	if err != nil {
