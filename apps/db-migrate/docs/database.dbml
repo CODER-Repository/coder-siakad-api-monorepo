@@ -78,6 +78,7 @@ Table "classroom" {
 
 Table "course" {
   "course_id" varchar(15) [not null]
+  "classroom_id" varchar(15) [not null]
   "course_name" varchar(100) [not null]
   "credit_hours" int4
 

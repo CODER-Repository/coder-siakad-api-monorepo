@@ -7,9 +7,11 @@ export class ScheduleService {
     try {
       const schedules = await dbContext.Schedule().find();
       // TODO GET PROPERTY
-      // const faculty = await dbContext.Faculty().findOne({ where: { faculty_id: classId } });
-      // const room = await dbContext.Classroom().findOne({ where: { classroom_id: classId } });
+      // GET USING ENTITY COURSE>CLASSROOM>FACULTY
       // const course = await dbContext.Semester().findOne({ where: { semester_id: semesterId } });
+      // const room = await dbContext.Classroom().findOne({ where: { classroom_id: classId } });
+      // const faculty = await dbContext.Faculty().findOne({ where: { faculty_id: classId } });
+      
 
       const result: CurrentSchedule = {
         monday: [],
@@ -30,6 +32,7 @@ export class ScheduleService {
           semester_id: schedule.semester_id,
           time_start: schedule.start_time,
           time_end: schedule.end_time,
+          // GET USING ENTITY COURSE>CLASSROOM>FACULTY
           // course_name: schedule.course_name,
           // room : schedule.room,
           // faculty: schedule.faculty,

@@ -16,7 +16,8 @@ import {
   RoleUser,
   Schedule,
   Classroom,
-  Faculty
+  Faculty,
+  Course,
 } from './entities';
 
 import { UserRoleView } from './views';
@@ -40,6 +41,7 @@ interface DbContext {
   Schedule: () => typeof Schedule;
   Classroom: () => typeof Classroom;
   Faculty: () => typeof Faculty;
+  Course: () => typeof Course;
   // Views
   UserRoleView: () => typeof UserRoleView;
 }
@@ -63,6 +65,7 @@ export class DbContextClass implements DbContext {
   Schedule = () => Schedule;
   Classroom = () => Classroom;
   Faculty = () => Faculty;
+  Course = () => Course;
   // Views
   UserRoleView = () => UserRoleView;
 }
