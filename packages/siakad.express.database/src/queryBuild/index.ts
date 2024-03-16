@@ -1,0 +1,1 @@
+export { getScheduleByNim } from './getScheduleByNim';

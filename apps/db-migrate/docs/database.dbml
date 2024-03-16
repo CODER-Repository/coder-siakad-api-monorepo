@@ -73,11 +73,12 @@ Table "class" {
 Table "classroom" {
   "classroom_id" varchar(15) [not null]
   "classroom_name" varchar(50) [not null]
-  "faculty_id" int2 [not null]
+  "faculty_id" int4 [not null]
 }
 
 Table "course" {
   "course_id" varchar(15) [not null]
+  "classroom_id" varchar(15) [not null]
   "course_name" varchar(100) [not null]
   "credit_hours" int4
 
