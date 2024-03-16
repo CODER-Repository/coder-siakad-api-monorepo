@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne, ManyToOne } from 'typeorm';
 import { Student } from './student.entity';
 import { Course } from './course.entity';
+import { Semester } from './semester.entity';
+import { Lecturer } from './lecture.entity';
+import { Class } from './class.entity';
 
 export enum Day {
   Sunday = 'sunday',
@@ -45,6 +48,15 @@ export class Schedule extends BaseEntity {
   @OneToMany(() => Student, student => student.nim)
   student!: Student;
 
-  @OneToMany(() => Course, course => course.course_id)
+  @ManyToOne(() => Course, course => course.course_id)
   course!: Course;
+
+  @ManyToOne(() => Semester, semester => semester.semester_id)
+  semester!: Semester;
+
+  @ManyToOne(() => Lecturer, lecturer => lecturer.lecturer_id)
+  lecturer!: Lecturer;
+
+  @OneToOne(() => Class, classEntity => classEntity.class_id)
+  class!: Class;
 }

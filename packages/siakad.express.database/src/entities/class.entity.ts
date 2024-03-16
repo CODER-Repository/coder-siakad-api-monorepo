@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import { Schedule } from '.';
 
 @Entity({ name: 'class' })
 export class Class extends BaseEntity {
@@ -17,6 +18,9 @@ export class Class extends BaseEntity {
     @Column({ type: 'varchar', length: 15 })
     classroom_id!: string;
 
-    @Column({ type: 'varchar', length: 100 })
-    schedule!: string;
+    @Column({ type: 'varchar', length: 20 })
+    schedule_id!: string;
+
+    @OneToOne(() => Schedule, schedule => schedule.schedule_id)
+    schedule!: Schedule;
 }
