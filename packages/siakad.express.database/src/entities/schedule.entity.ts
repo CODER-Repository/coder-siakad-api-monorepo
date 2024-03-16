@@ -54,7 +54,7 @@ export class Schedule extends BaseEntity {
   @ManyToOne(() => Semester, semester => semester.semester_id)
   semester!: Semester;
 
-  @ManyToOne(() => Lecturer, lecturer => lecturer.lecturer_id)
+  @ManyToOne(() => Lecturer, lecturer => lecturer.nip)
   lecturer!: Lecturer;
 
   @OneToOne(() => Class, classEntity => classEntity.class_id)

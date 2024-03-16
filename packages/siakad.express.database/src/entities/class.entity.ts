@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
-import { Schedule } from '.';
+import { BaseEntity, Column, Entity, ManyToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { Lecturer } from './lecture.entity';
+import { Schedule } from './schedule.entity';
 
 @Entity({ name: 'class' })
 export class Class extends BaseEntity {
@@ -20,4 +21,7 @@ export class Class extends BaseEntity {
 
     @OneToOne(() => Schedule, schedule => schedule.schedule_id)
     schedule!: Schedule;
+
+    @ManyToMany(() => Lecturer, lecturer => lecturer.nip)
+    lecturer!: Lecturer;
 }
