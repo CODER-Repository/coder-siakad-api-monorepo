@@ -51,7 +51,7 @@ export class ScheduleService {
       const today: Day = new Date()
         .toLocaleString('en-US', { weekday: 'long' })
         .toLocaleLowerCase() as Day;
-      const schedules = await Schedule.find({ where: { type: today } });
+      const schedules = await dbContext.Schedule().find({ where: { type: today } });
 
       const todaySchedule = schedules.map((schedule) => ({
         schedule_id: schedule.schedule_id,

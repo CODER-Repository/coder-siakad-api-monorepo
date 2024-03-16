@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne, ManyToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
 import { Student } from './student.entity';
 import { Course } from './course.entity';
 import { Semester } from './semester.entity';
@@ -46,17 +46,22 @@ export class Schedule extends BaseEntity {
   end_time!: string;
 
   @OneToMany(() => Student, student => student.nim)
+  @JoinColumn({ name: 'nim' })
   student!: Student;
 
   @ManyToOne(() => Course, course => course.course_id)
+  @JoinColumn({ name: 'course_id' })
   course!: Course;
-
+  
   @ManyToOne(() => Semester, semester => semester.semester_id)
+  @JoinColumn({ name: 'semester_id' })
   semester!: Semester;
-
+  
   @ManyToOne(() => Lecturer, lecturer => lecturer.nip)
+  @JoinColumn({ name: 'lecturer_id' })
   lecturer!: Lecturer;
-
-  @OneToOne(() => Class, classEntity => classEntity.class_id)
+  
+  @ManyToOne(() => Class, classEntity => classEntity.class_id)
+  @JoinColumn({ name: 'class_id' })
   class!: Class;
 }
