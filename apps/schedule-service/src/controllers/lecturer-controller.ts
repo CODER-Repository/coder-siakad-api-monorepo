@@ -13,7 +13,7 @@ export class LecturerController {
 
       if (!lectures) {
         Logger.error(
-          `${contextLogger.getClassController} | Error: ${resMessage.emptyData}`
+          `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`
         );
         JsonResponse(res, 200, resMessage.emptyData, {
           data: []
@@ -22,14 +22,14 @@ export class LecturerController {
       }
 
       Logger.info(
-        `${contextLogger.getClassController} | ${resMessage.success}`
+        `${contextLogger.getLecturerController} | ${resMessage.success}`
       );
       JsonResponse(res, 200, resMessage.success, {
         data: lectures
       });
     } catch (error) {
       Logger.error(
-        `${contextLogger.getClassController} | Error: ${error.message}`
+        `${contextLogger.getLecturerController} | Error: ${error.message}`
       );
       res.status(500).json(BaseResponse.internalServerErrorResponse());
       return;
