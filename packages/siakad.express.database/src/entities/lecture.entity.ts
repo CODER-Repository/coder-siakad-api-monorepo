@@ -10,7 +10,7 @@ export enum Gender {
 @Entity({ name: 'lecturer' })
 export class Lecturer extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 10 })
-  lecturer_id!: string;
+  nip!: string;
 
   @Column({ type: 'uuid' })
   user_id!: string;
