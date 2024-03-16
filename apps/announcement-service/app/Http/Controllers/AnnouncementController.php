@@ -89,7 +89,6 @@ class AnnouncementController extends Controller
 
             $announcements = Announcement::paginate($pageSize, ['*'], 'page', $currentPage);
             Log::info('Announcement Fetched', ['total' => $announcements->total()]);
-//            $logger->info('[Announcement.get] Announcement Fetched', ['total' => $announcements->total()]);
             $response = [
                 'statusCode' => 200,
                 'status' => true,
