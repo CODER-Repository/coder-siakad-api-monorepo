@@ -45,23 +45,23 @@ export class Schedule extends BaseEntity {
   @Column({ type: 'time' })
   end_time!: string;
 
-  @OneToMany(() => Student, student => student.nim)
+  @ManyToOne(() => Student, student => student.schedule)
   @JoinColumn({ name: 'nim' })
   student!: Student;
 
-  @ManyToOne(() => Course, course => course.course_id)
+  @ManyToOne(() => Course, course => course.schedule)
   @JoinColumn({ name: 'course_id' })
   course!: Course;
-  
-  @ManyToOne(() => Semester, semester => semester.semester_id)
-  @JoinColumn({ name: 'semester_id' })
-  semester!: Semester;
-  
-  @ManyToOne(() => Lecturer, lecturer => lecturer.nip)
+
+  @ManyToOne(() => Lecturer, lecturer => lecturer.schedules)
   @JoinColumn({ name: 'lecturer_id' })
   lecturer!: Lecturer;
-  
-  @ManyToOne(() => Class, classEntity => classEntity.class_id)
+
+  @ManyToOne(() => Class, classEntity => classEntity.schedule)
   @JoinColumn({ name: 'class_id' })
   class!: Class;
+
+  @ManyToOne(() => Semester, semester => semester.schedule)
+  @JoinColumn({ name: 'semester_id' })
+  semester!: Semester;
 }

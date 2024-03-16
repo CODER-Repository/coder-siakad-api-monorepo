@@ -72,4 +72,36 @@ export class ScheduleController {
       return;
     }
   }
+
+  static async getScheduleList(
+    req: Request<{}, {}, {}, {}>,
+    res: Response
+  ): Promise<void> {
+    try {
+      const response = await ScheduleService.getScheduleList();
+
+      if (!response) {
+        Logger.error(
+          `${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`
+        );
+        JsonResponse(res, 200, resMessage.emptyData, {
+          data: []
+        });
+        return;
+      }
+
+      Logger.info(
+        `${contextLogger.getScheduleListController} | ${resMessage.success}`
+      );
+      JsonResponse(res, 200, resMessage.success, {
+        data: response
+      });
+    } catch (error) {
+      Logger.error(
+        `${contextLogger.getScheduleListController} | Error: ${error.message}`
+      );
+      res.status(500).json(BaseResponse.internalServerErrorResponse());
+      return;
+    }
+  }
 }

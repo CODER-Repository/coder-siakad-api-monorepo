@@ -1,4 +1,4 @@
-import { dbContext, getScheduleByNim, Schedule } from '@siakad/express.database';
+import { dbContext, getScheduleByNim, getScheduleList } from '@siakad/express.database';
 import { CurrentSchedule } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
@@ -61,6 +61,18 @@ export class ScheduleService {
       }));
 
       return todaySchedule;
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`);
+      throw error;
+    }
+  }
+
+  static async getScheduleList(): Promise<any> {
+    try {
+
+      const schedules = await dbContext.Schedule().find();
+
+      return schedules;
     } catch (error) {
       Logger.error(`Error: ${error.message}`);
       throw error;

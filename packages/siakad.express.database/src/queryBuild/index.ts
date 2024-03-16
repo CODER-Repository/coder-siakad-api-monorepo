@@ -1,1 +1,2 @@
-export { getScheduleByNim } from './getScheduleByNim';
+export { getScheduleByNim } from './scheduleQuery';
+export { getScheduleList } from './scheduleQuery';

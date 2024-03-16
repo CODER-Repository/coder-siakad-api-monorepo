@@ -16,9 +16,9 @@ export class Course extends BaseEntity {
     @Column({ type: 'int' })
     credit_hours!: number;
 
-    @OneToMany(() => Schedule, schedule => schedule.course_id)
+    @OneToMany(() => Schedule, schedule => schedule.course)
     schedule!: Schedule;
 
-    @ManyToOne(() => Classroom, classroom => classroom.classroom_id)
+    @ManyToOne(() => Classroom, classroom => classroom.course)
     classroom!: Classroom;
 }

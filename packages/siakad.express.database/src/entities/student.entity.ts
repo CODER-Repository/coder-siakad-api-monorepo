@@ -30,6 +30,6 @@ export class Student extends BaseEntity {
   @Column({ type: 'uuid' })
   user_id!: string;
 
-  @ManyToOne(() => Schedule, schedule => schedule.nim)
-  schedule!: Schedule;
+  @ManyToOne(() => Schedule, schedule => schedule.student)
+  schedule!: Schedule[];
 }
