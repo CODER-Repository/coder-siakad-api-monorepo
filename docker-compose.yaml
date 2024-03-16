@@ -100,6 +100,28 @@ services:
     networks:
       - siakad-network
 
+  announcement-service:
+    image: ghcr.io/coder-repository/announcement-service:latest
+    platform: linux/amd64
+    build:
+      context: apps/announcement-service
+      dockerfile: Dockerfile
+    container_name: announcement-service
+    depends_on:
+      - postgres
+    environment:
+      - PORT=5005
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=coder-siakad
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "5005:5005"
+    networks:
+      - siakad-network
+
   postgres:
     image: postgres:13
     restart: always

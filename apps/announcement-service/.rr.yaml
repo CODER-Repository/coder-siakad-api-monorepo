@@ -1,0 +1,62 @@
+version: "3"
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php /app/vendor/mobypolo/roadrunner-lumen/bin/rr-lumen-worker" # maybe you need to update this path
+
+http:
+  address: 0.0.0.0:5005
+  middleware: ["headers", "gzip"]
+  access_logs: true
+  pool:
+    max_jobs: 4
+
+logs:
+  mode: development
+
+  level: debug
+
+  encoding: console
+
+  # Log line ending
+  #
+  # Default: "\n"
+  line_ending: "\n"
+
+  # Output can be file (eg.: "/var/log/rr_errors.log"), "stderr" or "stdout".
+  #
+  # Default: "stderr"
+  output: stderr
+
+  # Errors only output can be file (eg.: "/var/log/rr_errors.log"), "stderr" or "stdout".
+  #
+  # Default: "stderr"
+  err_output: stderr
+
+  # You can configure each plugin log messages individually (key is plugin name, and value is logging options in same
+  # format as above).
+  #
+  # Default: <empty map>
+  channels:
+    app:
+      level: info
+    http:
+      mode: development
+      level: panic
+      encoding: console
+      output: stdout
+      err_output: stderr
+    server:
+      mode: production
+      level: info
+      encoding: json
+      output: stdout
+      err_output: stdout
+    rpc:
+      mode: raw
+      level: debug
+      encoding: console
+      output: stderr
+      err_output: stdout
