@@ -7,7 +7,8 @@ import express, { Express } from 'express';
 import { HttpLogger, Logger, PORT_SERVICE } from '@siakad/express.utils';
 import { DatabaseConnection } from '@siakad/express.database';
 
-import router from './routes/schedule-route';
+import scheduleRouter from './routes/schedule-route';
+import classRouter from './routes/class-route';
 
 const app: Express = express();
 const port = PORT_SERVICE.scheduleService;
@@ -17,7 +18,8 @@ app.use(boom());
 app.use(HttpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api/v1/schedule', router);
+app.use('/api/v1/schedule', scheduleRouter);
+app.use('/api/v1/class', classRouter);
 
 // Initialize Database and Start Server
 // TODO: Implement graceful shutdown

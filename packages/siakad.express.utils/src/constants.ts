@@ -68,6 +68,8 @@ export const contextLogger = {
   getTodayScheduleController: '[ScheduleController.getTodayScheduleController]',
   getCurrentScheduleController:
     '[ScheduleController.getCurrentScheduleController]',
+  getClassController: '[ScheduleController.getClass]',
+  getClassService: '[ScheduleService.getClass]',
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
 
