@@ -70,7 +70,9 @@ export class ScheduleService {
   static async getScheduleList(): Promise<any> {
     try {
 
-      const schedules = await dbContext.Schedule().find();
+
+      // TODO fix : student relation
+      const schedules = await dbContext.Schedule().find({ relations: ['class','course','lecturer','semester'] });
 
       return schedules;
     } catch (error) {

@@ -5,7 +5,7 @@ GET http://localhost:5005/api/v1/schedule/today
 ### Fetch Current Schedules
 GET http://localhost:5005/api/v1/schedule/current
 
-### Fetch List Schedule
+### Fetch List Schedules
 GET http://localhost:5005/api/v1/schedule/
 
 ### Fetch List Class
