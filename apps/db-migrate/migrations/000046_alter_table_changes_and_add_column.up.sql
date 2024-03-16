@@ -1,0 +1,8 @@
+ALTER TABLE class
+RENAME COLUMN schedule TO schedule_id;
+
+ALTER TABLE class
+ALTER COLUMN schedule_id TYPE VARCHAR(20);
+
+ALTER TABLE course
+ADD COLUMN classroom_id VARCHAR(15) NOT NULL;
