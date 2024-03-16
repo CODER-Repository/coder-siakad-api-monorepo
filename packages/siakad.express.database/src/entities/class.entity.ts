@@ -18,9 +18,6 @@ export class Class extends BaseEntity {
     @Column({ type: 'varchar', length: 15 })
     classroom_id!: string;
 
-    @Column({ type: 'varchar', length: 20 })
-    schedule_id!: string;
-
     @OneToOne(() => Schedule, schedule => schedule.schedule_id)
     schedule!: Schedule;
 }
