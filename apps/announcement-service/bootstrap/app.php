@@ -1,5 +1,9 @@
 <?php
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -19,9 +23,27 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 |
 */
 
+$log = new Logger('RoadRunner');
+$formatter = new LineFormatter(null, null, true, true);
+
+$debugHandler = new StreamHandler('/var/log/rr_logs.log', Logger::DEBUG);
+$debugHandler->setFormatter($formatter);
+
+$infoHandler = new StreamHandler('/var/log/rr_info.log', Logger::INFO);
+$infoHandler->setFormatter($formatter);
+
+$errHandler = new StreamHandler('/var/log/rr_errors.log', Logger::ERROR);
+$errHandler->setFormatter($formatter);
+
+$log->pushHandler($debugHandler);
+$log->pushHandler($infoHandler);
+$log->pushHandler($errHandler);
+
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
+
+$app->instance('log', $log);
 
 $app->withFacades();
 
