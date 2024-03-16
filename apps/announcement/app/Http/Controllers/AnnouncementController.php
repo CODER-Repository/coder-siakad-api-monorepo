@@ -32,7 +32,7 @@ class AnnouncementController extends Controller
                     ];
                 }
             }
-            
+
             return response()->json([ //Response gagal tervalidasi
                 'statusCode' => 400,
                 'status' => false,
