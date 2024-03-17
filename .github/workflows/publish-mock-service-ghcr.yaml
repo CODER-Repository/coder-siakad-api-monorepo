@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "staging/sprint-1"
+      - "staging/sprint-2"
     paths:
       - 'apps/mock-service/**'
 

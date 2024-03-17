@@ -25,6 +25,12 @@ Enum "gender" {
     "female"
 }
 
+Enum "payment_status" {
+    "pending"
+    "paid"
+    "overdue"
+}
+
 Table "address" {
   "street" text
   "city" varchar(100)
@@ -61,17 +67,18 @@ Table "class" {
   "lecturer_id" varchar(15) [not null]
   "semester_id" varchar(5) [not null]
   "classroom_id" varchar(15) [not null]
-  "schedule" varchar(100) [not null]
+  "schedule_id"  varchar(15) [not null]
 }
 
 Table "classroom" {
   "classroom_id" varchar(15) [not null]
   "classroom_name" varchar(50) [not null]
-  "faculty_id" int2 [not null]
+  "faculty_id" int4 [not null]
 }
 
 Table "course" {
   "course_id" varchar(15) [not null]
+  "classroom_id" varchar(15) [not null]
   "course_name" varchar(100) [not null]
   "credit_hours" int4
 
@@ -231,6 +238,27 @@ Indexes {
 }
 }
 
+Table "payment_history" {
+    "payment_history_id" varchar(15) [not null]
+    "invoice_url" text
+    "ukt_id" varchar(15) [not null]
+    "student_nim" varchar(30) [not null]
+    "amount" int8 [not null]
+    "description" text [not null]
+    "payment_date" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+    "payment_verified_at" timestamptz(6)
+    "payment_method" varchar(50) [not null]
+    "payment_status" payment_status [not null]
+    "proof_of_payment_url" text
+    "payment_rejected_reason" text
+    "created_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+    "updated_at" timestamptz(6) [default: `CURRENT_TIMESTAMP`]
+
+Indexes {
+    (ukt_id, payment_status, student_nim, payment_history_id) [type: btree, name: "payment_ukt_student_idx"]
+  }
+}
+
 Ref "fk_student_address_id":"student"."nim" < "address"."nim" [update: no action, delete: no action]
 
 Ref "fk_administrator_user_id":"user"."user_id" < "administrator"."user_id" [update: no action, delete: no action]
@@ -264,3 +292,7 @@ Ref "fk_schedule_course_id":"course"."course_id" < "schedule"."course_id" [updat
 Ref "fk_schedule_lecturer_id":"lecturer"."nip" < "schedule"."lecturer_id" [update: no action, delete: no action]
 
 Ref "fk_schedule_semester_id":"semester"."semester_id" < "schedule"."semester_id" [update: no action, delete: no action]
+
+Ref "fk_ukt_payment_history":"ukt"."ukt_id" < "payment_history"."ukt_id" [update: no action, delete: no action]
+
+Ref "fk_student_nim_payment_history":"student"."nim" < "payment_history"."student_nim" [update: no action, delete: no action]

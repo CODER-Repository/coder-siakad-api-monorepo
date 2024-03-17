@@ -1,0 +1,43 @@
+{
+    "status": true,
+    "statusCode": 200,
+    "data": [
+        {
+            "id": "PAY202303101530",
+            "payment_date": "2020-01-01",
+            "payment_verified_date": "2020-01-01",
+            "invoice_url": "https://www.example.com/invoice/PAY202303101530",
+            "payment_amount": 6000000,
+            "payment_method": "Bank Transfer",
+            "payment_status": "Paid",
+            "description": "SPP. Ganjil 2020/2021"
+        },
+        {
+            "id": "PAY202303111530",
+            "payment_date": "2020-01-02",
+            "payment_verified_date": "2020-01-02",
+            "invoice_url": "https://www.example.com/invoice/PAY202303111530",
+            "payment_amount": 5000000,
+            "payment_method": "Cash",
+            "payment_status": "Paid",
+            "description": "SPP. Genap 2020/2021"
+        },
+        {
+            "id": "PAY202303121540",
+            "payment_date": "2020-01-03",
+            "payment_verified_date": "2020-01-03",
+            "invoice_url": "https://www.example.com/invoice/PAY202303121540",
+            "payment_amount": 2500000,
+            "payment_method": "Bank Transfer",
+            "payment_status": "Paid",
+            "description": "BIP 2 Ganjil 2020/2021"
+        }
+    ],
+    "message": "Success Fetching Payment History",
+    "pagination": {
+        "total_rows": 3,
+        "total_page": 1,
+        "current_page": 1,
+        "page_size": 10
+    }
+}

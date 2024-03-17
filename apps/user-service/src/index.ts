@@ -4,13 +4,13 @@ dotenv.config();
 
 import boom from 'express-boom';
 import express, { Express } from 'express';
-import { HttpLogger, Logger } from '@siakad/express.utils';
+import { HttpLogger, Logger, PORT_SERVICE } from '@siakad/express.utils';
 import { DatabaseConnection } from '@siakad/express.database';
 
 import router from './routes/user-route';
 
 const app: Express = express();
-const port = process.env.PORT || 5003;
+const port = process.env.PORT || PORT_SERVICE.userService;
 
 // Middleware
 app.use(boom());
