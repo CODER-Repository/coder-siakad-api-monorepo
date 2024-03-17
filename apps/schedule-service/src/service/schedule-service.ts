@@ -72,7 +72,7 @@ export class ScheduleService {
 
 
       // TODO fix : student relation
-      const schedules = await dbContext.Schedule().find({ relations: ['class','course','lecturer','semester'] });
+      const schedules = await dbContext.Schedule().find({ relations: ['student'] });
 
       return schedules;
     } catch (error) {

@@ -18,3 +18,8 @@ ALTER TABLE class
 ADD CONSTRAINT fk_class_lecturer
 FOREIGN KEY (lecturer_id)
 REFERENCES lecturer(nip);
+
+ALTER TABLE schedule
+ADD CONSTRAINT fk_student_schedule
+FOREIGN KEY (nim)
+REFERENCES student(nim);

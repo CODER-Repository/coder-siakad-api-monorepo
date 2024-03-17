@@ -29,7 +29,7 @@ export class Lecturer extends BaseEntity {
   email!: string;
 
   @OneToMany(() => Schedule, schedule => schedule.lecturer_id)
-  schedules!: Schedule;
+  schedule!: Schedule;
 
   @OneToMany(() => Class, classEntity => classEntity.lecturer_id)
   class!: Class;
