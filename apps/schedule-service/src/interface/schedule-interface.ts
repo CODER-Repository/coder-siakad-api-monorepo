@@ -1,6 +1,6 @@
 export enum Status {
   onGoing = 'On Going',
-  onAir = 'On Air',
+  inProgress = 'In Progress',
   finished = 'Finished',
 }
 

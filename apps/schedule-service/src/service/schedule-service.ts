@@ -64,7 +64,7 @@ export class ScheduleService {
         let status: Status = Status.onGoing;
     
         if (now >= startTime && now <= endTime) {
-          status = Status.onAir;
+          status = Status.inProgress;
         } else if (now > endTime) {
           status = Status.finished;
         }
