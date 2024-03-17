@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siakad-announcement-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siakad-announcement-api
+  template:
+    metadata:
+      labels:
+        app: siakad-announcement-api
+    spec:
+      containers:
+        - name: siakad-announcement-api
+          image: ghcr.io/coder-repository/announcement-service:202403171424
+          env:
+            - name: JWT_SECRET
+              value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
+            - name: PORT
+              value: "5005"
+            - name: APP_NAME
+              value: siakad-announcement-api
+            - name: APP_ENV
+              value: local
+            - name: APP_KEY
+              value: ''
+            - name: APP_DEBUG
+              value: "true"
+            - name: APP_URL
+              value: http://coder-siakad.com/api/v1/announcement
+            - name: APP_TIMEZONE
+              value: Asia/Jakarta
+            - name: LOG_CHANNEL
+              value: stderr
+            - name: LOG_SLACK_WEBHOOK_URL
+              value: ''
+            - name: DB_CONNECTION
+              value: pgsql
+            - name: DB_HOST
+              value: ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_DATABASE
+              value: coder-siakad
+            - name: DB_USERNAME
+              value: oktariorifqi
+            - name: DB_PASSWORD
+              value: WbVHOqg0m6Gw
+            - name: CACHE_DRIVER
+              value: file
+            - name: QUEUE_CONNECTION
+              value: sync
+      imagePullSecrets:
+        - name: ghcr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: siakad-announcement-api
+spec:
+  selector:
+    app: siakad-announcement-api
+  ports:
+    - port: 5005
+      targetPort: 5005
+
