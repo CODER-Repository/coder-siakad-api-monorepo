@@ -1,5 +1,5 @@
-import { dbContext, getScheduleByNim, getScheduleList } from '@siakad/express.database';
-import { CurrentSchedule } from '../interface/schedule-interface';
+import { dbContext, getScheduleByNim, getScheduleList, getScheduleListToday } from '@siakad/express.database';
+import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
 export class ScheduleService {
@@ -48,17 +48,38 @@ export class ScheduleService {
 
   static async getTodaySchedule(): Promise<any> {
     try {
+      const now = new Date();
       const today: Day = new Date()
         .toLocaleString('en-US', { weekday: 'long' })
         .toLocaleLowerCase() as Day;
-      const schedules = await dbContext.Schedule().find({ where: { type: today } });
+    
 
-      const todaySchedule = schedules.map((schedule) => ({
-        schedule_id: schedule.schedule_id,
-        course_id: schedule.course_id,
-        time_start: schedule.start_time,
-        time_end: schedule.end_time
-      }));
+      // TODO GET BY NIM/LECTURER_ID
+      const schedules = await getScheduleListToday(today)
+      // const schedules = await dbContext.Schedule().find({ where: { type: today } });
+  
+      const todaySchedule = schedules.map((schedule) => {
+        const startTime = new Date(schedule.start_time);
+        const endTime = new Date(schedule.end_time);
+        let status: Status = Status.onGoing;
+    
+        if (now >= startTime && now <= endTime) {
+          status = Status.onAir;
+        } else if (now > endTime) {
+          status = Status.finished;
+        }
+    
+        return {
+          schedule_id: schedule.schedule_id,
+          course_id: schedule.course_id,
+          course_name: schedule.course.course_name,
+          room: schedule.course.classroom.classroom_name,
+          faculty: schedule.course.classroom.faculty,
+          time_start: schedule.start_time,
+          time_end: schedule.end_time,
+          status: status,
+        };
+      });
 
       return todaySchedule;
     } catch (error) {
@@ -75,7 +96,6 @@ export class ScheduleService {
       const listSchedule = schedules.map((schedule) => ({
         schedule_id: schedule.schedule_id,
         course_id: schedule.course_id,
-        class_id: schedule.class_id,
         course_name: schedule.course.course_name,
         course_room: schedule.course.classroom.classroom_name,
         faculty: schedule.course.classroom.faculty,
