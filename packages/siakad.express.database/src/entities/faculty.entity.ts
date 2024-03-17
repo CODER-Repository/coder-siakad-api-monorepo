@@ -10,5 +10,5 @@ export class Faculty extends BaseEntity {
     faculty_name!: string;
 
     @OneToMany(() => Classroom, classroom => classroom.faculty_id)
-    faculty!: Classroom;
+    classroom!: Classroom;
 }

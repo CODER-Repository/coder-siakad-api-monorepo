@@ -67,7 +67,7 @@ Table "class" {
   "lecturer_id" varchar(15) [not null]
   "semester_id" varchar(5) [not null]
   "classroom_id" varchar(15) [not null]
-  "schedule" varchar(100) [not null]
+  "schedule_id"  varchar(15) [not null]
 }
 
 Table "classroom" {

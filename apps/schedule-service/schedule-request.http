@@ -1,6 +1,0 @@
-
-### Fetch Today Schedules
-GET http://localhost:5005/api/v1/schedule/today
-
-### Fetch Current Schedules
-GET http://localhost:5005/api/v1/schedule/current

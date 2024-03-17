@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Course } from './course.entity';
 import { Faculty } from './faculty.entity';
 
@@ -16,6 +16,7 @@ export class Classroom extends BaseEntity {
     @OneToMany(() => Course, course => course.course_id)
     course!: Course;
 
-    @OneToOne(() => Faculty, faculty => faculty.faculty_id)
+    @OneToOne(() => Faculty, faculty => faculty.classroom)
+    @JoinColumn({ name: 'faculty_id' })
     faculty!: Faculty;
 }

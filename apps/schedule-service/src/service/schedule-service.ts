@@ -1,4 +1,4 @@
-import { dbContext, getScheduleByNim, Schedule } from '@siakad/express.database';
+import { dbContext, getScheduleByNim, getScheduleList } from '@siakad/express.database';
 import { CurrentSchedule } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
@@ -51,7 +51,7 @@ export class ScheduleService {
       const today: Day = new Date()
         .toLocaleString('en-US', { weekday: 'long' })
         .toLocaleLowerCase() as Day;
-      const schedules = await Schedule.find({ where: { type: today } });
+      const schedules = await dbContext.Schedule().find({ where: { type: today } });
 
       const todaySchedule = schedules.map((schedule) => ({
         schedule_id: schedule.schedule_id,
@@ -61,6 +61,20 @@ export class ScheduleService {
       }));
 
       return todaySchedule;
+    } catch (error) {
+      Logger.error(`Error: ${error.message}`);
+      throw error;
+    }
+  }
+
+  static async getScheduleList(): Promise<any> {
+    try {
+
+
+      // TODO fix : student relation
+      const schedules = await dbContext.Schedule().find({ relations: ['student'] });
+
+      return schedules;
     } catch (error) {
       Logger.error(`Error: ${error.message}`);
       throw error;
