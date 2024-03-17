@@ -46,7 +46,7 @@ export class ScheduleService {
     }
   }
 
-  static async getTodaySchedule(): Promise<any> {
+  static async getTodaySchedule(nim: string): Promise<any> {
     try {
       const now = new Date();
       const today: Day = new Date()
@@ -55,7 +55,7 @@ export class ScheduleService {
     
 
       // TODO GET BY NIM/LECTURER_ID
-      const schedules = await getScheduleListToday(today)
+      const schedules = await getScheduleListToday(today, nim)
       // const schedules = await dbContext.Schedule().find({ where: { type: today } });
   
       const todaySchedule = schedules.map((schedule) => {
@@ -88,11 +88,11 @@ export class ScheduleService {
     }
   }
 
-  static async getScheduleList(): Promise<any> {
+  static async getScheduleList(nim: string): Promise<any> {
     try {
 
       // TODO GET BY NIM/LECTURER_ID
-      const schedules = await getScheduleList()
+      const schedules = await getScheduleList(nim)
       const listSchedule = schedules.map((schedule) => ({
         schedule_id: schedule.schedule_id,
         course_id: schedule.course_id,
