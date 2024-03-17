@@ -70,11 +70,20 @@ export class ScheduleService {
   static async getScheduleList(): Promise<any> {
     try {
 
+      // TODO GET BY NIM/LECTURER_ID
+      const schedules = await getScheduleList()
+      const listSchedule = schedules.map((schedule) => ({
+        schedule_id: schedule.schedule_id,
+        course_id: schedule.course_id,
+        class_id: schedule.class_id,
+        course_name: schedule.course.course_name,
+        course_room: schedule.course.classroom.classroom_name,
+        faculty: schedule.course.classroom.faculty,
+        time_start: schedule.start_time,
+        time_end: schedule.end_time
+      }));
 
-      // TODO fix : student relation
-      const schedules = await dbContext.Schedule().find({ relations: ['student'] });
-
-      return schedules;
+      return listSchedule;
     } catch (error) {
       Logger.error(`Error: ${error.message}`);
       throw error;
