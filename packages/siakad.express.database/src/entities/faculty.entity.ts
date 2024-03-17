@@ -9,6 +9,6 @@ export class Faculty extends BaseEntity {
     @Column({ type: 'varchar', length: 50 })
     faculty_name!: string;
 
-    @OneToMany(() => Classroom, classroom => classroom.classroom_id)
+    @OneToMany(() => Classroom, classroom => classroom.faculty_id)
     classroom!: Classroom;
 }

@@ -19,9 +19,9 @@ export class Class extends BaseEntity {
     @Column({ type: 'varchar', length: 15 })
     classroom_id!: string;
 
-    @OneToOne(() => Schedule, schedule => schedule.schedule_id)
+    @OneToOne(() => Schedule, schedule => schedule.class_id)
     schedule!: Schedule;
 
-    @ManyToMany(() => Lecturer, lecturer => lecturer.nip)
+    @ManyToMany(() => Lecturer, lecturer => lecturer.class)
     lecturer!: Lecturer;
 }

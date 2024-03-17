@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany } from 'typeorm';
 import { Schedule } from './schedule.entity';
+import { Class } from '.';
 
 export enum Gender {
     Male = 'male',
@@ -27,6 +28,9 @@ export class Lecturer extends BaseEntity {
   @Column({ type: 'varchar', length: 30 })
   email!: string;
 
-  @OneToMany(() => Schedule, schedule => schedule.schedule_id)
+  @OneToMany(() => Schedule, schedule => schedule.lecturer_id)
   schedules!: Schedule;
+
+  @OneToMany(() => Class, classEntity => classEntity.lecturer_id)
+  class!: Class;
 }
