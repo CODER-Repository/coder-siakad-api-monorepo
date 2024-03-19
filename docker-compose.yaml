@@ -113,9 +113,12 @@ services:
       - PORT=5005
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
+#      - DB_HOST=ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
       - DB_PORT=5432
       - DB_DATABASE=coder-siakad
+#      - DB_USERNAME=oktariorifqi
       - DB_USERNAME=postgres
+#      - DB_PASSWORD=WbVHOqg0m6Gw
       - DB_PASSWORD=postgres
     ports:
       - "5005:5005"

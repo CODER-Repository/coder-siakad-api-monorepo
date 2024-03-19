@@ -19,16 +19,23 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 |
 */
 
-
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-//$app->instance('log', $log);
-
 $app->withFacades();
 
 $app->withEloquent();
+
+// Configure database health check
+try {
+    $db = new PDO('pgsql:host=' . env('DB_HOST') . ';port=' . env('DB_PORT') . ';dbname=' . env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    \Illuminate\Support\Facades\Log::info('Database connection successful');
+} catch (PDOException $e) {
+    \Illuminate\Support\Facades\Log::error('Database connection failed: ' . $e->getMessage());
+    die();
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -99,7 +106,7 @@ $app->configure('app');
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
-$app->register(App\Providers\LoggerServiceProvider::class);
+//$app->register(App\Providers\LoggerServiceProvider::class);
 
 
 /*
