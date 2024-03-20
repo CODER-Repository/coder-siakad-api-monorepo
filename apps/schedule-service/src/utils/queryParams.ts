@@ -42,16 +42,12 @@ export const buildWhereCondition = (where, columnName) => {
     let columnKey;
   
     if (where) {
-      for (const key in where) {
-        if (Array.isArray(where[key])) {
-          whereCondition[key] = where[key].join(',');
-          if (key === columnName) {
-            columnKey = where[key];
-          }
-        } else {
-          whereCondition[key] = where[key];
+      Object.entries(where).forEach(([key, value]) => {
+        whereCondition[key] = Array.isArray(value) ? value.join(',') : value;
+        if (key === columnName) {
+          columnKey = value;
         }
-      }
+      });
     }
   
     return { whereCondition, columnKey };
