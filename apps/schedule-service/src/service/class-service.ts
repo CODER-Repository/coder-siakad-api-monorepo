@@ -6,18 +6,28 @@ export class ClassService {
   static async getListClass(query: any): Promise<any> {
     try {
       const { limit, offset, where } = query;
+      let classes = [];
 
-      const { whereCondition, columnKey } = buildWhereCondition(where, 'lecturer_id');
+      if (where && where.lecturer_id) {
+        // TODO OR using sparator
+        const { whereCondition, columnKey } = buildWhereCondition(where, 'lecturer_id');
+        classes = await dbContext
+          .Class()
+          .createQueryBuilder('class')
+          .where(whereCondition)
+          .orWhere("class.lecturer_id IN (:...lecturers)", { lecturers: columnKey })
+          .skip(offset)
+          .take(limit)
+          .getMany();
+      }
 
-      console.log(whereCondition);
-      const classes = await dbContext
-      .Class()
-      .createQueryBuilder('class')
-      .where(whereCondition)
-      .orWhere("class.lecturer_id IN (:...lecturers)", { lecturers: columnKey })
-      .skip(offset)
-      .take(limit)
-      .getMany();
+      classes = await dbContext
+        .Class()
+        .createQueryBuilder('class')
+        .where(where)
+        .skip(offset)
+        .take(limit)
+        .getMany();
 
       const listClass = Array.isArray(classes) ? classes.map((item) => ({
         class_id: item.class_id,
@@ -29,7 +39,9 @@ export class ClassService {
       return listClass;
 
     } catch (error) {
-      Logger.error(`Error: ${error.message}`);
+      Logger.error(
+        `${contextLogger.getClassService} | Error: ${error.message}`
+      );
       throw error;
     }
   }
