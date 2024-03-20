@@ -1,3 +1,9 @@
+export enum Status {
+  onGoing = 'On Going',
+  inProgress = 'In Progress',
+  finished = 'Finished',
+}
+
 export interface TodaySchedule {
   schedule_id: number;
   course_id: string;

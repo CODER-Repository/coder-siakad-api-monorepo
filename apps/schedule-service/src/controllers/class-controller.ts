@@ -2,14 +2,41 @@ import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ClassService } from '../service/class-service';
+import { PaginateOption, QueryParamsDto, ToSeqWhere } from '../utils/queryParams';
 
 export class ClassController {
+  private readonly paginate: PaginateOption;
+
+  constructor(paginate: PaginateOption) {
+    this.paginate = paginate;
+  }
   static async getClass(
-    req: Request<{}, {}, {}, {}>,
+    req: Request<{}, {}, {}, QueryParamsDto>,
     res: Response
   ): Promise<void> {
+    const q: QueryParamsDto = req.query;
+    const paginate = new PaginateOption();
+    const pageOptions = {
+      page: (q.page < 0 ? 0 : q.page) || 0,
+      size: (q.size < 0 || q.size > paginate.MaxSize ? paginate.MaxSize : q.size) || paginate.MaxSize,
+    };
+
+    const pagination = {
+      totalCount: 0,
+      totalPage: 0,
+      page: pageOptions.page,
+      size: pageOptions.size,
+    };
+
+    const where = ToSeqWhere(q);
+    const query = {
+      where,
+      limit: pageOptions.size,
+      offset: pageOptions.page * pageOptions.size,
+    };
+
     try {
-      const classResponse = await ClassService.getListClass();
+      const classResponse = await ClassService.getListClass(query);
 
       if (!classResponse) {
         Logger.error(
@@ -25,7 +52,7 @@ export class ClassController {
         `${contextLogger.getClassController} | ${resMessage.success}`
       );
       JsonResponse(res, 200, resMessage.success, {
-        class: classResponse
+        data: classResponse, pagination
       });
     } catch (error) {
       Logger.error(

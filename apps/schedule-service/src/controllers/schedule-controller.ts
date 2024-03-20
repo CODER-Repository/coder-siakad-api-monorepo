@@ -40,11 +40,12 @@ export class ScheduleController {
   }
 
   static async getTodaySchedule(
-    req: Request<{}, {}, {}, {}>,
+    req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
     try {
-      const todaySchedule = await ScheduleService.getTodaySchedule();
+      const { nim } = req.query as typeof queryValidator;
+      const todaySchedule = await ScheduleService.getTodaySchedule(nim);
 
       if (!todaySchedule) {
         Logger.error(
@@ -74,11 +75,12 @@ export class ScheduleController {
   }
 
   static async getScheduleList(
-    req: Request<{}, {}, {}, {}>,
+    req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
     try {
-      const response = await ScheduleService.getScheduleList();
+      const { nim } = req.query as typeof queryValidator;
+      const response = await ScheduleService.getScheduleList(nim);
 
       if (!response) {
         Logger.error(

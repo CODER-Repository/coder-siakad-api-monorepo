@@ -1,5 +1,5 @@
 
-### Fetch Today Schedules
+### Fetch Today Schedule
 GET http://localhost:5005/api/v1/schedule/today
 
 ### Fetch Current Schedules
@@ -9,7 +9,7 @@ GET http://localhost:5005/api/v1/schedule/current
 GET http://localhost:5005/api/v1/schedule/
 
 ### Fetch List Class
-GET http://localhost:5005/api/v1/class/
+GET http://localhost:5005/api/v1/class/?page=1&size=10&class_id=CLS-1&classroom=GSG-1
 
 ### Fetch List Lecturer
 GET http://localhost:5005/api/v1/lecturer/

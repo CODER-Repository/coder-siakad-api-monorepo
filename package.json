@@ -50,6 +50,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@siakad/express.utils": "^0.0.0"
+    "@siakad/express.utils": "^0.0.0",
+    "sequelize": "^6.37.1"
   }
 }
