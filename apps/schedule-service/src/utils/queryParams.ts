@@ -1,5 +1,4 @@
-import { Op } from 'sequelize';
-
+import { Like, In } from 'typeorm';
 export class PaginateOption {
     public MaxSize: number;
 
@@ -28,27 +27,17 @@ export const ToSeqWhere = (q: QueryParamsDto) => {
         filterQuery['classroom_id'] = q['classroom'];
     }
 
-    //filter using sparator ,
-    if (q['lecturer_id']) {
-        const lecturers = q['lecturer_id'].split(',').map(a => a.trim());
-        filterQuery['lecturer_id'] = lecturers
+    // query using sparator ,
+    // TODO ADD Other query based on flow
+    if (q['nip']) {
+        const lecturerIds = q['nip'].split(',').map(a => a.trim());
+        if (lecturerIds.length === 1) {
+            filterQuery['lecturer_id'] = Like(`%${lecturerIds[0]}%`);
+        } else if (lecturerIds.length > 1) {
+            filterQuery['lecturer_id'] = In(lecturerIds);
+        }
     }
+    
 
     return filterQuery;
 };
-
-export const buildWhereCondition = (where, columnName) => {
-    const whereCondition = {};
-    let columnKey;
-  
-    if (where) {
-      Object.entries(where).forEach(([key, value]) => {
-        whereCondition[key] = Array.isArray(value) ? value.join(',') : value;
-        if (key === columnName) {
-          columnKey = value;
-        }
-      });
-    }
-  
-    return { whereCondition, columnKey };
-  }

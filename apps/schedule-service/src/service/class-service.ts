@@ -1,27 +1,12 @@
 import { Class, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger } from '@siakad/express.utils';
-import { buildWhereCondition } from '../utils/queryParams';
 
 export class ClassService {
   static async getListClass(query: any): Promise<any> {
     try {
       const { limit, offset, where } = query;
-      let classes = [];
 
-      if (where && where.lecturer_id) {
-        // TODO OR using sparator
-        const { whereCondition, columnKey } = buildWhereCondition(where, 'lecturer_id');
-        classes = await dbContext
-          .Class()
-          .createQueryBuilder('class')
-          .where(whereCondition)
-          .orWhere("class.lecturer_id IN (:...lecturers)", { lecturers: columnKey })
-          .skip(offset)
-          .take(limit)
-          .getMany();
-      }
-
-      classes = await dbContext
+      const classes = await dbContext
         .Class()
         .createQueryBuilder('class')
         .where(where)
