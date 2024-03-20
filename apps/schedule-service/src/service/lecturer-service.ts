@@ -20,6 +20,7 @@ export class LecturerService {
         gender: item.type,
         email: item.email,
         phone: item.phone_number,
+        course_name: item.class.classroom.classroom_name
       })) : [];
 
       return listLecturer;

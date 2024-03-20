@@ -33,7 +33,7 @@ export class ClassController {
     const query = {
       where,
       limit: pageOptions.size,
-      offset: pageOptions.page * pageOptions.size,
+      offset: (pageOptions.page - 1)* pageOptions.size,
     };
 
     try {

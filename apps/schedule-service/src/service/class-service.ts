@@ -7,21 +7,30 @@ export class ClassService {
       const { limit, offset, where } = query;
 
       const classes = await dbContext
-        .Class()
-        .createQueryBuilder('class')
-        .where(where)
-        .skip(offset)
-        .take(limit)
-        .getMany();
+      .Class()
+      .createQueryBuilder('class')
+      .innerJoin('class.classroom', 'classroom')
+      .innerJoin('class.course', 'course')
+      .innerJoin('class.lecturer', 'lecturer')
+      .where(where)
+      .skip(offset)
+      .take(limit)
+      .getMany();
 
-      const listClass = Array.isArray(classes) ? classes.map((item) => ({
-        class_id: item.class_id,
-        course_id: item.course_id,
-        classroom: item.classroom_id,
-        lecturer: item.lecturer_id
-      })) : [];
-
-      return listClass;
+      // const listClass = classes.map((books: Book[]) => {
+      //   return books.map((book: Clas) => ToCreateBookDto(book));
+      // }),
+  
+  const listClass = Array.isArray(classes) ? classes.map((item) => ({
+      class_id: item.class_id,
+      course_id: item.course.course_name,
+      classroom: item.classroom.classroom_name,
+      lecturer: item.lecturer.name,
+  })) : [];
+  
+  return listClass;
+  
+  
 
     } catch (error) {
       Logger.error(
