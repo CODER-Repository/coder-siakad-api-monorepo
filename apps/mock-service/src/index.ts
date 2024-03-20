@@ -7,6 +7,7 @@ import DashboardRoutes from './routes/DashboardRoutes';
 import ScheduleRoute from './routes/ScheduleRoute';
 import AnnouncementRoute from './routes/AnnouncementRoute';
 import PaymentRoute from './routes/PaymentRoute';
+import cors from 'cors';
 
 const app: Express = express();
 const server = http.createServer(app);
@@ -29,6 +30,11 @@ const terminusOptions = {
     },
     timeout: 5000
 };
+
+app.use(cors({
+    origin: '*',
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(HttpLogger);
