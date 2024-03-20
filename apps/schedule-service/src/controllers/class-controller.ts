@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ClassService } from '../service/class-service';
-import { PaginateOption, QueryParamsDto, ToSeqWhere } from '../utils/queryParams';
+import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
+import { ToSeqWhere } from '../params/class-params';
 
 export class ClassController {
   private readonly paginate: PaginateOption;
