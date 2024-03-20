@@ -3,11 +3,11 @@ POST http://localhost:5001/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "name" : "Admin",
-  "email": "admin@student.ac.id",
+  "username": "admins",
+  "name" : "Admins",
+  "email": "admins@student.ac.id",
   "password" : "password",
-  "role_id": "ADM"
+  "role_id": "STD"
 }
 ### Register Failed
 POST http://localhost:5001/api/v1/auth/register
@@ -17,6 +17,6 @@ POST http://localhost:5001/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "johndoe123",
+  "username": "admins",
   "password": "password"
 }
