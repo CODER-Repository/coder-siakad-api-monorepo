@@ -1,6 +1,7 @@
-import { BaseEntity, Column, Entity, ManyToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToMany, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { Lecturer } from './lecture.entity';
 import { Schedule } from './schedule.entity';
+import { Classroom, Course } from '.';
 
 @Entity({ name: 'class' })
 export class Class extends BaseEntity {
@@ -24,4 +25,10 @@ export class Class extends BaseEntity {
 
     @ManyToMany(() => Lecturer, lecturer => lecturer.class)
     lecturer!: Lecturer;
+
+    @OneToMany(() => Classroom, entityClassroom => entityClassroom.class)
+    classroom!: Classroom;
+
+    @OneToMany(() => Course, course => course.class)
+    course!: Course;
 }

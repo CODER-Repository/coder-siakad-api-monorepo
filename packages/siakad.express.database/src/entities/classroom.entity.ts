@@ -19,4 +19,7 @@ export class Classroom extends BaseEntity {
     @OneToOne(() => Faculty, faculty => faculty.classroom)
     @JoinColumn({ name: 'faculty_id' })
     faculty!: Faculty;
+
+    @OneToMany(() => Classroom, classroom => classroom.classroom_id)
+    class!: Classroom;
 }
