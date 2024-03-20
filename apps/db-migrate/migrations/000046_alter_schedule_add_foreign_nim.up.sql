@@ -1,0 +1,4 @@
+ALTER TABLE schedule
+ADD CONSTRAINT fk_schedule_student
+FOREIGN KEY (nim)
+REFERENCES student(nim) ON DELETE CASCADE ON UPDATE CASCADE;

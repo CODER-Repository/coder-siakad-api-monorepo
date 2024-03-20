@@ -1,0 +1,4 @@
+ALTER TABLE class
+ADD CONSTRAINT fk_class_lecturer
+FOREIGN KEY (lecturer_id)
+REFERENCES lecturer(nip) ON DELETE CASCADE ON UPDATE CASCADE;
