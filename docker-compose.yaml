@@ -22,6 +22,29 @@ services:
     networks:
       - siakad-network
 
+  schedule-service:
+    image: ghcr.io/coder-repository/schedule-service:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./apps/schedule-service/Dockerfile
+    container_name: schedule-service
+    ports:
+      - "5005:5005"
+    environment:
+      - PORT=5005
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=coder-siakad
+      - DB_SSL=false
+      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
+    depends_on:
+      - postgres
+    networks:
+      - siakad-network
+
   user-service:
     image: ghcr.io/coder-repository/user-service:latest
     platform: linux/amd64
