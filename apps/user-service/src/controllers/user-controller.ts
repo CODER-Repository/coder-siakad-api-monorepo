@@ -45,7 +45,7 @@ export class UserController {
         ]);
 
         Logger.info(`${contextLogger.updateUser} | User updated successfully`);
-        return JsonResponse(res, 200, 'User updated successfully', { userId });
+        return JsonResponse(res, 'User updated successfully', 'success', { userId });
       });
     } catch (error) {
       Logger.error(

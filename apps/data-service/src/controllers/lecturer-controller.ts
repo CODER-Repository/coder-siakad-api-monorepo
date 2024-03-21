@@ -43,7 +43,7 @@ export class LecturerController {
         Logger.error(
           `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`
         );
-        JsonResponse(res, 200, resMessage.emptyData, {
+        JsonResponse(res, resMessage.emptyData, 'success', {
           data: []
         });
         return;
@@ -52,7 +52,7 @@ export class LecturerController {
       Logger.info(
         `${contextLogger.getLecturerController} | ${resMessage.success}`
       );
-      JsonResponse(res, 200, resMessage.success, {
+      JsonResponse(res, resMessage.success, 'success', {
         data: lectures,
         pagination
       });
