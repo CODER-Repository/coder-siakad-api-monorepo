@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
-import { EntityManager } from 'typeorm';
-import bcrypt from 'bcrypt';
 
-import { AppDataSource } from '@siakad/express.database';
 import { BaseResponse } from '@siakad/express.server';
-import { Logger, ROLE_ID } from '@siakad/express.utils';
+import { Logger } from '@siakad/express.utils';
 import { KRSService } from '../service/krs-service';
 
 export class KRSController {

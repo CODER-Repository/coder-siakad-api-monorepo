@@ -9,14 +9,16 @@ services:
       dockerfile: ./apps/krs-service/Dockerfile
     container_name: krs-service
     ports:
-      - "5000:5000"
+      - "5008:5008"
     environment:
-      - PORT=5000
+      - PORT=5008
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
+      - DB_SSL=false
+      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     networks:
       - siakad-network
 
@@ -183,7 +185,6 @@ services:
       - DB_DATABASE=coder-siakad
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/coder-siakad?sslmode=disable
 
   redis:
     image: redis:6
