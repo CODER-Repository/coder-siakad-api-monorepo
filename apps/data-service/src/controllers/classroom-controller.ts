@@ -32,9 +32,10 @@ export class ClassroomController {
         };
 
         try {
-            const classroomResponse = await ClassroomService.getListClassroom(query);
+            const { listClassroom, pagination } = await ClassroomService.getListClassroom(query);
+            console.log(listClassroom);
 
-            if (!classroomResponse) {
+            if (!listClassroom) {
                 Logger.error(
                     `['ClassroomService.getListStudent'] | Error: ${resMessage.emptyData}`
                 );
@@ -47,7 +48,7 @@ export class ClassroomController {
                 `['ClassroomService.getListStudent'] | ${resMessage.success}`
             );
             return JsonResponse(res, resMessage.success, 'success', {
-                data: classroomResponse, pagination
+                listClassroom, pagination
             });
         } catch (error) {
             Logger.error(
