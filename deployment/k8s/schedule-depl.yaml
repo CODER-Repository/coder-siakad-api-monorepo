@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siakad-schedule-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siakad-schedule-api
+  template:
+    metadata:
+      labels:
+        app: siakad-schedule-api
+    spec:
+      containers:
+        - name: siakad-schedule-api
+          image: ghcr.io/coder-repository/schedule-service:20240321051306
+          env:
+          - name: JWT_SECRET
+            value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
+          - name: PORT
+            value: "5005"
+          - name: DB_HOST
+            value: ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: oktariorifqi
+          - name: DB_PASSWORD
+            value: WbVHOqg0m6Gw
+          - name: DB_NAME
+            value: coder-siakad
+          - name: DB_SSL
+            value: "true"
+      imagePullSecrets:
+        - name: ghcr-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: siakad-schedule-api
+spec:
+  selector:
+    app: siakad-schedule-api
+  ports:
+    - port: 5010
+      targetPort: 5005
+

@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: public
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     name: ingress-service
@@ -33,3 +33,17 @@ spec:
                 name: siakad-announcement-api
                 port:
                   number: 5005
+          - pathType: ImplementationSpecific
+            path: /api/v1/schedule
+            backend:
+              service:
+                name: siakad-schedule-api
+                port:
+                  number: 5010
+          - pathType: ImplementationSpecific
+            path: /api/v1/krs
+            backend:
+              service:
+                name: siakad-krs-api
+                port:
+                  number: 5008
