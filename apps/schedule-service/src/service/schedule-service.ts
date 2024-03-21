@@ -1,4 +1,4 @@
-import { dbContext, getScheduleList } from '@siakad/express.database';
+import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day } from '@siakad/express.utils';
 
@@ -101,7 +101,25 @@ export class ScheduleService {
     try {
 
       // TODO GET BY NIM/LECTURER_ID
-      const schedules = await getScheduleList(nim)
+      const schedules = await dbContext.Schedule()
+            .createQueryBuilder('schedule')
+            .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
+            .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+            .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
+            .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
+            .select([
+                'schedule.schedule_id AS schedule_id',
+                'schedule.course_id AS course_id',
+                'course.course_name AS course_name',
+                'classroom.classroom_name AS course_room',
+                'faculty.faculty_name AS faculty',
+                'schedule.start_time AS time_start',
+                'schedule.end_time AS time_end',
+                'schedule.class_id AS class_id',
+            ])
+            .where('student.nim = :nim', { nim: nim || '' })
+            .getRawMany();
+      
       const listSchedule = schedules.map((schedule) => ({
         schedule_id: schedule.schedule_id,
         course_id: schedule.course_id,
