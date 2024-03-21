@@ -34,14 +34,15 @@ export const getUserFromToken = (token: any) => {
   }
 
   try {
-    const authUser = jwt.verify(token.split(' ')[1], JWT_SECRET) as TokenPayload;
+    const userToken = token.split(' ')[1];
+    const authUser = jwt.verify(userToken, JWT_SECRET) as TokenPayload;
     
-    if (authUser) {
-      return authUser;
-    } else {
-      throw new Error('Tidak dapat mengambil email dari token.')
+    if (!authUser) {
+      throw new Error('Tidak dapat mengambil email dari token.');
     }
+    
+    return authUser;
   } catch (error) {
-    throw new Error('Error saat memverifikasi token:' + error)
-  }
+    throw new Error('Error saat memverifikasi token: ' + error);
+  }  
 };
