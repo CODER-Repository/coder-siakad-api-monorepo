@@ -17,13 +17,13 @@ export class Course extends BaseEntity {
     @Column({ type: 'int' })
     credit_hours!: number;
 
-    @OneToMany(() => Schedule, schedule => schedule.course_id)
+    @OneToMany(() => Schedule, schedule => schedule.course)
     schedule!: Schedule;
 
-    @ManyToOne(() => Classroom, classroom => classroom.course)
+    @ManyToOne(() => Classroom, classroom => classroom)
     @JoinColumn({ name: 'classroom_id' })
     classroom!: Classroom;
 
-    @OneToMany(() => Class, entityClass => entityClass.course_id)
-    class!: Class;
+    @OneToMany(() => Class, entityClass => entityClass.course)
+    classe!: Class;
 }
