@@ -21,7 +21,7 @@ export const ToSeqWhere = (q: QueryParamsDto) => {
             filterQuery['nip'] = In(lecturerIds);
         }
     }
-    
+
 
     return filterQuery;
 };

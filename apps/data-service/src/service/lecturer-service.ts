@@ -1,32 +1,31 @@
-import { dbContext } from '@siakad/express.database';
-import { Logger, contextLogger } from '@siakad/express.utils';
+import { dbContext, Lecturer } from '@siakad/express.database';
+import { Logger } from '@siakad/express.utils';
 
 export class LecturerService {
-    static async getListLecturer(query: any): Promise<any> {
-    try {
-      const { limit, offset, where } = query;
+    static async getListLecturer(query: { offset: number; limit: number; where: {} }): Promise<Array<object>> {
+        try {
+            const { limit, offset, where } = query;
 
-      const lectures = await dbContext
-        .Lecturer()
-        .createQueryBuilder('lecturer')
-        .where(where)
-        .skip(offset)
-        .take(limit)
-        .getMany();
+            const lectures = await dbContext
+                .Lecturer()
+                .createQueryBuilder('lecturer')
+                .where(where)
+                .skip(offset)
+                .take(limit)
+                .getMany();
 
-      const listLecturer = Array.isArray(lectures) ? lectures.map((item) => ({
-        nip: item.nip,
-        name: item.name,
-        gender: item.type,
-        email: item.email,
-        phone: item.phone_number,
-        course_name: item.class.classroom.classroom_name
-      })) : [];
+            return lectures.map((item: Lecturer) => ({
+                nip: item.nip,
+                name: item.name,
+                gender: item.type,
+                email: item.email,
+                phone: item.phone_number,
+                course_name: item.class.classroom.classroom_name
+            }));
 
-      return listLecturer;
-    } catch (error) {
-      Logger.error(`Error: ${error.message}`);
-      throw error;
+        } catch (error) {
+            Logger.error(`[LecturerService.getListLecturer] Error: ${error.message}`);
+            throw error;
+        }
     }
-  }
 }

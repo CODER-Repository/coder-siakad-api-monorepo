@@ -1,7 +1,7 @@
 import { Like, In } from 'typeorm';
 import { QueryParamsDto } from '../utils/queryParams';
 
-export const ToSeqWhere = (q: QueryParamsDto) => {
+export const ToSqlWhere = (q: QueryParamsDto) => {
     let filterQuery = {};
 
     if (q['class_id']) {
@@ -15,13 +15,8 @@ export const ToSeqWhere = (q: QueryParamsDto) => {
     // query using sparator ,
     if (q['courses']) {
         const courseIds = q['courses'].split(',').map(a => a.trim());
-        if (courseIds.length === 1) {
-            filterQuery['course_id'] = Like(`%${courseIds[0]}%`);
-        } else if (courseIds.length > 1) {
-            filterQuery['course_id'] = In(courseIds);
-        }
+        filterQuery['course_id'] = courseIds.length === 1 ? Like(`%${courseIds[0]}%`) : In(courseIds);
     }
-
 
     return filterQuery;
 };

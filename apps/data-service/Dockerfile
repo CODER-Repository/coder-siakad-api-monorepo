@@ -25,7 +25,7 @@ RUN npm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN npx turbo build --filter=schedule-service...
+RUN npx turbo build --filter=data-service...
 
 FROM base AS runner
 WORKDIR /app
