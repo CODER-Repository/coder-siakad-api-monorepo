@@ -6,7 +6,8 @@ export class KRS extends BaseEntity {
     krs_id!: number;
 
     @Column({ type: 'varchar', length: 30 })
-    student_id!: string;
+    nim!: string;
+    // student_id!: string;
 
     @Column({ type: 'int' })
     course_id!: string;
