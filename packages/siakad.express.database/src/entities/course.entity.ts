@@ -25,5 +25,5 @@ export class Course extends BaseEntity {
     classroom!: Classroom;
 
     @OneToMany(() => Class, entityClass => entityClass.course)
-    classe!: Class;
+    classes!: Class;
 }

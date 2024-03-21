@@ -1,7 +1,7 @@
 import { Like, In } from 'typeorm';
 import { QueryParamsDto } from '../utils/queryParams';
 
-export const ToSeqWhere = (q: QueryParamsDto) => {
+export const ToSqlWhere = (q: QueryParamsDto) => {
     let filterQuery = {};
 
     if (q['id']) {

@@ -1,4 +1,3 @@
-import { Like, In } from 'typeorm';
 import { QueryParamsDto } from '../utils/queryParams';
 
 export const ToSeqWhere = (q: QueryParamsDto) => {
