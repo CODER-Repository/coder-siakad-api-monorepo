@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Generate 1000 users
-        for ($i = 0; $i < 1000; $i++) {
+        // Generate 100 users
+        for ($i = 0; $i < 100; $i++) {
             $username = $faker->userName;
 
             // Check if username already exists
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 DB::table('user')->insert([
                     'username' => $username,
                     'email' => $faker->unique()->safeEmail,
-                    'password' => Hash::make('password'), 
+                    'password' => Hash::make('password'),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
