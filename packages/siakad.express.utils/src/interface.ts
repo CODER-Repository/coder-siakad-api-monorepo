@@ -7,3 +7,9 @@ export interface TokenPayload {
     nim?: string;
     nip?: string;
 }
+
+export interface SqlPagination {
+    limit: number,
+    offset: number,
+    where: Object
+}
