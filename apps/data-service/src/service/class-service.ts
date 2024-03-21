@@ -1,9 +1,9 @@
 import { Class, dbContext } from '@siakad/express.database';
-import { Logger, contextLogger } from '@siakad/express.utils';
+import { Logger, contextLogger, SqlPagination } from '@siakad/express.utils';
 import { CreateClassDto, toCreateClassDto } from '../interface/class-dto';
 
 export class ClassService {
-    static async getListClass(query: { offset: number; limit: number; where: {} }): Promise<CreateClassDto[]> {
+    static async getListClass(query: SqlPagination): Promise<CreateClassDto[]> {
         try {
             const { limit, offset, where } = query;
 

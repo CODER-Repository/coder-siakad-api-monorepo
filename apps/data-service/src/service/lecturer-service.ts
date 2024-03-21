@@ -1,9 +1,9 @@
 import { dbContext, Lecturer } from '@siakad/express.database';
-import { Logger } from '@siakad/express.utils';
+import { Logger, SqlPagination } from '@siakad/express.utils';
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
 
 export class LecturerService {
-    static async getListLecturer(query: { limit: number, offset: number, where: Object }): Promise<CreateLectureDto[]> {
+    static async getListLecturer(query: SqlPagination): Promise<CreateLectureDto[]> {
         try {
             const { limit, offset, where } = query;
 

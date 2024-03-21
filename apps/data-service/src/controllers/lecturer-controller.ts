@@ -15,7 +15,7 @@ export class LecturerController {
     static async getLecturer(
         req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
-    ): Promise<void> {
+    ): Promise<void | Express.BoomError<null>> {
         try {
             const q: QueryParamsDto = req.query;
             const paginate = new PaginateOption();
@@ -61,8 +61,7 @@ export class LecturerController {
             Logger.error(
                 `${contextLogger.getLecturerController} | Error: ${error.message}`
             );
-            res.status(500).json(BaseResponse.internalServerErrorResponse());
-            return;
+            return res.boom.badImplementation();
         }
     }
 }
