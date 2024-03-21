@@ -57,7 +57,7 @@ export const getScheduleList = async (nim: string) => {
     }
 }
 
-export const getScheduleListToday = async (today: string, nim: string): Promise<any[]> => {
+export const getScheduleListToday = async (today: string): Promise<any[]> => {
     try {
         const schedules = await dbContext.Schedule()
             .createQueryBuilder('schedule')
@@ -76,7 +76,6 @@ export const getScheduleListToday = async (today: string, nim: string): Promise<
                 'schedule.class_id AS class_id',
             ])
             .where('schedule.type = :type', { type: today })
-            .where('student.nim = :nim', { nim: nim || '' })
             .getRawMany();
 
         return schedules;

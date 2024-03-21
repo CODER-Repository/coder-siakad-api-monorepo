@@ -57,7 +57,8 @@ export const resMessage = {
   notFound: 'Data not found',
   emptyData: 'Data is empty',
   success: 'Successfully',
-  validationRole: 'Role is not allowed'
+  validationRole: 'Role is not allowed',
+  forbidden: 'Cannot access this API'
   // add more
 };
 
