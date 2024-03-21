@@ -7,7 +7,7 @@ RUN apk update
 WORKDIR /app
 RUN npm i -g turbo
 COPY . .
-RUN turbo prune --scope=sample-service --docker
+RUN turbo prune --scope=schedule-service --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -25,7 +25,7 @@ RUN npm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN npx turbo build --filter=sample-service...
+RUN npx turbo build --filter=schedule-service...
 
 FROM base AS runner
 WORKDIR /app
@@ -36,4 +36,4 @@ RUN adduser --system --uid 1001 expressjs
 USER expressjs
 COPY --from=installer /app .
 
-CMD node apps/sample-service/dist/index.js
+CMD node apps/schedule-service/dist/index.js

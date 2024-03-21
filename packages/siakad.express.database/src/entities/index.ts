@@ -14,3 +14,7 @@ export { User } from './user.entity';
 export { Role } from './role.entity';
 export { RoleUser } from './role_user.entity';
 export { Schedule } from './schedule.entity';
+export { Classroom } from './classroom.entity';
+export { Faculty } from './faculty.entity';
+export { Course } from './course.entity';
+export { Lecturer } from './lecture.entity';

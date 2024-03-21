@@ -2,13 +2,22 @@ import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
+import { queryValidator } from '../utils/queryValidator';
 export class ScheduleController {
   static async getCurrentSchedule(
-    req: Request<{}, {}, {}, {}>,
+    //params, body, query, headers
+    req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
+    const { nim } = req.query as typeof queryValidator;
+    if (!nim) {
+      Logger.error(`${contextLogger.getCurrentScheduleController} | Error: Invalid query parameters`);
+      JsonResponse(res, 400, 'Query parameters nim are required', {});
+      return;
+    }
+
     try {
-      const schedules = await ScheduleService.getCurrentSchedule();
+      const schedules = await ScheduleService.getCurrentSchedule(nim);
       if (!schedules) {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`
@@ -31,11 +40,12 @@ export class ScheduleController {
   }
 
   static async getTodaySchedule(
-    req: Request<{}, {}, {}, {}>,
+    req: Request<{}, {}, typeof queryValidator, {}>,
     res: Response
   ): Promise<void> {
     try {
-      const todaySchedule = await ScheduleService.getTodaySchedule();
+      const { nim } = req.query as typeof queryValidator;
+      const todaySchedule = await ScheduleService.getTodaySchedule(nim);
 
       if (!todaySchedule) {
         Logger.error(
@@ -58,6 +68,39 @@ export class ScheduleController {
     } catch (error) {
       Logger.error(
         `${contextLogger.getTodayScheduleController} | Error: ${error.message}`
+      );
+      res.status(500).json(BaseResponse.internalServerErrorResponse());
+      return;
+    }
+  }
+
+  static async getScheduleList(
+    req: Request<{}, {}, typeof queryValidator, {}>,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { nim } = req.query as typeof queryValidator;
+      const response = await ScheduleService.getScheduleList(nim);
+
+      if (!response) {
+        Logger.error(
+          `${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`
+        );
+        JsonResponse(res, 200, resMessage.emptyData, {
+          data: []
+        });
+        return;
+      }
+
+      Logger.info(
+        `${contextLogger.getScheduleListController} | ${resMessage.success}`
+      );
+      JsonResponse(res, 200, resMessage.success, {
+        data: response
+      });
+    } catch (error) {
+      Logger.error(
+        `${contextLogger.getScheduleListController} | Error: ${error.message}`
       );
       res.status(500).json(BaseResponse.internalServerErrorResponse());
       return;

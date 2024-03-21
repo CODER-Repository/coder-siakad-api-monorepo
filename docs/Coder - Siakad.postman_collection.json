@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "017cf9a2-32c2-4a17-b9c9-327aa5adc921",
+		"name": "Coder - Siakad",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31534439"
+	},
+	"item": [
+		{
+			"name": "payment-service",
+			"item": [
+				{
+					"name": "Get Payment History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzEwOTkwMzIwLCJleHAiOjE3MTA5OTM5MjB9.VhdoKbv-2uvoiFJ5dvf-RcEfKmUOxD3gqF8jdJBMJkQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_prod}}/api/v1/payment/history?page=1",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment",
+								"history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzEwOTkwMzIwLCJleHAiOjE3MTA5OTM5MjB9.VhdoKbv-2uvoiFJ5dvf-RcEfKmUOxD3gqF8jdJBMJkQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "amount",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "payment_method",
+									"value": "Bank Transfer",
+									"type": "text"
+								},
+								{
+									"key": "ukt_id",
+									"value": "UKT20203203",
+									"type": "text"
+								},
+								{
+									"key": "proof_of_payment",
+									"type": "file",
+									"src": "/C:/Users/oktar/OneDrive/Pictures/wallpaperflare.com_wallpaper.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_prod}}/api/v1/payment",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth-service",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"johndoe123\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_prod}}/api/v1/auth/login",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"johndoe1234\",\r\n    \"name\": \"John Doe 1234\",\r\n    \"email\": \"johndoe1234@student.ac.id\",\r\n    \"password\": \"password\",\r\n    \"role_id\": \"STD\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_prod}}/api/v1/auth/register",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "announcement-service",
+			"item": [
+				{
+					"name": "Get Announcement",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_prod}}/api/v1/announcement",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"announcement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Announcement",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\" : \"Test Announcement\",\r\n    \"content\" : \"This is a test announcement\",\r\n    \"type\": \"event\",\r\n    \"priority\" : 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_prod}}/api/v1/announcement",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"announcement"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "payment_service",
+			"value": "http://localhost:5004",
+			"type": "string"
+		},
+		{
+			"key": "auth_service",
+			"value": "http://localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "api_prod",
+			"value": "http://coder-siakad.com",
+			"type": "string"
+		},
+		{
+			"key": "announcement_service",
+			"value": "http://localhost:5005",
+			"type": "string"
+		}
+	]
+}

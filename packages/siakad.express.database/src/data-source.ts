@@ -15,6 +15,7 @@ export const AppDataSource = new DataSource({
         __dirname + '/entities/**/*.entity.{js,ts}',
         __dirname + '/views/**/*.view.{js,ts}'
     ],
+    ssl: (process.env.DB_SSL || 'false') === 'true',
     migrations: [],
     connectTimeoutMS: 5000,
     useUTC: true,

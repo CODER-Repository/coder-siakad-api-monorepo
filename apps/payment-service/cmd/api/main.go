@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gofiber/fiber/v2/log"
 	"os"
 	"payment-service/internal/server"
 	"strconv"
@@ -11,12 +12,15 @@ import (
 
 func main() {
 
-	server := server.New()
+	app, err := server.New()
 
-	server.RegisterFiberRoutes()
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
-	err := server.Listen(fmt.Sprintf(":%d", port))
 	if err != nil {
-		panic(fmt.Sprintf("cannot start server: %s", err))
+		log.Fatal("cannot start app", err)
+	}
+	app.RegisterFiberRoutes()
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+	err = app.Listen(fmt.Sprintf(":%d", port))
+	if err != nil {
+		panic(fmt.Sprintf("cannot start app: %s", err))
 	}
 }
