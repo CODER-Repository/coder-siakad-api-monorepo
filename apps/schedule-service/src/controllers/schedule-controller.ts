@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
-import { Logger, resMessage, contextLogger, getEmailFromToken } from '@siakad/express.utils';
+import { Logger, resMessage, contextLogger, getUserFromToken } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
-import { queryValidator } from '../utils/queryValidator';
 import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhere } from '../params/scheduler-params';
 
@@ -19,9 +18,9 @@ export class ScheduleController {
     res: Response
   ): Promise<void> {
     const token = req.headers.authorization;
-    const userEmail = getEmailFromToken(token);
-    console.log(userEmail);
-    if (!userEmail) {
+    const userAuth = getUserFromToken(token);
+    
+    if (!userAuth.email) {
       Logger.error(`${contextLogger.getCurrentScheduleController} | Error: Invalid query parameters`);
       JsonResponse(res, resMessage.forbidden, 'unauthorized');
       return;

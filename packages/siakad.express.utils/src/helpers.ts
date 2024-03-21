@@ -22,23 +22,22 @@ interface TokenPayload {
 }
 
 
-export const getEmailFromToken = (token: any) => {
-  if (!token) {
-    return;
-  }
-
+export const getUserFromToken = (token: any) => {
   const { JWT_SECRET } = process.env;
+
+  if (!token) {
+    throw new Error('Token not found')
+  }
   
   if (!JWT_SECRET) {
-    console.error('JWT_SECRET tidak ditemukan dalam environment variables.');
-    return null;
+    throw new Error('JWT_SECRET not found')
   }
 
   try {
     const authUser = jwt.verify(token.split(' ')[1], JWT_SECRET) as TokenPayload;
     
-    if (authUser && typeof authUser === 'object' && authUser.email) {
-      return authUser.email;
+    if (authUser) {
+      return authUser;
     } else {
       console.error('Tidak dapat mengambil email dari token.');
       return null;
