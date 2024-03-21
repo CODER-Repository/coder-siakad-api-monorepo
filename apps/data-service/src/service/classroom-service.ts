@@ -10,12 +10,15 @@ export class ClassroomService {
       const classrooms = await dbContext
         .Classroom()
         .createQueryBuilder('classroom')
-        .innerJoin('classroom.course', 'course', 'classroom.classroom_id = course.course_id')
-        .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
+        .innerJoinAndSelect('classroom.course', 'course')
+        .innerJoinAndSelect('classroom.faculty', 'faculty')
+        .orderBy('classroom.classroom_id', 'ASC')
         .where(where)
         .skip(offset)
         .take(limit)
         .getMany();
+
+      
 
       return classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
 
