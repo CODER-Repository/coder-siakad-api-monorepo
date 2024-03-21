@@ -3,7 +3,16 @@ import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger, getEmailFromToken } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
 import { queryValidator } from '../utils/queryValidator';
+import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
+import { ToSeqWhere } from '../params/scheduler-params';
+
 export class ScheduleController {
+  private readonly paginate: PaginateOption;
+
+  constructor(paginate: PaginateOption) {
+    this.paginate = paginate;
+  }
+
   static async getCurrentSchedule(
     //params, body, query, headers
     req: Request<{}, {}, {}, {}>,
@@ -76,12 +85,33 @@ export class ScheduleController {
   }
 
   static async getScheduleList(
-    req: Request<{}, {}, typeof queryValidator, {}>,
+    req: Request<{}, {}, {}, QueryParamsDto>,
     res: Response
   ): Promise<void> {
+    const q: QueryParamsDto = req.query;
+    const paginate = new PaginateOption();
+    const pageOptions = {
+      page: (q.page < 0 ? 0 : q.page) || 0,
+      size: (q.size < 0 || q.size > paginate.MaxSize ? paginate.MaxSize : q.size) || paginate.MaxSize,
+    };
+
+    const pagination = {
+      totalCount: 0,
+      totalPage: 0,
+      page: pageOptions.page,
+      size: pageOptions.size,
+    };
+
+    const where = ToSeqWhere(q);
+    const query = {
+      where,
+      limit: pageOptions.size,
+      offset: (pageOptions.page - 1)* pageOptions.size,
+    };
+
     try {
-      const { nim } = req.query as typeof queryValidator;
-      const response = await ScheduleService.getScheduleList(nim);
+
+      const response = await ScheduleService.getScheduleList(query);
 
       if (!response) {
         Logger.error(
@@ -97,7 +127,8 @@ export class ScheduleController {
         `${contextLogger.getScheduleListController} | ${resMessage.success}`
       );
       JsonResponse(res, resMessage.success, 'success', {
-        data: response
+        scheduleList: response,
+        pagination
       });
     } catch (error) {
       Logger.error(

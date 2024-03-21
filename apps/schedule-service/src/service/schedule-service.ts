@@ -97,9 +97,9 @@ export class ScheduleService {
     }
   }
 
-  static async getScheduleList(nim: string): Promise<any> {
+  static async getScheduleList(query: any): Promise<any> {
     try {
-
+      const { limit, offset, where } = query;
       // TODO GET BY NIM/LECTURER_ID
       const schedules = await dbContext.Schedule()
             .createQueryBuilder('schedule')
@@ -117,7 +117,9 @@ export class ScheduleService {
                 'schedule.end_time AS time_end',
                 'schedule.class_id AS class_id',
             ])
-            .where('student.nim = :nim', { nim: nim || '' })
+            .where(where)
+            .skip(offset)
+            .take(limit)
             .getRawMany();
       
       const listSchedule = schedules.map((schedule) => ({
