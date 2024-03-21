@@ -8,7 +8,7 @@ on:
       - 'apps/data-service/**'
 
 jobs:
-  build_and_publish_auth_service:
+  build_and_publish_data_service:
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
