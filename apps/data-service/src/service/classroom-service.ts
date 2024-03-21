@@ -21,7 +21,12 @@ export class ClassroomService {
             const totalCount = await dbContext
                 .Classroom()
                 .createQueryBuilder('classroom')
+                .innerJoinAndSelect('classroom.course', 'course')
+                .innerJoinAndSelect('classroom.faculty', 'faculty')
+                .orderBy('classroom.classroom_id', 'ASC')
                 .where(where)
+                .skip(offset)
+                .take(limit)
                 .getCount();
 
             const totalPages = Math.ceil(totalCount / limit);

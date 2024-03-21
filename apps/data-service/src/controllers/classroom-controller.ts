@@ -33,7 +33,6 @@ export class ClassroomController {
 
         try {
             const { listClassroom, pagination } = await ClassroomService.getListClassroom(query);
-            console.log(listClassroom);
 
             if (!listClassroom) {
                 Logger.error(
