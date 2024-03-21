@@ -39,11 +39,9 @@ export const getUserFromToken = (token: any) => {
     if (authUser) {
       return authUser;
     } else {
-      console.error('Tidak dapat mengambil email dari token.');
-      return null;
+      throw new Error('Tidak dapat mengambil email dari token.')
     }
   } catch (error) {
-    console.error('Error saat memverifikasi token:', error);
-    return null;
+    throw new Error('Error saat memverifikasi token:' + error)
   }
 };
