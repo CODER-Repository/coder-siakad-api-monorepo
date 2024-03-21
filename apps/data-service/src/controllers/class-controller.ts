@@ -43,7 +43,7 @@ export class ClassController {
         Logger.error(
           `${contextLogger.getClassController} | Error: ${resMessage.emptyData}`
         );
-        JsonResponse(res, 200, resMessage.emptyData, {
+        JsonResponse(res, resMessage.emptyData, 'success', {
           class: []
         });
         return;
@@ -52,7 +52,7 @@ export class ClassController {
       Logger.info(
         `${contextLogger.getClassController} | ${resMessage.success}`
       );
-      JsonResponse(res, 200, resMessage.success, {
+      JsonResponse(res, resMessage.success, 'success', {
         data: classResponse, pagination
       });
     } catch (error) {

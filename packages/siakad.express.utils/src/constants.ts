@@ -45,7 +45,9 @@ export const PORT_SERVICE = {
   mockService: 5002,
   userService: 5003,
   paymentService: 5004,
-  scheduleService: 5005
+  scheduleService: 5005,
+  krsService: 5008,
+  dataService: 5009
   // add more
 };
 
@@ -55,7 +57,8 @@ export const resMessage = {
   notFound: 'Data not found',
   emptyData: 'Data is empty',
   success: 'Successfully',
-  validationRole: 'Role is not allowed'
+  validationRole: 'Role is not allowed',
+  forbidden: 'Cannot access this API'
   // add more
 };
 

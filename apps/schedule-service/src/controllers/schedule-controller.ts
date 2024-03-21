@@ -1,57 +1,66 @@
 import { Request, Response } from 'express';
 import { BaseResponse, JsonResponse } from '@siakad/express.server';
-import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
+import { Logger, resMessage, contextLogger, getUserFromToken } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
-import { queryValidator } from '../utils/queryValidator';
+import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
+import { ToSeqWhere } from '../params/scheduler-params';
+
 export class ScheduleController {
+  private readonly paginate: PaginateOption;
+
+  constructor(paginate: PaginateOption) {
+    this.paginate = paginate;
+  }
+
   static async getCurrentSchedule(
     //params, body, query, headers
-    req: Request<{}, {}, typeof queryValidator, {}>,
+    req: Request<{}, {}, {}, {}>,
     res: Response
   ): Promise<void> {
-    const { nim } = req.query as typeof queryValidator;
-    if (!nim) {
+    const token = req.headers.authorization;
+    const userAuth = getUserFromToken(token);
+    
+    if (!userAuth.email) {
       Logger.error(`${contextLogger.getCurrentScheduleController} | Error: Invalid query parameters`);
-      JsonResponse(res, 400, 'Query parameters nim are required', {});
+      JsonResponse(res, resMessage.forbidden, 'unauthorized');
       return;
     }
 
     try {
-      const schedules = await ScheduleService.getCurrentSchedule(nim);
+      const schedules = await ScheduleService.getCurrentSchedule();
       if (!schedules) {
         Logger.error(
           `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`
         );
-        JsonResponse(res, 200, resMessage.emptyData, {});
+        JsonResponse(res, resMessage.emptyData, 'success', []);
         return;
       }
 
       Logger.info(
         `${contextLogger.getCurrentScheduleController} | ${resMessage.success}`
       );
-      JsonResponse(res, 200, resMessage.success, schedules);
+      JsonResponse(res, resMessage.success, 'success', schedules);
     } catch (error) {
       Logger.error(
         `${contextLogger.getCurrentScheduleController} | Error: ${error.message}`
       );
-      res.boom.badImplementation(resMessage.badImplementation);
+      JsonResponse(res, resMessage.badImplementation, 'internalServerError', []);
       return;
     }
   }
 
   static async getTodaySchedule(
-    req: Request<{}, {}, typeof queryValidator, {}>,
+    req: Request<{}, {}, {}, {}>,
     res: Response
   ): Promise<void> {
     try {
-      const { nim } = req.query as typeof queryValidator;
-      const todaySchedule = await ScheduleService.getTodaySchedule(nim);
+      const todaySchedule = await ScheduleService.getTodaySchedule();
 
       if (!todaySchedule) {
         Logger.error(
           `${contextLogger.getTodayScheduleController} | Error: ${resMessage.emptyData}`
         );
-        JsonResponse(res, 200, resMessage.emptyData, {
+        JsonResponse(res, resMessage.emptyData, 'success',{
           date: new Date().toISOString(),
           schedule: []
         });
@@ -61,7 +70,7 @@ export class ScheduleController {
       Logger.info(
         `${contextLogger.getTodayScheduleController} | ${resMessage.success}`
       );
-      JsonResponse(res, 200, resMessage.success, {
+      JsonResponse(res, resMessage.success, 'success', {
         date: new Date().toISOString(),
         schedule: todaySchedule
       });
@@ -75,18 +84,39 @@ export class ScheduleController {
   }
 
   static async getScheduleList(
-    req: Request<{}, {}, typeof queryValidator, {}>,
+    req: Request<{}, {}, {}, QueryParamsDto>,
     res: Response
   ): Promise<void> {
+    const q: QueryParamsDto = req.query;
+    const paginate = new PaginateOption();
+    const pageOptions = {
+      page: (q.page < 0 ? 0 : q.page) || 0,
+      size: (q.size < 0 || q.size > paginate.MaxSize ? paginate.MaxSize : q.size) || paginate.MaxSize,
+    };
+
+    const pagination = {
+      totalCount: 0,
+      totalPage: 0,
+      page: pageOptions.page,
+      size: pageOptions.size,
+    };
+
+    const where = ToSeqWhere(q);
+    const query = {
+      where,
+      limit: pageOptions.size,
+      offset: (pageOptions.page - 1)* pageOptions.size,
+    };
+
     try {
-      const { nim } = req.query as typeof queryValidator;
-      const response = await ScheduleService.getScheduleList(nim);
+
+      const response = await ScheduleService.getScheduleList(query);
 
       if (!response) {
         Logger.error(
           `${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`
         );
-        JsonResponse(res, 200, resMessage.emptyData, {
+        JsonResponse(res, resMessage.emptyData, 'success', {
           data: []
         });
         return;
@@ -95,8 +125,9 @@ export class ScheduleController {
       Logger.info(
         `${contextLogger.getScheduleListController} | ${resMessage.success}`
       );
-      JsonResponse(res, 200, resMessage.success, {
-        data: response
+      JsonResponse(res, resMessage.success, 'success', {
+        scheduleList: response,
+        pagination
       });
     } catch (error) {
       Logger.error(
