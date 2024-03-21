@@ -1,0 +1,1 @@
+ALTER TABLE faculty ADD COLUMN abbreviation VARCHAR(10);

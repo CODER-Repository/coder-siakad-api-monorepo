@@ -16,19 +16,27 @@ class ClassRoomSeeder extends Seeder
         $faker = Faker::create();
 
         // Mendapatkan semua fakultas dari database
-        $faculties = DB::table('faculty')->pluck('faculty_id');
+        $faculties = DB::table('faculty')->select('faculty_id', 'abbreviation')->get();
 
-        // Generate 50 random classrooms
-        for ($i = 0; $i < 50; $i++) {
-            // Memilih secara acak satu fakultas
-            $facultyId = $faker->randomElement($faculties);
+        foreach ($faculties as $faculty) {
+            $facultyId = $faculty->faculty_id;
+            $abbr = $faculty->abbreviation;
 
-            // Menambahkan data kelas ke tabel
-            DB::table('classroom')->insert([
-                'classroom_id' => $faker->unique()->numberBetween($min = 1, $max = 100),
-                'classroom_name' => $faker->unique()->word,
-                'faculty_id' => $facultyId,
-            ]);
+            // Generate 10 random classrooms for each faculty
+            for ($i = 0; $i < 10; $i++) {
+                // Generate a new random classroom name for each iteration
+                $classroomName = ucfirst($faker->unique()->word);
+
+                // Construct the classroom_id using abbreviation and a random number
+                $classroomId = 'CLS-' . $abbr . '-' . $faker->unique()->numberBetween($min = 1, $max = 100);
+
+                // Insert data into the classroom table
+                DB::table('classroom')->insert([
+                    'classroom_id' => $classroomId,
+                    'classroom_name' => $classroomName,
+                    'faculty_id' => $facultyId,
+                ]);
+            }
         }
     }
 }
