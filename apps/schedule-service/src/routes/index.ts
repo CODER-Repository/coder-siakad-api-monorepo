@@ -1,8 +1,8 @@
 import scheduleRouter from './schedule-route';
 
-const basePath = '/api/v1'
+const basePath = '/api/v1';
 
 export const routes = [
-  { path: `${basePath}/schedule`, router: scheduleRouter },
+    { path: `${basePath}/schedule`, router: scheduleRouter }
 ];
 

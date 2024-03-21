@@ -5,6 +5,9 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: public
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
   labels:
     name: ingress-service
 spec:
