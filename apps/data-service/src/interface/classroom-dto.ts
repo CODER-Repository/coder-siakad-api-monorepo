@@ -4,8 +4,8 @@ export interface CreateClassroomDto {
     id: string;
     classroomName: string;
     faculty: string;
-    courseId: any;
-    courseName: any;
+    courseId: string;
+    courseName: string;
 }
 
 export const toCreateClassroomDto = (e: Classroom): CreateClassroomDto => ({
