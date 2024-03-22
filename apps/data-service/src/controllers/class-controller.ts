@@ -3,7 +3,7 @@ import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ClassService } from '../service/class-service';
 import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
-import { ToSqlWhere } from '../params/class-params';
+import { ToSeqWhereClass } from '../params/class-params';
 
 export class ClassController {
     private readonly paginate: PaginateOption;
@@ -30,7 +30,7 @@ export class ClassController {
             size: pageOptions.page_size
         };
 
-        const where = ToSqlWhere(q);
+        const where = ToSeqWhereClass(q);
         const query = {
             where,
             limit: pageOptions.page_size,

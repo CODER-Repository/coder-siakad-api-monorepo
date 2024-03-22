@@ -3,7 +3,7 @@ import { BaseResponse, JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { LecturerService } from '../service/lecturer-service';
 import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
-import { ToSeqWhere } from '../params/lecturer-params';
+import { ToSeqWhereLecturer } from '../params/lecturer-params';
 
 export class LecturerController {
     private readonly paginate: PaginateOption;
@@ -31,7 +31,7 @@ export class LecturerController {
                 page_size: pageOptions.page_size
             };
 
-            const where = ToSeqWhere(q);
+            const where = ToSeqWhereLecturer(q);
             const query = {
                 where,
                 limit: pageOptions.page_size,

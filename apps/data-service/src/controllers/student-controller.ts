@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage } from '@siakad/express.utils';
 import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
-import { ToSqlWhere } from '../params/student-params';
+import { ToSeqWhereStudent } from '../params/student-params';
 import { StudentService } from '../service/student-service';
 
 export class StudentController {
@@ -24,7 +24,7 @@ export class StudentController {
             size: pageOptions.page_size
         };
 
-        const where = ToSqlWhere(q);
+        const where = ToSeqWhereStudent(q);
         const query = {
             where,
             limit: pageOptions.page_size,

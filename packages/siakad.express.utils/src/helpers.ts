@@ -60,9 +60,19 @@ export const buildWhereCondition = (where: QueryValue) => {
     for (const key in where) {
         if (Object.prototype.hasOwnProperty.call(where, key)) {
             const [entity, field] = key.split('.');
-
-            conditions.push(`${entity}.${field} = :${key}`);
-            parameters[key] = where[key];
+            const values = where[key].split(',').map((value: string) => value.trim());
+            
+            if (values.length > 1) {
+                const orConditions = values.map((value: string, index: number) => {
+                    const paramName = `${key}_${index}`;
+                    parameters[paramName] = value;
+                    return `${entity}.${field} = :${paramName}`;
+                });
+                conditions.push(`(${orConditions.join(' OR ')})`);
+            } else {
+                conditions.push(`${entity}.${field} = :${key}`);
+                parameters[key] = values[0];
+            }
         }
     }
 

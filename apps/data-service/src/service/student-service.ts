@@ -1,16 +1,17 @@
 import { Student, dbContext } from '@siakad/express.database';
-import { Logger, SqlPagination } from '@siakad/express.utils';
+import { Logger, SqlPagination, buildWhereCondition } from '@siakad/express.utils';
 import { CreateStudentDto, toCreateStudentDto } from '../interface/student-dto';
 
 export class StudentService {
     static async getListStudent(query: SqlPagination): Promise<CreateStudentDto[]> {
         try {
             const { limit, offset, where } = query;
+            const { condition, parameters } = buildWhereCondition(where);
 
             const students = await dbContext
                 .Student()
                 .createQueryBuilder('student')
-                .where(where)
+                .where(condition,parameters)
                 .skip(offset)
                 .take(limit)
                 .getMany();
