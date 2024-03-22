@@ -15,9 +15,9 @@ export class LecturerController {
             const where = ToSeqWhereLecturer(q);
             const query = queryHelper(where, q.page, q.page_size)
 
-            const lectures = await LecturerService.getListLecturer(query);
+            const { data: listLecturer, pagination}= await LecturerService.getListLecturer(query);
 
-            if (!lectures) {
+            if (!listLecturer) {
                 Logger.error(
                     `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`
                 );
@@ -30,9 +30,7 @@ export class LecturerController {
             Logger.info(
                 `${contextLogger.getLecturerController} | ${resMessage.success}`
             );
-            JsonResponse(res, resMessage.success, 'success', {
-                data: lectures,
-            });
+            JsonResponse(res, resMessage.success, 'success', { listLecturer, pagination });
         } catch (error) {
             Logger.error(
                 `${contextLogger.getLecturerController} | Error: ${error.message}`

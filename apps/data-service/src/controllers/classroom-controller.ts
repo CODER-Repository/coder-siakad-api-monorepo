@@ -16,7 +16,7 @@ export class ClassroomController {
         const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const { listClassroom, pagination } = await ClassroomService.getListClassroom(query);
+            const { data: listClassroom, pagination } = await ClassroomService.getListClassroom(query);
 
             if (!listClassroom) {
                 Logger.error(

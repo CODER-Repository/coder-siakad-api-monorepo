@@ -1,14 +1,15 @@
 import { Classroom, dbContext } from '@siakad/express.database';
 import { Logger, queryInterface, buildWhereCondition } from '@siakad/express.utils';
 import { toCreateClassroomDto } from '../interface/classroom-dto';
+import { DTO } from '../utils/queryParams';
 
 export class ClassroomService {
-    static async getListClassroom(query: queryInterface): Promise<any> {
+    static async getListClassroom(query: queryInterface): Promise<DTO> {
         try {
             const { limit, offset, where } = query;
             const { condition, parameters } = buildWhereCondition(where)
-            console.log(where);
 
+            // MAKE QUERY
             const queryBuilder = dbContext
                 .Classroom()
                 .createQueryBuilder('classroom')
@@ -19,11 +20,12 @@ export class ClassroomService {
                 .skip(offset)
                 .take(limit);
 
+            // GET DATA AND COUNT
             const classrooms = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
-
             const totalPages = Math.ceil(totalCount / limit);
 
+            // RETRIVED DATA & PAGINATION
             const listClassroom = classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
             const pagination = {
                 totalCount,
@@ -33,7 +35,7 @@ export class ClassroomService {
             };
 
             return {
-                listClassroom,
+                data: listClassroom,
                 pagination
             };
 

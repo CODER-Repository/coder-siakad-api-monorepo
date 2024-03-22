@@ -15,9 +15,9 @@ export class StudentController {
         const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const studentResponse = await StudentService.getListStudent(query);
+            const { data: listStudent, pagination} = await StudentService.getListStudent(query);
 
-            if (!studentResponse) {
+            if (!listStudent) {
                 Logger.error(
                     `['StudentController.getListStudent']| Error: ${resMessage.emptyData}`
                 );
@@ -29,9 +29,7 @@ export class StudentController {
             Logger.info(
                 `['StudentController.getListStudent'] | ${resMessage.success}`
             );
-            return JsonResponse(res, resMessage.success, 'success', {
-                data: studentResponse
-            });
+            return JsonResponse(res, resMessage.success, 'success', { listStudent, pagination });
         } catch (error) {
             Logger.error(
                 `['StudentController.getListStudent'] | Error: ${error.message}`

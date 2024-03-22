@@ -15,3 +15,8 @@ export class QueryParamsDto {
     offset: number;
     where?: string;
 };
+
+export interface DTO {
+    data: object
+    pagination: object
+}
