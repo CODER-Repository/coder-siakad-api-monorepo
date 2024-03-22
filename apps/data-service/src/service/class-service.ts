@@ -13,6 +13,11 @@ export class ClassService {
             const queryBuilder = dbContext
                 .Class()
                 .createQueryBuilder('class')
+                .innerJoinAndSelect('class.course', 'course')
+                .innerJoinAndSelect('class.lecturer', 'lecturer')
+                .innerJoinAndSelect('class.classroom', 'classroom')
+                .innerJoinAndSelect('class.schedule', 'schedule')
+                .orderBy('class.class_id', 'ASC')
                 .where(condition, parameters)
                 .skip(offset)
                 .take(limit)

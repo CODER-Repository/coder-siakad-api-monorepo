@@ -21,9 +21,9 @@ export class ClassController {
         const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const { data: classResponse, pagination} = await ClassService.getListClass(query);
+            const { data: listClass, pagination} = await ClassService.getListClass(query);
 
-            if (!classResponse) {
+            if (!listClass) {
                 Logger.error(
                     `${contextLogger.getClassController} | Error: ${resMessage.emptyData}`
                 );
@@ -37,7 +37,7 @@ export class ClassController {
                 `${contextLogger.getClassController} | ${resMessage.success}`
             );
             JsonResponse(res, resMessage.success, 'success', {
-                classResponse, pagination,
+                listClass, pagination,
             });
         } catch (error) {
             Logger.error(
