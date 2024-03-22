@@ -9,27 +9,18 @@ export class ClassroomService {
             const { condition, parameters } = buildWhereCondition(where)
             console.log(where);
 
-            const classrooms = await dbContext
+            const queryBuilder = dbContext
                 .Classroom()
                 .createQueryBuilder('classroom')
                 .innerJoinAndSelect('classroom.course', 'course')
                 .innerJoinAndSelect('classroom.faculty', 'faculty')
                 .orderBy('classroom.classroom_id', 'ASC')
-                .where(condition,parameters)
+                .where(condition, parameters)
                 .skip(offset)
-                .take(limit)
-                .getMany();
+                .take(limit);
 
-            const totalCount = await dbContext
-                .Classroom()
-                .createQueryBuilder('classroom')
-                .innerJoinAndSelect('classroom.course', 'course')
-                .innerJoinAndSelect('classroom.faculty', 'faculty')
-                .orderBy('classroom.classroom_id', 'ASC')
-                .where(condition,parameters)
-                .skip(offset)
-                .take(limit)
-                .getCount();
+            const classrooms = await queryBuilder.getMany();
+            const totalCount = await queryBuilder.getCount();
 
             const totalPages = Math.ceil(totalCount / limit);
 
