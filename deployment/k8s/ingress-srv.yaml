@@ -50,3 +50,10 @@ spec:
                 name: siakad-krs-api
                 port:
                   number: 5008
+          - pathType: ImplementationSpecific
+            path: /api/v1/data
+            backend:
+              service:
+                name: siakad-data-api
+                port:
+                  number: 5010

@@ -1,11 +1,11 @@
 import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
-import { Logger, contextLogger, Day } from '@siakad/express.utils';
+import { Logger, contextLogger, Day, SqlPagination } from '@siakad/express.utils';
 
 export class ScheduleService {
-    static async getCurrentSchedule(): Promise<CurrentSchedule> {
+    static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
         try {
-            const schedules = await dbContext.Schedule().find();
+            const schedules = await dbContext.Schedule().find({ where: { nim } });
             const result: CurrentSchedule = {
                 monday: [],
                 tuesday: [],
@@ -97,7 +97,7 @@ export class ScheduleService {
         }
     }
 
-    static async getScheduleList(query: { limit: number, offset: number, where: Object }): Promise<Object> {
+    static async getScheduleList(query: SqlPagination): Promise<Object> {
         try {
             const { limit, offset, where } = query;
             // TODO GET BY NIM/LECTURER_ID

@@ -15,7 +15,7 @@ export class ClassController {
     static async getClass(
         req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
-    ): Promise<void> {
+    ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
         const where = ToSeqWhereClass(q);
         const query = queryHelper(where, q.page, q.page_size)
@@ -27,10 +27,9 @@ export class ClassController {
                 Logger.error(
                     `${contextLogger.getClassController} | Error: ${resMessage.emptyData}`
                 );
-                JsonResponse(res, resMessage.emptyData, 'success', {
+                return JsonResponse(res, resMessage.emptyData, 'success', {
                     class: []
                 });
-                return;
             }
 
             Logger.info(
@@ -43,8 +42,7 @@ export class ClassController {
             Logger.error(
                 `${contextLogger.getClassController} | Error: ${error.message}`
             );
-            res.status(500).json(BaseResponse.internalServerErrorResponse());
-            return;
+            return res.boom.badImplementation();
         }
     }
 }
