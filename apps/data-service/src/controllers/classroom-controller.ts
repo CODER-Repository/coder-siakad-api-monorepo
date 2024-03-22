@@ -10,7 +10,7 @@ export class ClassroomController {
     static async getClassroom(
         req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
-    ): Promise<void | Express.BoomError<null>> {
+    ): Promise<void> {
         const q: QueryParamsDto = req.query;
         const where = ToSeqWhere(q);
         const query = queryHelper(where, q.page, q.page_size)
@@ -37,7 +37,7 @@ export class ClassroomController {
             Logger.error(
                 `['ClassroomService.getListStudent'] | Error: ${error.message}`
             );
-            return res.boom.badImplementation();
+            res.boom.badImplementation();
         }
     }
 }
