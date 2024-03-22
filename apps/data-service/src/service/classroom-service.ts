@@ -1,11 +1,12 @@
 import { Classroom, dbContext } from '@siakad/express.database';
-import { Logger, SqlPagination } from '@siakad/express.utils';
+import { Logger, SqlPagination, buildWhereCondition } from '@siakad/express.utils';
 import { CreateClassroomDto, toCreateClassroomDto } from '../interface/classroom-dto';
 
 export class ClassroomService {
     static async getListClassroom(query: SqlPagination): Promise<any> {
         try {
-            const { limit, offset, where } = query;
+            const { limit, offset, where } = query;            
+            const { condition, parameters } = buildWhereCondition(where)
 
             const classrooms = await dbContext
                 .Classroom()
@@ -13,7 +14,7 @@ export class ClassroomService {
                 .innerJoinAndSelect('classroom.course', 'course')
                 .innerJoinAndSelect('classroom.faculty', 'faculty')
                 .orderBy('classroom.classroom_id', 'ASC')
-                .where(where)
+                .where(condition,parameters)
                 .skip(offset)
                 .take(limit)
                 .getMany();
@@ -24,7 +25,7 @@ export class ClassroomService {
                 .innerJoinAndSelect('classroom.course', 'course')
                 .innerJoinAndSelect('classroom.faculty', 'faculty')
                 .orderBy('classroom.classroom_id', 'ASC')
-                .where(where)
+                .where(condition,parameters)
                 .skip(offset)
                 .take(limit)
                 .getCount();

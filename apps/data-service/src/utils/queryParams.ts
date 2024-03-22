@@ -10,7 +10,7 @@ export class PaginateOption {
 
 export class QueryParamsDto {
     page: number;
-    page_size: number;
+    size: number;
     limit: number;
     offset: number;
     where?: string;

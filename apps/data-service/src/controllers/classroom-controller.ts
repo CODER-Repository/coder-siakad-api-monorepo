@@ -14,21 +14,14 @@ export class ClassroomController {
         const paginate = new PaginateOption();
         const pageOptions = {
             page: Math.max(0, q.page || 1),
-            page_size: Math.min(paginate.MaxSize, Math.max(0, q.page_size || paginate.MaxSize))
-        };
-
-        const pagination = {
-            totalCount: 0,
-            totalPage: 0,
-            page: pageOptions.page,
-            size: pageOptions.page_size
+            size: Math.min(paginate.MaxSize, Math.max(0, q.size || paginate.MaxSize))
         };
 
         const where = ToSeqWhere(q);
         const query = {
             where,
-            limit: pageOptions.page_size,
-            offset: (pageOptions.page - 1) * pageOptions.page_size
+            limit: pageOptions.size,
+            offset: (pageOptions.page - 1) * pageOptions.size
         };
 
         try {

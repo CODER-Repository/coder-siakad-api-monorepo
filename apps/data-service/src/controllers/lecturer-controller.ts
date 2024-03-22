@@ -21,7 +21,7 @@ export class LecturerController {
             const paginate = new PaginateOption();
             const pageOptions = {
                 page: Math.max(0, q.page || 1),
-                page_size: Math.min(paginate.MaxSize, Math.max(0, q.page_size || paginate.MaxSize))
+                page_size: Math.min(paginate.MaxSize, Math.max(0, q.size || paginate.MaxSize))
             };
 
             const pagination = {

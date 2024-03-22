@@ -49,3 +49,22 @@ export const getUserFromToken = (token: string) : TokenPayload | Error => {
     }
 };
 
+interface QueryValue {
+    [key: string]: any;
+}
+
+export const buildWhereCondition = (where: QueryValue) => {
+    const conditions = [];
+    const parameters: QueryValue = {}; 
+
+    for (const key in where) {
+        if (Object.prototype.hasOwnProperty.call(where, key)) {
+            const [entity, field] = key.split('.');
+
+            conditions.push(`${entity}.${field} = :${key}`);
+            parameters[key] = where[key];
+        }
+    }
+
+    return { condition: conditions.join(' AND '), parameters };
+};
