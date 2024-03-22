@@ -78,3 +78,24 @@ export const buildWhereCondition = (where: QueryValue) => {
 
     return { condition: conditions.join(' AND '), parameters };
 };
+
+export const PaginateOptions = {
+    MaxSize: 25
+};
+
+export const paginationHelper = (page: number , size: number) => {
+    page = Math.max(0, page || 1);
+    size = Math.min(PaginateOptions.MaxSize, Math.max(0, size || PaginateOptions.MaxSize));
+
+    return { page, size };
+};
+
+export const queryHelper = (where: object, offset: number, limit: number) => {
+    const { page, size } = paginationHelper(offset, limit);
+    const query = {
+        where,
+        limit: size,
+        offset: (page - 1) * size  
+    };
+    return query;
+};

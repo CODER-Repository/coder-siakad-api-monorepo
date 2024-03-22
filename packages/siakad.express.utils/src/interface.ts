@@ -8,8 +8,14 @@ export interface TokenPayload {
     nip?: string;
 }
 
-export interface SqlPagination {
+export interface queryInterface {
     limit: number,
     offset: number,
     where: Object
+}
+
+export interface paginate {
+    page: number;
+    size: number;
+    page_size: number;
 }

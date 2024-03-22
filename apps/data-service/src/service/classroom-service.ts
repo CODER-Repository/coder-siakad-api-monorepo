@@ -1,9 +1,9 @@
 import { Classroom, dbContext } from '@siakad/express.database';
-import { Logger, SqlPagination, buildWhereCondition } from '@siakad/express.utils';
+import { Logger, queryInterface, buildWhereCondition } from '@siakad/express.utils';
 import { toCreateClassroomDto } from '../interface/classroom-dto';
 
 export class ClassroomService {
-    static async getListClassroom(query: SqlPagination): Promise<any> {
+    static async getListClassroom(query: queryInterface): Promise<any> {
         try {
             const { limit, offset, where } = query;
             const { condition, parameters } = buildWhereCondition(where)

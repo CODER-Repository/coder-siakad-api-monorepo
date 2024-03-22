@@ -1,9 +1,9 @@
 import { Student, dbContext } from '@siakad/express.database';
-import { Logger, SqlPagination, buildWhereCondition } from '@siakad/express.utils';
+import { Logger, queryInterface, buildWhereCondition } from '@siakad/express.utils';
 import { CreateStudentDto, toCreateStudentDto } from '../interface/student-dto';
 
 export class StudentService {
-    static async getListStudent(query: SqlPagination): Promise<CreateStudentDto[]> {
+    static async getListStudent(query: queryInterface): Promise<CreateStudentDto[]> {
         try {
             const { limit, offset, where } = query;
             const { condition, parameters } = buildWhereCondition(where);

@@ -1,9 +1,9 @@
 import { dbContext, Lecturer } from '@siakad/express.database';
-import { buildWhereCondition, Logger, SqlPagination } from '@siakad/express.utils';
+import { buildWhereCondition, Logger, queryInterface } from '@siakad/express.utils';
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
 
 export class LecturerService {
-    static async getListLecturer(query: SqlPagination): Promise<CreateLectureDto[]> {
+    static async getListLecturer(query: queryInterface): Promise<CreateLectureDto[]> {
         try {
             const { limit, offset, where } = query;
             const { condition, parameters } = buildWhereCondition(where);
