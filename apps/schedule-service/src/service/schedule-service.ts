@@ -1,6 +1,6 @@
 import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
-import { Logger, contextLogger, Day, SqlPagination } from '@siakad/express.utils';
+import { Logger, contextLogger, Day, queryInterface } from '@siakad/express.utils';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -97,7 +97,7 @@ export class ScheduleService {
         }
     }
 
-    static async getScheduleList(query: SqlPagination): Promise<Object> {
+    static async getScheduleList(query: queryInterface): Promise<Object> {
         try {
             const { limit, offset, where } = query;
             // TODO GET BY NIM/LECTURER_ID
