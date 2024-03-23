@@ -5,7 +5,9 @@ export interface CreateClassDto {
     course: string;
     classroom: string;
     lecturer: string;
-    semester: number;
+    date: string;
+    startTime: string,
+    endTime: string,
 
 }
 
@@ -14,6 +16,8 @@ export const toCreateClassDto = (e: Class): CreateClassDto => ({
     course: e?.course.course_name,
     classroom: e?.classroom.classroom_name,
     lecturer: e?.lecturer.name,
-    semester: e?.semester_id
+    date: e?.schedule.type,
+    startTime: e?.schedule.start_time,
+    endTime: e?.schedule.end_time,
 });
   
