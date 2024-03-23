@@ -19,12 +19,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1/auth', router);
 
+
 // Initialize Database and Start Server
 // TODO: Implement graceful shutdown
 app.listen(port, async (): Promise<void> => {
   try {
     await DatabaseConnection();
-    Logger.info(`Server is running on port ${port}`);
+    Logger.info(`[Auth-Service] Server is running on port ${port}`);
   } catch (error) {
     Logger.error(
       `Error starting server: Message: ${error.message} | Stack: ${error.stack}`

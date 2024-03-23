@@ -8,7 +8,7 @@ import { HttpLogger, Logger, PORT_SERVICE } from '@siakad/express.utils';
 import { DatabaseConnection } from '@siakad/express.database';
 
 import { routes } from './routes';
-import { VerifyAuth } from '@siakad/express.server';
+import { AuthContext } from '@siakad/express.server';
 
 const app: Express = express();
 const port = process.env.PORT || PORT_SERVICE.dataService;
@@ -18,7 +18,7 @@ app.use(boom());
 app.use(HttpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(VerifyAuth);
+app.use(AuthContext);
 routes.forEach(route => {
     app.use(route.path, route.router);
 });
