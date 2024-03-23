@@ -21,7 +21,7 @@ declare global {
     }
 }
 
-export const VerifyAuth = (req: Request, res: Response, next: NextFunction) => {
+export const AuthContext = (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.headers?.authorization?.split(' ')[1];
         if (!token) {
@@ -33,7 +33,7 @@ export const VerifyAuth = (req: Request, res: Response, next: NextFunction) => {
 
         next();
     } catch (error: any) {
-        Logger.error(`[VerifyAuth] Error: ${error.message}`);
+        Logger.error(`[AuthContext] Error: ${error.message}`);
         return res.status(401).json(BaseResponse.unauthorizedResponse('Unauthorized'));
     }
 };
