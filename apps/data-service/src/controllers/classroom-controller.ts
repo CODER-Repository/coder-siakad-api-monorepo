@@ -10,7 +10,7 @@ export class ClassroomController {
     static async getClassroom(
         req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
-    ): Promise<void> {
+    ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
         const where = ToSeqWhere(q);
         const query = queryHelper(where, q.page, q.page_size)
@@ -23,7 +23,7 @@ export class ClassroomController {
                     `['ClassroomService.getListClassroom'] | Error: ${resMessage.emptyData}`
                 );
                 return JsonResponse(res, resMessage.emptyData, 'success', {
-                    class: []
+                    classroom: []
                 });
             }
 
@@ -37,7 +37,7 @@ export class ClassroomController {
             Logger.error(
                 `['ClassroomService.getListStudent'] | Error: ${error.message}`
             );
-            res.boom.badImplementation();
+            return res.boom.badImplementation();
         }
     }
 }

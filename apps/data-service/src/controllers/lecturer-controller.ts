@@ -19,21 +19,19 @@ export class LecturerController {
 
             if (!listLecturer) {
                 Logger.error(
-                    `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`
+                    `${contextLogger.getLecturerController} 
+                    | Error: ${resMessage.emptyData}`
                 );
-                JsonResponse(res, resMessage.emptyData, 'success', {
-                    data: []
-                });
+                JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
                 return;
             }
 
-            Logger.info(
-                `${contextLogger.getLecturerController} | ${resMessage.success}`
-            );
+            Logger.info(`${contextLogger.getLecturerController} | ${resMessage.success}`);
             JsonResponse(res, resMessage.success, 'success', { listLecturer, pagination });
         } catch (error) {
             Logger.error(
-                `${contextLogger.getLecturerController} | Error: ${error.message}`
+                `${contextLogger.getLecturerController} 
+                | Error: ${error.message}`
             );
             return res.boom.badImplementation();
         }

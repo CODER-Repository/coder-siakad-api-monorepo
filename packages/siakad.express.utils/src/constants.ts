@@ -67,17 +67,26 @@ export const contextLogger = {
   userRegister: '[AuthController.registerUser]',
   userLogin: '[AuthController.login]',
 
-  //Schedule Service
+  // Data Service
   getClassController: '[ClassController.getClass]',
+  getClassroomController: '[ClassroomController.getClassroom]',
   getLecturerController: '[LecturerController.getLecturer]',
+  getStudentController: '[StudentController.getStudent]',
+  getCourseController: '[CourseController.getCourse]',
+
+  getCourseService: '[CourseService.getListCourse]',
+  getClassService: '[ScheduleService.getListClass]',
+  getClassroomService: '[ClassroomService.getListClassroom]',
+  getLecturerService: '[LecrurerService.getListLecturer]',
+  getStudentService: '[StudentService.getListStudent]',
+
+  //Schedule Service
   getTodayScheduleController: '[ScheduleController.getTodayScheduleController]',
   getCurrentScheduleController:
     '[ScheduleController.getCurrentScheduleController]',
   getScheduleListController:
     '[ScheduleController.getScheduleListController]',
 
-  getClassService: '[ScheduleService.getListClass]',
-  getLecturerService: '[LecrurerService.getListLecturer]',
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
   getScheduleListService: '[ScheduleService.getListSchedule]',
