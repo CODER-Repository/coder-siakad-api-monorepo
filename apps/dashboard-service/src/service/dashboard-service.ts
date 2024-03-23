@@ -1,16 +1,14 @@
 import { AppDataSource, KRS, Student, Semester, Course, PaymentHistory  } from '@siakad/express.database';
 import { Logger } from '@siakad/express.utils';
+import { DashboardData, IPKData, CurrentSemesterData, UKTData, TotalCreditsData } from '../interface/response';
 
 export class DasboardService {
-    static async showDashboard(studentId: string): Promise<any> {
+    static async showDashboard(studentId: string): Promise<DashboardData> {
         try {
-            const ipkData = await this.calculateIPK(studentId);
-            
-            const currentSemester = await this.getCurrentSemester(studentId);
-            
-            const uktData = await this.getUKTData(studentId);
-            
-            const totalCredits = await this.getTotalCredits(studentId);
+            const ipkData: IPKData = await this.calculateIPK(studentId);
+            const currentSemester: CurrentSemesterData = await this.getCurrentSemester(studentId);
+            const uktData: UKTData = await this.getUKTData(studentId);
+            const totalCredits: TotalCreditsData = await this.getTotalCredits(studentId);
 
             if (totalCredits.total_credits === null) {
                 totalCredits.total_credits = 0;
@@ -28,7 +26,7 @@ export class DasboardService {
         }
     }
 
-    static async calculateIPK(studentId: string): Promise<any> {
+    static async calculateIPK(studentId: string): Promise<{ ipk: number }> {
         try {
             const ipkData = await AppDataSource.createQueryBuilder(KRS, 'krs')
                 .select('AVG(grade)', 'ipk')    
@@ -43,7 +41,7 @@ export class DasboardService {
         }
     }
 
-    static async getCurrentSemester(studentId: string): Promise<any> {
+    static async getCurrentSemester(studentId: string): Promise<{ current_semester_year: string }> {
         try {
             const currentSemester = await AppDataSource.createQueryBuilder(KRS, 'krs')
             .select('MAX(semester.semester_id)', 'current_semester_year')
@@ -59,7 +57,7 @@ export class DasboardService {
         }
     }
 
-    static async getUKTData(studentId: string): Promise<any> {
+    static async getUKTData(studentId: string): Promise<{ total_ukt: number }> {
         try {
             const uktData = await AppDataSource.createQueryBuilder(PaymentHistory, 'payment_history')
                 .select('SUM(payment_history.amount)', 'total_ukt')
@@ -75,7 +73,7 @@ export class DasboardService {
         }
     }
 
-    static async getTotalCredits(studentId: string): Promise<any> {
+    static async getTotalCredits(studentId: string): Promise<{ total_credits: number }> {
         try {
             const totalCredits = await AppDataSource.createQueryBuilder(KRS, 'krs')
                 .select('SUM(course.credit_hours)', 'total_credits')
