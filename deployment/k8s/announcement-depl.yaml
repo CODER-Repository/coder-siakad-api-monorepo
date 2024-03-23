@@ -19,7 +19,7 @@ spec:
             - name: JWT_SECRET
               value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
             - name: PORT
-              value: "5005"
+              value: "5007"
             - name: APP_NAME
               value: siakad-announcement-api
             - name: APP_ENV
