@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
 import { Logger, queryHelper, resMessage, } from '@siakad/express.utils';
-import { ToSeqWhere } from '../params/classroom-params';
+import { ToSeqWhereClassroom } from '../params/classroom-params';
 import { ClassroomService } from '../service/classroom-service';
 import { QueryParamsDto } from '../utils/queryParams';
 
@@ -12,7 +12,7 @@ export class ClassroomController {
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
-        const where = ToSeqWhere(q);
+        const where = ToSeqWhereClassroom(q);
         const query = queryHelper(where, q.page, q.page_size)
 
         try {

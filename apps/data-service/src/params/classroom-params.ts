@@ -1,6 +1,6 @@
 import { QueryParamsDto } from '../utils/queryParams';
 
-export const ToSeqWhere = (q: QueryParamsDto) => {
+export const ToSeqWhereClassroom = (q: QueryParamsDto) => {
     const filterQuery: Object = {};
     
     // KEY MAP entity.column
