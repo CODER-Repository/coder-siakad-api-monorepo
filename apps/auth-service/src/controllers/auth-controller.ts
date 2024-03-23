@@ -61,13 +61,13 @@ export class AuthController {
             const user = await AuthService.findExistingUsername(username);
             if (!user) {
                 Logger.error(`${context} | User not found for ${username}`);
-                return res.boom.notFound('Email or password is not valid');
+                return res.boom.notFound('Username or password is not valid');
             }
-
+            console.log(user);
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 Logger.error(`${context} | Invalid password for ${username}`);
-                return res.boom.unauthorized('Email or password is not valid');
+                return res.boom.unauthorized('Password is not valid');
             }
 
             const token = await AuthService.generateJWTPayload(user);

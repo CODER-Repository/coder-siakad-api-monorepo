@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Logger } from '@siakad/express.utils';
 import jwt from 'jsonwebtoken';
 import { BaseResponse } from '../response';
+import { Console } from 'console';
 
 interface TokenPayload {
     userId: string;
@@ -30,6 +31,7 @@ export const AuthContext = (req: Request, res: Response, next: NextFunction) => 
 
         const decoded = jwt.decode(token, { complete: true })
         req.user = decoded?.payload as TokenPayload
+        console.log('decoded', decoded)
 
         next();
     } catch (error: any) {
