@@ -33,7 +33,7 @@ export const VerifyAuth = (req: Request, res: Response, next: NextFunction) => {
 
         next();
     } catch (error: any) {
-        Logger.error(`[AuthContext] Error: ${error.message}`);
-        return res.status(500).json(BaseResponse.internalServerErrorResponse());
+        Logger.error(`[VerifyAuth] Error: ${error.message}`);
+        return res.status(401).json(BaseResponse.unauthorizedResponse('Unauthorized'));
     }
 };
