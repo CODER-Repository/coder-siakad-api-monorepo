@@ -1,14 +1,22 @@
 import { QueryParamsDto } from '../utils/queryParams';
 
 export const ToSeqWhere = (q: QueryParamsDto) => {
-    let filterQuery = {};
+    const filterQuery: Object = {};
+    
+    // KEY MAP entity.column
+    const mapKeys = {
+        id: 'classroom.classroom_id',
+        classroom: 'classroom.classroom_name',
+        courseId: 'course.course_id',
+        courseName: 'course.course_name',
+        facultyId: 'faculty.faculty_id',
+        facultyName: 'faculty.faculty_name'
+    };
 
-    if (q['id']) {
-        filterQuery['classroom_id'] = q['id'];
-    }
-
-    if (q['classroomName']) {
-        filterQuery['classroom_name'] = q['classroomName'];
+    for (const key in q) {
+        if (q.hasOwnProperty(key) && mapKeys[key]) {
+            filterQuery[mapKeys[key]] = q[key];
+        }
     }
 
     return filterQuery;

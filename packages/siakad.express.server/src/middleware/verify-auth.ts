@@ -25,10 +25,11 @@ declare global {
     }
 }
 
-export const VerifyAuth = (req: Request, res: Response, next: NextFunction) => {
+export const VerifyAuth = (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction) => {
     try {
         const { JWT_SECRET } = process.env;
         if (!JWT_SECRET) {
+            Logger.error(`[VerifyAuth] Error: Secret Key Not Found`);
             return res.status(500).json(BaseResponse.internalServerErrorResponse());
         }
 

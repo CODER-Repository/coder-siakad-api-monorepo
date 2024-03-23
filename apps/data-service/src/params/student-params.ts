@@ -1,31 +1,22 @@
-import { Like, In } from 'typeorm';
 import { QueryParamsDto } from '../utils/queryParams';
 
-export const ToSqlWhere = (q: QueryParamsDto) => {
-    let filterQuery = {};
+export const ToSeqWhereStudent = (q: QueryParamsDto) => {
+    const filterQuery: Object = {};
+    
+    // KEY MAP entity.column
+    const mapKeys = {
+        id: 'student.nim',
+        name: 'student.full_name',
+        addreess: 'student.address_id',
+        major: 'student.major_id',
+        birthday: 'student.birth_date',
+    };
 
-    if (q['id']) {
-        filterQuery['user_id'] = q['id'];
-    }
-
-    if (q['name']) {
-        filterQuery['name'] = q['name'];
-    }
-
-    if (q['email']) {
-        filterQuery['email'] = q['email'];
-    }
-
-    // query using sparator ,
-    if (q['nim']) {
-        const nimIds = q['nim'].split(',').map(a => a.trim());
-        if (nimIds.length === 1) {
-            filterQuery['nim'] = Like(`%${nimIds[0]}%`);
-        } else if (nimIds.length > 1) {
-            filterQuery['nim'] = In(nimIds);
+    for (const key in q) {
+        if (q.hasOwnProperty(key) && mapKeys[key]) {
+            filterQuery[mapKeys[key]] = q[key];
         }
     }
-    
 
     return filterQuery;
 };
