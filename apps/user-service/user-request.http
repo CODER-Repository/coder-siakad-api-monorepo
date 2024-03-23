@@ -1,6 +1,6 @@
 
 ### Update User
-PATCH  http://localhost:5003/api/v1/user/9c39e6b4-2581-4d2b-b1a1-337484b06642
+PATCH http://localhost:5003/api/v1/api/29e99e68-e255-40cf-8ba4-83588f82fb7f
 Content-Type: application/json
 
 {
