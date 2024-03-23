@@ -35,14 +35,7 @@ spec:
               service:
                 name: siakad-announcement-api
                 port:
-                  number: 5005
-          - pathType: ImplementationSpecific
-            path: /api/v1/schedule
-            backend:
-              service:
-                name: siakad-schedule-api
-                port:
-                  number: 5010
+                  number: 5007
           - pathType: ImplementationSpecific
             path: /api/v1/krs
             backend:
@@ -55,5 +48,12 @@ spec:
             backend:
               service:
                 name: siakad-data-api
+                port:
+                  number: 5009
+          - pathType: ImplementationSpecific
+            path: /api/v1/schedule
+            backend:
+              service:
+                name: siakad-schedule-api
                 port:
                   number: 5010
