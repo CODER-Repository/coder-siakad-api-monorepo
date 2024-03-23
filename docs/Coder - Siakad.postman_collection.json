@@ -124,9 +124,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{api_prod}}/api/v1/auth/login",
+							"raw": "{{auth_service}}/api/v1/auth/login",
 							"host": [
-								"{{api_prod}}"
+								"{{auth_service}}"
 							],
 							"path": [
 								"api",
@@ -178,7 +178,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api_prod}}/api/v1/announcement",
+							"raw": "{{api_prod}}/api/v1/announcement?page=1?page_size=10",
 							"host": [
 								"{{api_prod}}"
 							],
@@ -186,6 +186,12 @@
 								"api",
 								"v1",
 								"announcement"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1?page_size=10"
+								}
 							]
 						}
 					},
@@ -214,6 +220,165 @@
 								"api",
 								"v1",
 								"announcement"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "krs-service",
+			"item": [
+				{
+					"name": "Get KRS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzEwOTk5MDU5LCJleHAiOjE3MTEwMDI2NTl9.4Tdh-IhtfUUK9tmlgL1LQPOfRqtI9xyyBHbGqmjbWik",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_prod}}/api/v1/krs",
+							"host": [
+								"{{api_prod}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"krs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "data-service",
+			"item": [
+				{
+					"name": "Get Class List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzExMTY2NjA1LCJleHAiOjE3MTExOTU0MDUsImlzcyI6InNpYWthZC1zZXJ2aWNlIn0.oSbIJKjZmOZrBo3TlqIMu3lZtk37dCDjLpUK4q0OuFM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{data_service}}/api/v1/data/class",
+							"host": [
+								"{{data_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"class"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lecturer List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzExMTY2NjA1LCJleHAiOjE3MTExOTU0MDUsImlzcyI6InNpYWthZC1zZXJ2aWNlIn0.oSbIJKjZmOZrBo3TlqIMu3lZtk37dCDjLpUK4q0OuFM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{data_service}}/api/v1/data/lecturer",
+							"host": [
+								"{{data_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"lecturer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzExMTY2NjA1LCJleHAiOjE3MTExOTU0MDUsImlzcyI6InNpYWthZC1zZXJ2aWNlIn0.oSbIJKjZmOZrBo3TlqIMu3lZtk37dCDjLpUK4q0OuFM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{data_service}}/api/v1/data/student",
+							"host": [
+								"{{data_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhNjllYTAzMi0yNWQ0LTQwODQtOWYxMi1hM2JkODQ5ZWI3MjEiLCJlbWFpbCI6ImpvaG5kb2UxMjNAc3R1ZGVudC5hYy5pZCIsInVzZXJuYW1lIjoiam9obmRvZTEyMyIsInJvbGUiOiJTdHVkZW50Iiwicm9sZUlkIjoiU1REIiwibmltIjoiUHJ1S1FtUXBlMFZwUWZMQXQ1dERhTHh3bkJpTWNCIiwiaWF0IjoxNzExMTY2NjA1LCJleHAiOjE3MTExOTU0MDUsImlzcyI6InNpYWthZC1zZXJ2aWNlIn0.oSbIJKjZmOZrBo3TlqIMu3lZtk37dCDjLpUK4q0OuFM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{data_service}}/api/v1/data/course",
+							"host": [
+								"{{data_service}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"data",
+								"course"
 							]
 						}
 					},
@@ -263,6 +428,16 @@
 		{
 			"key": "announcement_service",
 			"value": "http://localhost:5005",
+			"type": "string"
+		},
+		{
+			"key": "krs_service",
+			"value": "http://localhost:5008",
+			"type": "string"
+		},
+		{
+			"key": "data_service",
+			"value": "http://localhost:5009",
 			"type": "string"
 		}
 	]

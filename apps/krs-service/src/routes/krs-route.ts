@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { KRSController } from '../controllers/krs-controller';
-import { VerifyAuth } from '@siakad/express.server';
+import { AuthContext } from '@siakad/express.server';
 
 const authRouter = Router();
 
-authRouter.route('/').get(VerifyAuth, KRSController.showKRS);
+authRouter.route('/').get(AuthContext, KRSController.showKRS);
 
 export default authRouter;

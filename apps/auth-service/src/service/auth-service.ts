@@ -139,7 +139,9 @@ export class AuthService {
             }
 
             return jwt.sign(jwtPayload, JWT_SECRET, {
-                expiresIn: '1h'
+                issuer: 'siakad-service',
+                algorithm: 'HS256',
+                expiresIn: '8h',
             });
         } catch (error) {
             Logger.error(`[AuthService.generateJWTPayload] Error: ${error.message}`);

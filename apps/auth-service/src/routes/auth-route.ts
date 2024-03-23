@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/auth-controller';
 import { LoginSchema, RegisterSchema } from './schema/auth-validation';
-import { ValidationHandler, VerifyAuth } from '@siakad/express.server';
+import { ValidationHandler, AuthContext } from '@siakad/express.server';
 
 const authRouter = Router();
 
 authRouter.route('/register').post(
   // uncomment this on production
-  // VerifyAuth,
+  // AuthContext,
   RegisterSchema,
   ValidationHandler,
   AuthController.registerUser
