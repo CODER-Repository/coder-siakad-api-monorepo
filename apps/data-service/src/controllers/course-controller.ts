@@ -1,37 +1,35 @@
 import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
 import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.utils';
-import { ClassService } from '../service/class-service';
 import { QueryParamsDto } from '../utils/queryParams';
-import { ToSeqWhereClass } from '../params/class-params';
+import { ToSeqWhereCourse } from '../params/course-params';
+import { CourseService } from '../service/course-service';
 
-export class ClassController {
-    static async getClass(
+export class CourseController {
+    static async getCourse(
         req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
-        const where = ToSeqWhereClass(q);
+        const where = ToSeqWhereCourse(q);
         const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const { data: listClass, pagination} = await ClassService.getListClass(query);
+            const { data: listCourses, pagination} = await CourseService.getListCourse(query);
 
-            if (!listClass) {
+            if (!listCourses) {
                 Logger.error(
-                    `${contextLogger.getClassController} 
+                    `${contextLogger.getCourseController} 
                     | Error: ${resMessage.emptyData}`
                 );
-                return JsonResponse(res, resMessage.emptyData, 'success', { class: [] });
+                return JsonResponse(res, resMessage.emptyData, 'success', { course: [] });
             }
 
-            Logger.info(`${contextLogger.getClassController} | ${resMessage.success}`);
-            JsonResponse(res, resMessage.success, 'success', {
-                listClass, pagination,
-            });
+            Logger.info(`${contextLogger.getCourseController} | ${resMessage.success}`);
+            JsonResponse(res, resMessage.success, 'success', { listCourses, pagination });
         } catch (error) {
             Logger.error(
-                `${contextLogger.getClassController} 
+                `${contextLogger.getCourseController} 
                 | Error: ${error.message}`
             );
             return res.boom.badImplementation();

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
-import { Logger, queryHelper, resMessage } from '@siakad/express.utils';
+import { Logger, contextLogger, queryHelper, resMessage } from '@siakad/express.utils';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereStudent } from '../params/student-params';
 import { StudentService } from '../service/student-service';
@@ -19,20 +19,18 @@ export class StudentController {
 
             if (!listStudent) {
                 Logger.error(
-                    `['StudentController.getListStudent']| Error: ${resMessage.emptyData}`
+                    `${contextLogger.getStudentController} 
+                    | Error: ${resMessage.emptyData}`
                 );
-                return JsonResponse(res, resMessage.emptyData, 'success', {
-                    class: []
-                });
+                return JsonResponse(res, resMessage.emptyData, 'success', { class: [] });
             }
 
-            Logger.info(
-                `['StudentController.getListStudent'] | ${resMessage.success}`
-            );
+            Logger.info(`${contextLogger.getStudentController} | ${resMessage.success}`);
             return JsonResponse(res, resMessage.success, 'success', { listStudent, pagination });
         } catch (error) {
             Logger.error(
-                `['StudentController.getListStudent'] | Error: ${error.message}`
+                `${contextLogger.getStudentController} 
+                | Error: ${error.message}`
             );
             return res.boom.badImplementation();
         }

@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { ClassController } from '../controllers/class-controller';
+import { CourseController } from '../controllers/course-controller';
 
 const classRoute = Router();
 
-classRoute.route('/').get(ClassController.getClass);
+classRoute.route('/').get(CourseController.getCourse);
 
 export default classRoute;

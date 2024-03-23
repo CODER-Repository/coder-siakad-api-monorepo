@@ -97,9 +97,9 @@ services:
       dockerfile: ./apps/data-service/Dockerfile
     container_name: data-service
     ports:
-      - "5010:5010"
+      - "5009:5009"
     environment:
-      - PORT=5010
+      - PORT=5009
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
@@ -159,7 +159,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - PORT=5005
+      - PORT=5007
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
 #      - DB_HOST=ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
@@ -170,7 +170,7 @@ services:
 #      - DB_PASSWORD=WbVHOqg0m6Gw
       - DB_PASSWORD=postgres
     ports:
-      - "5005:5005"
+      - "5007:5007"
     networks:
       - siakad-network
 

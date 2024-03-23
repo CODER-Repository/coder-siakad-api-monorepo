@@ -43,6 +43,6 @@ spec:
   selector:
     app: siakad-data-api
   ports:
-    - port: 5010
-      targetPort: 5010
+    - port: 5009
+      targetPort: 5009
 
