@@ -31,7 +31,7 @@ spec:
       backendRefs:
         - name: siakad-announcement-api
           kind: Service
-          port: 5005
+          port: 5007
     - matches:
         - path:
             type: PathPrefix
@@ -55,4 +55,4 @@ spec:
       backendRefs:
         - name: siakad-data-api
           kind: Service
-          port: 5010
+          port: 5009
