@@ -55,7 +55,7 @@ services:
     ports:
       - "5003:5003"
     environment:
-      - PORT=5002
+      - PORT=5003
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
@@ -90,7 +90,7 @@ services:
       - postgres
 
   data-service:
-    image: ghcr.io/data-repository/auth-service:latest
+    image: ghcr.io/data-repository/data-service:latest
     platform: linux/amd64
     build:
       context: .
