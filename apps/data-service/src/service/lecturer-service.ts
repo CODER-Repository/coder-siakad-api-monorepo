@@ -52,25 +52,32 @@ export class LecturerService {
             nip,
             name,
             phone_number: phone,
-            type: Gender[gender as keyof typeof Gender],
+            type: gender,
             email
         };
-    
+
         const condition = { user_id: id };
 
         try {
-            const lecturer = dbContext
-                .Lecturer()
+            await dbContext.Lecturer()
                 .createQueryBuilder('lecturer')
                 .update(Lecturer)
                 .set(updateData)
                 .where(condition)
                 .execute();
 
-            Logger.info(`${contextLogger.updateUser} | Lecturer updated successfully`);
-            return { data: lecturer };
-    } catch(error) {
-        Logger.error(`[LecturerService.patchLecturer] Error: ${error.message}`);
+            // Find existing lecturer
+            const existingLecturer = await dbContext.User().findOne({ where: { user_id: id } });
+            if (!existingLecturer) {
+                Logger.info(`${contextLogger.patchLecturerService} | User not found`);
+                return { data: [] };
+            }
+
+            Logger.info(`${contextLogger.patchLecturerService} | Lecturer updated successfully`);
+            return { data: existingLecturer };
+
+        } catch (error) {
+            Logger.error(`[LecturerService.patchLecturer] Error: ${error.message}`);
+        }
     }
-}    
 }

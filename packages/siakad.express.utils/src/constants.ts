@@ -72,6 +72,7 @@ export const contextLogger = {
   getClassController: '[ClassController.getClass]',
   getClassroomController: '[ClassroomController.getClassroom]',
   getLecturerController: '[LecturerController.getLecturer]',
+  PatchLecturerController: '[LecturerController.updatedLecturer]',
   getStudentController: '[StudentController.getStudent]',
   getCourseController: '[CourseController.getCourse]',
 
@@ -79,6 +80,7 @@ export const contextLogger = {
   getClassService: '[ScheduleService.getListClass]',
   getClassroomService: '[ClassroomService.getListClassroom]',
   getLecturerService: '[LecrurerService.getListLecturer]',
+  patchLecturerService: '[LecrurerService.updateLecturer]',
   getStudentService: '[StudentService.getListStudent]',
 
   //Schedule Service

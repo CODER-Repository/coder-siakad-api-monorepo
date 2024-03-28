@@ -47,17 +47,20 @@ export class LecturerController {
         const { roleId } = JSON.parse(UserAuth);
         try {
             const payload = req.body;
-            console.log(payload);
             if (roleId !== 'LCT') {
                 const errorMessage = `[LecturerController.patchLecturer] | Error: ${resMessage.emptyData}`;
                 Logger.error(errorMessage);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
-            const lecturer  = await LecturerService.pacthLecurerByUserID(payload);
-
-            Logger.info(`${contextLogger.getLecturerController} | ${resMessage.success}`);
-            return JsonResponse(res, resMessage.success, 'created', { lecturer });
+            const { data: lecturer }  = await LecturerService.pacthLecurerByUserID(payload);
+            if (!lecturer || Object.keys(lecturer).length === 0) {
+                Logger.error(`${contextLogger.PatchLecturerController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
+            }
+    
+            Logger.error(`${contextLogger.PatchLecturerController} | Successfully updated lecturer`);
+            return JsonResponse(res, resMessage.success, 'success', { lecturer });
         } catch (error) {
             const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;
             Logger.error(errorMessage);
