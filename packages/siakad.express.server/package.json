@@ -24,7 +24,6 @@
   "dependencies": {
     "@siakad/express.utils": "*",
     "express-validator": "^7.0.1",
-    "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.1"
   }
 }

@@ -98,8 +98,6 @@ export class AuthService {
 
     static async findExistingUsername(username: string): Promise<User> {
         try {
-            const user = await dbContext.User().find({});
-            console.log(user);
             return dbContext.User().findOne({
                 where: { username }
             });
@@ -118,7 +116,7 @@ export class AuthService {
                 where: { user_id: user.user_id }
             });
 
-            let jwtPayload : JwtPayloadInterface = {
+            let jwtPayload: JwtPayloadInterface = {
                 userId: userPayload.user_id,
                 email: userPayload.email,
                 username: userPayload.username,
@@ -144,6 +142,7 @@ export class AuthService {
                 issuer: 'siakad-service',
                 algorithm: 'HS256',
                 expiresIn: '8h',
+                audience: 'siakad-client'
             });
         } catch (error) {
             Logger.error(`[AuthService.generateJWTPayload] Error: ${error.message}`);

@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Logger } from '@siakad/express.utils';
-import jwt from 'jsonwebtoken';
 import { BaseResponse } from '../response';
-import { Console } from 'console';
 
-interface TokenPayload {
+interface UserPayload {
     userId: string;
     email: string;
     username: string;
@@ -17,22 +15,18 @@ interface TokenPayload {
 declare global {
     namespace Express {
         interface Request {
-            user?: TokenPayload;
+            user?: UserPayload;
         }
     }
 }
 
 export const AuthContext = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers?.authorization?.split(' ')[1];
-        if (!token) {
+        const profile = req.header('X-User-Profile');
+        if (!profile) {
             return res.status(401).json(BaseResponse.unauthorizedResponse('Unauthorized'));
         }
-
-        const decoded = jwt.decode(token, { complete: true })
-        req.user = decoded?.payload as TokenPayload
-        console.log('decoded', decoded)
-
+        req.user = profile as unknown as UserPayload;
         next();
     } catch (error: any) {
         Logger.error(`[AuthContext] Error: ${error.message}`);

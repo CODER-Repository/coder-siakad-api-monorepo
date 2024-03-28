@@ -14,10 +14,8 @@ spec:
     spec:
       containers:
         - name: siakad-announcement-api
-          image: ghcr.io/coder-repository/announcement-service:202403171424
+          image: ghcr.io/coder-repository/announcement-service:20240321023336
           env:
-            - name: JWT_SECRET
-              value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
             - name: PORT
               value: "5007"
             - name: APP_NAME

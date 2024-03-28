@@ -63,7 +63,6 @@ export class AuthController {
                 Logger.error(`${context} | User not found for ${username}`);
                 return res.boom.notFound('Username or password is not valid');
             }
-            console.log(user);
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 Logger.error(`${context} | Invalid password for ${username}`);
