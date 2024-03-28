@@ -98,6 +98,8 @@ export class AuthService {
 
     static async findExistingUsername(username: string): Promise<User> {
         try {
+            const user = await dbContext.User().find({});
+            console.log(user);
             return dbContext.User().findOne({
                 where: { username }
             });

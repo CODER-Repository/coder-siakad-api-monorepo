@@ -47,7 +47,8 @@ export const PORT_SERVICE = {
   paymentService: 5004,
   scheduleService: 5005,
   krsService: 5008,
-  dataService: 5009
+  dataService: 5009,
+  dashboardService: 5010
   // add more
 };
 
