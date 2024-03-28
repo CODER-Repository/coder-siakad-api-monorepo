@@ -39,27 +39,21 @@ export class LecturerController {
         }
     }
 
-    static async postLecturer(
+    static async patchLecturer(
         req: Request<{}, {}, CreateLectureDto, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
+        const UserAuth = req.user as unknown as string;
+        const { roleId } = JSON.parse(UserAuth);
         try {
-            const { role } = req.user;
-            const { userId } = req.user
             const payload = req.body;
-            if (role !== 'Administrator') {
-                const errorMessage = `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`;
+            if (roleId !== 'LCT') {
+                const errorMessage = `[LecturerController.patchLecturer] | Error: ${resMessage.emptyData}`;
                 Logger.error(errorMessage);
-                return JsonResponse(res, resMessage.forbidden, 'unauthorized');
+                return res.boom.forbidden(resMessage.validationRole)
             }
 
-            const lecturer  = await LecturerService.postLecturer(payload, userId, res);
-
-            if (!lecturer) {
-                const errorMessage = `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`;
-                Logger.error(errorMessage);
-                return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
-            }
+            const lecturer  = await LecturerService.pacthLecurerByUserID(payload, res);
 
             Logger.info(`${contextLogger.getLecturerController} | ${resMessage.success}`);
             return JsonResponse(res, resMessage.success, 'created', { lecturer });

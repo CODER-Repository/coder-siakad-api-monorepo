@@ -43,29 +43,26 @@ export class LecturerService {
         }
     }
 
-    static async postLecturer(payload: CreateLectureDto, userId, res): Promise<void | Express.BoomError<null>> {
+    static async pacthLecurerByUserID(payload: CreateLectureDto, res): Promise<void | Express.BoomError<null>> {
         try {
-            const { nip, name, gender, phone, email } = payload
-    
-            return AppDataSource.transaction(async (transaction) => {
+            const { id, nip, name, gender, phone, email } = payload;
+            const condition = { user_id: id }
+            const updateValues = { nip, name, gender, phone, email };
+            const lecturer = dbContext
+                .Lecturer()
+                .createQueryBuilder('lecturer')
+                .update(Lecturer)
+                .set(updateValues)
+                .where(condition)
+                .execute();
 
-                const condition = { user_id: userId };
-                const updateValues = { nip, name, gender, phone, email };
-                const lecturer = await transaction.update(Lecturer, condition, updateValues);
-    
-                await Promise.all([
-                    transaction.save(lecturer.raw),
-                ]);
-
-    
-                Logger.info(`${contextLogger.updateUser} | Lecturer updated successfully`);
-                return JsonResponse(res, 'Lecturer updated successfully', 'success', { data: lecturer });
-            });
-        } catch (error) {
-            Logger.error(
-                `${contextLogger.updateUser} | Error updating Lecturer: Message: ${error.message} | Stack: ${error.stack}`
-            );
-            return res.boom.badImplementation();
-        }
-    }    
+            Logger.info(`${contextLogger.updateUser} | Lecturer updated successfully`);
+            return JsonResponse(res, 'Lecturer updated successfully', 'success', { data: lecturer });
+    } catch(error) {
+        Logger.error(
+            `${contextLogger.updateUser} | Error updating Lecturer: Message: ${error.message} | Stack: ${error.stack}`
+        );
+        return res.boom.badImplementation();
+    }
+}    
 }
