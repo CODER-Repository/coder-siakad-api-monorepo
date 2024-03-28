@@ -3,6 +3,7 @@ import { buildWhereCondition, contextLogger, Logger, queryInterface } from '@sia
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
 import { JsonResponse } from '@siakad/express.server';
+import { Gender } from '@siakad/express.database/dist/entities/lecture.entity';
 
 export class LecturerService {
     static async getListLecturer(query: queryInterface): Promise<DTO> {
@@ -43,26 +44,33 @@ export class LecturerService {
         }
     }
 
-    static async pacthLecurerByUserID(payload: CreateLectureDto, res): Promise<void | Express.BoomError<null>> {
+    static async pacthLecurerByUserID(payload: CreateLectureDto): Promise<CreateDTO> {
+        const { id, nip, name, gender, phone, email } = payload;
+
+        // LECTURE ENTITY
+        const updateData = {
+            nip,
+            name,
+            phone_number: phone,
+            type: Gender[gender as keyof typeof Gender],
+            email
+        };
+    
+        const condition = { user_id: id };
+
         try {
-            const { id, nip, name, gender, phone, email } = payload;
-            const condition = { user_id: id }
-            const updateValues = { nip, name, gender, phone, email };
             const lecturer = dbContext
                 .Lecturer()
                 .createQueryBuilder('lecturer')
                 .update(Lecturer)
-                .set(updateValues)
+                .set(updateData)
                 .where(condition)
                 .execute();
 
             Logger.info(`${contextLogger.updateUser} | Lecturer updated successfully`);
-            return JsonResponse(res, 'Lecturer updated successfully', 'success', { data: lecturer });
+            return { data: lecturer };
     } catch(error) {
-        Logger.error(
-            `${contextLogger.updateUser} | Error updating Lecturer: Message: ${error.message} | Stack: ${error.stack}`
-        );
-        return res.boom.badImplementation();
+        Logger.error(`[LecturerService.patchLecturer] Error: ${error.message}`);
     }
 }    
 }

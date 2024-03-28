@@ -40,20 +40,21 @@ export class LecturerController {
     }
 
     static async patchLecturer(
-        req: Request<{}, {}, CreateLectureDto, {}>,
+        req: Request<{}, {}, CreateLectureDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const UserAuth = req.user as unknown as string;
         const { roleId } = JSON.parse(UserAuth);
         try {
             const payload = req.body;
+            console.log(payload);
             if (roleId !== 'LCT') {
                 const errorMessage = `[LecturerController.patchLecturer] | Error: ${resMessage.emptyData}`;
                 Logger.error(errorMessage);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
-            const lecturer  = await LecturerService.pacthLecurerByUserID(payload, res);
+            const lecturer  = await LecturerService.pacthLecurerByUserID(payload);
 
             Logger.info(`${contextLogger.getLecturerController} | ${resMessage.success}`);
             return JsonResponse(res, resMessage.success, 'created', { lecturer });
