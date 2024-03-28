@@ -1,7 +1,8 @@
-import { dbContext, Lecturer } from '@siakad/express.database';
-import { buildWhereCondition, Logger, queryInterface } from '@siakad/express.utils';
+import { AppDataSource, dbContext, Lecturer } from '@siakad/express.database';
+import { buildWhereCondition, contextLogger, Logger, queryInterface } from '@siakad/express.utils';
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
+import { JsonResponse } from '@siakad/express.server';
 
 export class LecturerService {
     static async getListLecturer(query: queryInterface): Promise<DTO> {
@@ -16,7 +17,7 @@ export class LecturerService {
                 .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-            
+
             // GET DATA AND COUNT
             const lectures = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
@@ -41,4 +42,30 @@ export class LecturerService {
             throw error;
         }
     }
+
+    static async postLecturer(payload: CreateLectureDto, userId, res): Promise<void | Express.BoomError<null>> {
+        try {
+            const { nip, name, gender, phone, email } = payload
+    
+            return AppDataSource.transaction(async (transaction) => {
+
+                const condition = { user_id: userId };
+                const updateValues = { nip, name, gender, phone, email };
+                const lecturer = await transaction.update(Lecturer, condition, updateValues);
+    
+                await Promise.all([
+                    transaction.save(lecturer.raw),
+                ]);
+
+    
+                Logger.info(`${contextLogger.updateUser} | Lecturer updated successfully`);
+                return JsonResponse(res, 'Lecturer updated successfully', 'success', { data: lecturer });
+            });
+        } catch (error) {
+            Logger.error(
+                `${contextLogger.updateUser} | Error updating Lecturer: Message: ${error.message} | Stack: ${error.stack}`
+            );
+            return res.boom.badImplementation();
+        }
+    }    
 }

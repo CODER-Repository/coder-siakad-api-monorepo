@@ -20,3 +20,7 @@ export interface DTO {
     data: object
     pagination: object
 }
+
+export interface CreateDTO {
+    data: object  
+}

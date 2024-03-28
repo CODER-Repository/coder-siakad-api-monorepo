@@ -4,6 +4,8 @@ import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.
 import { LecturerService } from '../service/lecturer-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereLecturer } from '../params/lecturer-params';
+import { Lecturer } from '@siakad/express.database';
+import { CreateLectureDto } from '../interface/lecturer-dto';
 
 export class LecturerController {
     static async getLecturer(
@@ -15,7 +17,7 @@ export class LecturerController {
             const where = ToSeqWhereLecturer(q);
             const query = queryHelper(where, q.page, q.page_size)
 
-            const { data: listLecturer, pagination}= await LecturerService.getListLecturer(query);
+            const { data: listLecturer, pagination } = await LecturerService.getListLecturer(query);
 
             if (!listLecturer) {
                 Logger.error(
@@ -36,4 +38,36 @@ export class LecturerController {
             return res.boom.badImplementation();
         }
     }
+
+    static async postLecturer(
+        req: Request<{}, {}, CreateLectureDto, {}>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const { role } = req.user;
+            const { userId } = req.user
+            const payload = req.body;
+            if (role !== 'Administrator') {
+                const errorMessage = `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`;
+                Logger.error(errorMessage);
+                return JsonResponse(res, resMessage.forbidden, 'unauthorized');
+            }
+
+            const lecturer  = await LecturerService.postLecturer(payload, userId, res);
+
+            if (!lecturer) {
+                const errorMessage = `${contextLogger.getLecturerController} | Error: ${resMessage.emptyData}`;
+                Logger.error(errorMessage);
+                return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
+            }
+
+            Logger.info(`${contextLogger.getLecturerController} | ${resMessage.success}`);
+            return JsonResponse(res, resMessage.success, 'created', { lecturer });
+        } catch (error) {
+            const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
+
 }
