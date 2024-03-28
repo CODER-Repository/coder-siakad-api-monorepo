@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
-import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.utils';
+import { Logger, resMessage, contextLogger, queryHelper, ROLE_ID } from '@siakad/express.utils';
 import { LecturerService } from '../service/lecturer-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereLecturer } from '../params/lecturer-params';
 import { Lecturer } from '@siakad/express.database';
 import { CreateLectureDto } from '../interface/lecturer-dto';
+import { queryLecturerValidator } from '../utils/queryValidator';
 
 export class LecturerController {
     static async getLecturer(
@@ -47,19 +48,47 @@ export class LecturerController {
         const { roleId } = JSON.parse(UserAuth);
         try {
             const payload = req.body;
-            if (roleId !== 'LCT') {
-                const errorMessage = `[LecturerController.patchLecturer] | Error: ${resMessage.emptyData}`;
+            if (roleId !== ROLE_ID.Lecturer || ROLE_ID.Admin) {
+                const errorMessage = `${contextLogger.patchLecturerController} | Error: ${resMessage.emptyData}`;
                 Logger.error(errorMessage);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
             const { data: lecturer }  = await LecturerService.pacthLecurerByUserID(payload);
             if (!lecturer || Object.keys(lecturer).length === 0) {
-                Logger.error(`${contextLogger.PatchLecturerController} | No rows affected`);
+                Logger.error(`${contextLogger.patchLecturerController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
             }
     
-            Logger.error(`${contextLogger.PatchLecturerController} | Successfully updated lecturer`);
+            Logger.error(`${contextLogger.patchLecturerController} | Successfully updated lecturer`);
+            return JsonResponse(res, resMessage.success, 'success', { lecturer });
+        } catch (error) {
+            const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async deleteLecturer(
+        req: Request<queryLecturerValidator, {}, {}>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        const UserAuth = req.user as unknown as string;
+        const { roleId } = JSON.parse(UserAuth);
+        const id: string = req.query.id as string;
+        try {
+            if (roleId !== ROLE_ID.Admin) {
+                Logger.error(`${contextLogger.deleteLecturerController} | Error: ${resMessage.emptyData}`);
+                return res.boom.forbidden(resMessage.validationRole)
+            }
+
+            const { data: lecturer }  = await LecturerService.deleteLecturerByUserID(id);
+            if (!lecturer || Object.keys(lecturer).length === 0) {
+                Logger.error(`${contextLogger.deleteLecturerController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
+            }
+    
+            Logger.error(`${contextLogger.deleteLecturerController} | Successfully deleted lecturer`);
             return JsonResponse(res, resMessage.success, 'success', { lecturer });
         } catch (error) {
             const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;

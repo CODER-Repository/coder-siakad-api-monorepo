@@ -77,7 +77,27 @@ export class LecturerService {
             return { data: existingLecturer };
 
         } catch (error) {
-            Logger.error(`[LecturerService.patchLecturer] Error: ${error.message}`);
+            Logger.error(`${contextLogger.patchLecturerService} | Error: ${error.message}`);
         }
     }
+
+    static async deleteLecturerByUserID(id: string): Promise<CreateDTO> {
+        try {
+            const lecturerToDelete = await dbContext.Lecturer().findOne({ where: { user_id: id } });
+            
+            if (!lecturerToDelete) {
+                Logger.info(`${contextLogger.deleteLecturerService} | Lecturer not found`);
+                return { data: [] };
+            }
+    
+            await dbContext.Lecturer().delete({ user_id: id });
+
+            Logger.info(`${contextLogger.deleteLecturerService} | Success deleted lecturer`);
+            return { data: [] };
+    
+        } catch (error) {
+            Logger.error(`${contextLogger.deleteLecturerService} Error: ${error.message}`);
+        }
+    }
+    
 }
