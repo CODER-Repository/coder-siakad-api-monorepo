@@ -75,6 +75,8 @@ export const contextLogger = {
   patchLecturerController: '[LecturerController.updatedLecturer]',
   deleteLecturerController: '[LecturerController.deleteLecturer]',
   getStudentController: '[StudentController.getStudent]',
+  patchStudentController: '[StudentController.updateStudent]',
+  deleteStudentController: '[StudentController.deleteStudent]',
   getCourseController: '[CourseController.getCourse]',
 
   getCourseService: '[CourseService.getListCourse]',
@@ -84,6 +86,8 @@ export const contextLogger = {
   patchLecturerService: '[LecrurerService.updateLecturer]',
   deleteLecturerService: '[LecrurerService.deleteLecturer]',
   getStudentService: '[StudentService.getListStudent]',
+  patchStudentService: '[StudentService.updateStudent]',
+  deleteStudentService: '[StudentService.deleteStudent]',
 
   //Schedule Service
   getTodayScheduleController: '[ScheduleController.getTodayScheduleController]',

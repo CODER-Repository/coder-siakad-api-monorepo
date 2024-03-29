@@ -1,7 +1,7 @@
 import { Student, dbContext } from '@siakad/express.database';
-import { Logger, queryInterface, buildWhereCondition } from '@siakad/express.utils';
+import { Logger, queryInterface, buildWhereCondition, contextLogger } from '@siakad/express.utils';
 import { toCreateStudentDto } from '../interface/student-dto';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class StudentService {
     static async getListStudent(query: queryInterface): Promise<DTO> {
@@ -41,6 +41,25 @@ export class StudentService {
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
             throw error;
+        }
+    }
+
+    static async deleteStudentByUserID(id: string): Promise<CreateDTO> {
+        try {
+            const lecturerToDelete = await dbContext.Student().findOne({ where: { user_id: id } });
+            
+            if (!lecturerToDelete) {
+                Logger.info(`${contextLogger.deleteStudentService} | Student not found`);
+                return { data: [] };
+            }
+    
+            await dbContext.Student().delete({ user_id: id });
+
+            Logger.info(`${contextLogger.deleteStudentService} | Success deleted Student`);
+            return { data: [] };
+    
+        } catch (error) {
+            Logger.error(`${contextLogger.deleteStudentService} Error: ${error.message}`);
         }
     }
 }
