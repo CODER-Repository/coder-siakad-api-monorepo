@@ -17,7 +17,7 @@ spec:
           image: ghcr.io/coder-repository/announcement-service:20240321023336
           env:
             - name: PORT
-              value: "5007"
+              value: "5005"
             - name: APP_NAME
               value: siakad-announcement-api
             - name: APP_ENV
@@ -62,5 +62,5 @@ spec:
     app: siakad-announcement-api
   ports:
     - port: 5007
-      targetPort: 5007
+      targetPort: 5005
 

@@ -18,7 +18,7 @@ services:
       - name: announcement-route
         paths:
           - /api/v1/announcement
-        strip_path: true
+        strip_path: false
         preserve_host: false
   - name: auth-service
     url: http://siakad-auth-api.default.svc.cluster.local:5001
@@ -26,7 +26,7 @@ services:
       - name: auth-route
         paths:
           - /api/v1/auth
-        strip_path: true
+        strip_path: false
         preserve_host: false
   - name: data-service
     url: http://siakad-data-api.default.svc.cluster.local:5009
@@ -36,7 +36,7 @@ services:
       - name: data-route
         paths:
           - /api/v1/data
-        strip_path: true
+        strip_path: false
         preserve_host: false
   - name: krs-service
     url: http://siakad-krs-api.default.svc.cluster.local:5008
@@ -46,7 +46,7 @@ services:
       - name: krs-route
         paths:
           - /api/v1/krs
-        strip_path: true
+        strip_path: false
         preserve_host: false
   - name: payment-service
     url: http://siakad-payment-api.default.svc.cluster.local:5004
@@ -56,7 +56,7 @@ services:
       - name: payment-route
         paths:
           - /api/v1/payment
-        strip_path: true
+        strip_path: false
         preserve_host: false
   - name: schedule-service
     url: http://siakad-schedule-api.default.svc.cluster.local:5010
@@ -66,5 +66,5 @@ services:
       - name: schedule-route
         paths:
           - /api/v1/schedule
-        strip_path: true
+        strip_path: false
         preserve_host: false
