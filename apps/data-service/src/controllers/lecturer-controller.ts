@@ -49,14 +49,13 @@ export class LecturerController {
         try {
             const payload = req.body;
             if (roleId !== ROLE_ID.Lecturer || ROLE_ID.Admin) {
-                const errorMessage = `${contextLogger.patchLecturerController} | Error: ${resMessage.emptyData}`;
-                Logger.error(errorMessage);
+                Logger.info(`${contextLogger.patchLecturerController} | Error: ${resMessage.validationRole}`);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
             const { data: lecturer }  = await LecturerService.pacthLecurerByUserID(payload);
             if (!lecturer || Object.keys(lecturer).length === 0) {
-                Logger.error(`${contextLogger.patchLecturerController} | No rows affected`);
+                Logger.info(`${contextLogger.patchLecturerController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
             }
     
@@ -78,13 +77,13 @@ export class LecturerController {
         const id: string = req.query.id as string;
         try {
             if (roleId !== ROLE_ID.Admin) {
-                Logger.error(`${contextLogger.deleteLecturerController} | Error: ${resMessage.emptyData}`);
+                Logger.info(`${contextLogger.deleteLecturerController} | Error: ${resMessage.emptyData}`);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
             const { data: lecturer }  = await LecturerService.deleteLecturerByUserID(id);
             if (!lecturer || Object.keys(lecturer).length === 0) {
-                Logger.error(`${contextLogger.deleteLecturerController} | No rows affected`);
+                Logger.info(`${contextLogger.deleteLecturerController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
             }
     
