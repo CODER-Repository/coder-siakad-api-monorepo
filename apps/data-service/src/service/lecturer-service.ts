@@ -1,9 +1,7 @@
-import { AppDataSource, dbContext, Lecturer } from '@siakad/express.database';
+import { dbContext, Lecturer } from '@siakad/express.database';
 import { buildWhereCondition, contextLogger, Logger, queryInterface } from '@siakad/express.utils';
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
-import { JsonResponse } from '@siakad/express.server';
-import { Gender } from '@siakad/express.database/dist/entities/lecture.entity';
 
 export class LecturerService {
     static async getListLecturer(query: queryInterface): Promise<DTO> {

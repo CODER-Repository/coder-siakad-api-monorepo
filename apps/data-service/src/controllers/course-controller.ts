@@ -46,17 +46,17 @@ export class CourseController {
         const id: string = req.query.id as string;
         try {
             if (roleId !== ROLE_ID.Admin) {
-                Logger.error(`${contextLogger.deleteCourseController} | Error: ${resMessage.emptyData}`);
+                Logger.info(`${contextLogger.deleteCourseController} | Error: ${resMessage.emptyData}`);
                 return res.boom.forbidden(resMessage.validationRole)
             }
 
             const { data: course }  = await CourseService.deleteCourseByID(id);
             if (!course || Object.keys(course).length === 0) {
-                Logger.error(`${contextLogger.deleteCourseController} | No rows affected`);
+                Logger.info(`${contextLogger.deleteCourseController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { course: [] });
             }
     
-            Logger.error(`${contextLogger.deleteCourseController} | Successfully deleted course`);
+            Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted course`);
             return JsonResponse(res, resMessage.success, 'success', { course });
         } catch (error) {
             const errorMessage = `${contextLogger.deleteCourseController} | Error: ${error.message}`;

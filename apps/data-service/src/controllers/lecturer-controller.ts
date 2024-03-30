@@ -4,7 +4,6 @@ import { Logger, resMessage, contextLogger, queryHelper, ROLE_ID } from '@siakad
 import { LecturerService } from '../service/lecturer-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereLecturer } from '../params/lecturer-params';
-import { Lecturer } from '@siakad/express.database';
 import { CreateLectureDto } from '../interface/lecturer-dto';
 import { queryLecturerValidator } from '../utils/queryValidator';
 
