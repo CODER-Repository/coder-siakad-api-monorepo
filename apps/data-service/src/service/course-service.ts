@@ -1,7 +1,8 @@
 import { Course, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger, buildWhereCondition, queryInterface } from '@siakad/express.utils';
 import { toCreateCoursedTO } from '../interface/course-dto';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
+import { queryCourseValidator } from '../utils/queryValidator';
 
 export class CourseService {
     static async getListCourse(query: queryInterface): Promise<DTO> {
@@ -17,7 +18,7 @@ export class CourseService {
                 .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-            
+
             // GET DATA AND COUNT
             const courses = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
@@ -44,4 +45,31 @@ export class CourseService {
             throw error;
         }
     }
+
+    static async deleteCourseByID(id: string): Promise<CreateDTO> {
+        try {
+            const existingCourse = await dbContext.Course().findOne({ where: { course_id: id } });
+            if (!existingCourse) {
+                Logger.info(`${contextLogger.deleteCourseService} | Course not found`);
+                return { data: [] };
+            }
+
+            const deleteResult = await dbContext
+                .Course()
+                .createQueryBuilder('course')
+                .delete()
+                .where('course.course_id = :course_id', { id })
+                .execute();
+    
+            Logger.info(`${contextLogger.deleteCourseService} | Course deleted successfully`);
+            return { data: deleteResult };
+        } catch (error) {
+            Logger.error(
+                `${contextLogger.deleteCourseService} | Error: ${error.message}`
+            );
+            throw error;
+        }
+    }
+    
+
 }

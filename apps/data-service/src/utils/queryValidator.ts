@@ -17,3 +17,9 @@ export interface queryStudentValidator {
     phone: string;
     birthday: Date;
 };
+
+export interface queryCourseValidator {
+    id: string;
+    course: string;
+    sks: number;
+}
