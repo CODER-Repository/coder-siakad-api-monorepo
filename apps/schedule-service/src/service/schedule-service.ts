@@ -5,7 +5,26 @@ import { Logger, contextLogger, Day, queryInterface } from '@siakad/express.util
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
         try {
-            const schedules = await dbContext.Schedule().find({ where: { nim } });
+            const schedules = await dbContext.Schedule()
+                .createQueryBuilder('schedule')
+                .innerJoinAndSelect('schedule.course', 'course')
+                .innerJoinAndSelect('course.classroom', 'classroom')
+                .innerJoinAndSelect('classroom.faculty', 'faculty')
+                .where('schedule.nim = :nim', { nim: nim })
+                .select([
+                    'schedule.schedule_id AS schedule_id',
+                    'schedule.course_id AS course_id',
+                    'schedule.class_id AS class_id',
+                    'schedule.semester_id AS semester_id',
+                    'schedule.start_time AS start_time',
+                    'schedule.end_time AS end_time',
+                    'course.course_name AS course_name',
+                    'classroom.classroom_name AS room',
+                    'faculty.faculty_name AS faculty',
+                    'schedule.type AS day'
+                ])
+                .getRawMany();
+
             const result: CurrentSchedule = {
                 monday: [],
                 tuesday: [],
@@ -23,11 +42,11 @@ export class ScheduleService {
                     course_id: schedule.course_id,
                     class_id: schedule.class_id,
                     semester_id: schedule.semester_id,
+                    course_name: schedule.course_name,
+                    room: schedule.room,
+                    faculty: schedule.faculty,
                     time_start: schedule.start_time,
-                    time_end: schedule.end_time
-                    // course_name: schedule.course_name,
-                    // room: schedule.room,
-                    // faculty: schedule.faculty,
+                    time_end: schedule.end_time,
                 });
             });
 
@@ -99,8 +118,8 @@ export class ScheduleService {
 
     static async getScheduleList(query: queryInterface): Promise<Object> {
         try {
+
             const { limit, offset, where } = query;
-            // TODO GET BY NIM/LECTURER_ID
             const schedules = await dbContext.Schedule()
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
