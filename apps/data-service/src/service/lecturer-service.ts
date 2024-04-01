@@ -1,7 +1,7 @@
 import { dbContext, Lecturer } from '@siakad/express.database';
-import { buildWhereCondition, Logger, queryInterface } from '@siakad/express.utils';
+import { buildWhereCondition, contextLogger, Logger, queryInterface } from '@siakad/express.utils';
 import { CreateLectureDto, toCreateLecturerDto } from '../interface/lecturer-dto';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class LecturerService {
     static async getListLecturer(query: queryInterface): Promise<DTO> {
@@ -16,7 +16,7 @@ export class LecturerService {
                 .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-            
+
             // GET DATA AND COUNT
             const lectures = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
@@ -41,4 +41,61 @@ export class LecturerService {
             throw error;
         }
     }
+
+    static async pacthLecurerByUserID(payload: CreateLectureDto): Promise<CreateDTO> {
+        const { id, nip, name, gender, phone, email } = payload;
+
+        // LECTURE ENTITY
+        const updateData = {
+            nip,
+            name,
+            phone_number: phone,
+            type: gender,
+            email
+        };
+
+        const condition = { user_id: id };
+
+        try {
+            await dbContext.Lecturer()
+                .createQueryBuilder('lecturer')
+                .update(Lecturer)
+                .set(updateData)
+                .where(condition)
+                .execute();
+
+            // Find existing lecturer
+            const existingLecturer = await dbContext.User().findOne({ where: { user_id: id } });
+            if (!existingLecturer) {
+                Logger.info(`${contextLogger.patchLecturerService} | User not found`);
+                return { data: [] };
+            }
+
+            Logger.info(`${contextLogger.patchLecturerService} | Lecturer updated successfully`);
+            return { data: existingLecturer };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchLecturerService} | Error: ${error.message}`);
+        }
+    }
+
+    static async deleteLecturerByUserID(id: string): Promise<CreateDTO> {
+        try {
+            const lecturerToDelete = await dbContext.Lecturer().findOne({ where: { user_id: id } });
+            
+            if (!lecturerToDelete) {
+                Logger.info(`${contextLogger.deleteLecturerService} | Lecturer not found`);
+                return { data: [] };
+            }
+    
+            await dbContext.Lecturer().delete({ user_id: id });
+
+            Logger.info(`${contextLogger.deleteLecturerService} | Success deleted lecturer`);
+            return { data: [] };
+    
+        } catch (error) {
+            Logger.error(`${contextLogger.deleteLecturerService} Error: ${error.message}`);
+        }
+    }
+    
 }

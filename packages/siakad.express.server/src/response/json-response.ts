@@ -23,6 +23,10 @@ export const JsonResponse = (
       response = BaseResponse.unauthorizedResponse(resMessage);
       status = 403 
       break;
+    case 'forbidden':
+      response = BaseResponse.unauthorizedResponse(resMessage);
+      status = 403
+      break;
     case 'internalServerError':
       response = BaseResponse.internalServerErrorResponse();
       status = 500
