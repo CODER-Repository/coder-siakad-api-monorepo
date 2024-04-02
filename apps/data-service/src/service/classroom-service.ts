@@ -98,11 +98,6 @@ export class ClassroomService {
             // Retrivied data updated
             const updateClassroom = classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
     
-            if (!updateClassroom || updateClassroom.length === 0) {
-                Logger.info(`${contextLogger.patchClassroomService} | Classroom not found`);
-                return { data: [] };
-            }
-    
             Logger.info(`${contextLogger.patchClassroomService} | Classroom updated successfully`);
             return { data: updateClassroom };
         } catch (error) {
