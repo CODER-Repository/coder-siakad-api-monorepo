@@ -4,15 +4,17 @@ import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
 import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
 import { ToSqlWhere } from '../params/scheduler-params';
+import { Day } from '@siakad/express.database/dist/entities/schedule.entity';
 
 export class ScheduleController {
     static async getCurrentSchedule(
-        //params, body, query, headers
         req: Request<{}, {}, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
+        const UserAuth = req.user as unknown as string;
+        const { nim } = JSON.parse(UserAuth);
         try {
-            const schedules = await ScheduleService.getCurrentSchedule(req.user.nim);
+            const schedules = await ScheduleService.getCurrentSchedule(nim);
             if (!schedules) {
                 Logger.error(
                     `${contextLogger.getCurrentScheduleController} | Error: ${resMessage.emptyData}`
@@ -36,6 +38,9 @@ export class ScheduleController {
         req: Request<{}, {}, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
+        const today: Day = new Date()
+                .toLocaleString('en-US', { weekday: 'long' })
+                .toLocaleLowerCase() as Day;
         try {
             const todaySchedule = await ScheduleService.getTodaySchedule();
 
@@ -44,7 +49,7 @@ export class ScheduleController {
                     `${contextLogger.getTodayScheduleController} | Error: ${resMessage.emptyData}`
                 );
                 return JsonResponse(res, resMessage.emptyData, 'success', {
-                    date: new Date().toISOString(),
+                    day: today,
                     schedule: []
                 });
             }
@@ -53,7 +58,7 @@ export class ScheduleController {
                 `${contextLogger.getTodayScheduleController} | ${resMessage.success}`
             );
             return JsonResponse(res, resMessage.success, 'success', {
-                date: new Date().toISOString(),
+                day: today,
                 schedule: todaySchedule
             });
         } catch (error) {

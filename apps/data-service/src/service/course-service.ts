@@ -1,6 +1,6 @@
 import { Course, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger, buildWhereCondition, queryInterface } from '@siakad/express.utils';
-import { toCreateCoursedTO } from '../interface/course-dto';
+import { CreateCourseDto, toCreateCoursedTO } from '../interface/course-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
 import { queryCourseValidator } from '../utils/queryValidator';
 
@@ -43,6 +43,42 @@ export class CourseService {
                 `${contextLogger.getClassService} | Error: ${error.message}`
             );
             throw error;
+        }
+    }
+
+    static async patchCourseByID(payload: CreateCourseDto): Promise<CreateDTO> {
+        const { id, course, sks, } = payload;
+
+        // COURSE ENTITY
+        const updateData = {
+            course_id:id,
+            course_name: course,
+            credit_hours: sks,
+        };
+
+        const condition = { course_id: id };
+
+        try {
+            await dbContext.Course()
+                .createQueryBuilder('course')
+                .update(Course)
+                .set(updateData)
+                .where(condition)
+                .execute();
+
+            // Find existing course
+            const existingCourse = await dbContext.Course().findOne({ where: { course_id: id } });
+            if (!existingCourse) {
+                Logger.info(`${contextLogger.patchCourseService} | course not found`);
+                return { data: [] };
+            }
+
+            Logger.info(`${contextLogger.patchCourseService} | course updated successfully`);
+            return { data: existingCourse };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchCourseService} | Error: ${error.message}`);
+            return { data: [] };
         }
     }
 

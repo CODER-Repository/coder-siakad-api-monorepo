@@ -42,15 +42,8 @@ export class StudentController {
         req: Request<{}, {}, CreateStudentDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const UserAuth = req.user as unknown as string;
-        const { roleId } = JSON.parse(UserAuth);
         try {
             const payload = req.body;
-            if (roleId !== ROLE_ID.Admin && roleId !== ROLE_ID.Student) {
-                Logger.info(`${contextLogger.patchStudentController} | Error: ${resMessage.validationRole}`);
-                return res.boom.forbidden(resMessage.validationRole)
-            }
-
             const { data: student }  = await StudentService.patchStudentByUserID(payload);
             if (!student || Object.keys(student).length === 0) {
                 Logger.info(`${contextLogger.patchStudentController} | No rows affected`);
@@ -70,15 +63,8 @@ export class StudentController {
         req: Request<queryStudentValidator, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const UserAuth = req.user as unknown as string;
-        const { roleId } = JSON.parse(UserAuth);
         const id: string = req.query.id as string;
         try {
-            if (roleId !== ROLE_ID.Admin) {
-                Logger.error(`${contextLogger.deleteStudentController} | Error: ${resMessage.emptyData}`);
-                return res.boom.forbidden(resMessage.validationRole)
-            }
-
             const { data: student }  = await StudentService.deleteStudentByUserID(id);
             if (!student || Object.keys(student).length === 0) {
                 Logger.error(`${contextLogger.deleteStudentController} | No rows affected`);

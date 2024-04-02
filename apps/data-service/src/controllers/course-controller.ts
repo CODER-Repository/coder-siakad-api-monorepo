@@ -5,6 +5,7 @@ import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereCourse } from '../params/course-params';
 import { CourseService } from '../service/course-service';
 import { queryCourseValidator } from '../utils/queryValidator';
+import { CreateCourseDto } from '../interface/course-dto';
 
 export class CourseController {
     static async getCourse(
@@ -37,19 +38,33 @@ export class CourseController {
         }
     }
 
+    static async patchCourse(
+        req: Request<{}, {}, CreateCourseDto>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const payload = req.body;
+            const { data: course }  = await CourseService.patchCourseByID(payload);
+            if (!course || Object.keys(course).length === 0) {
+                Logger.info(`${contextLogger.patchCourseController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { course: [] });
+            }
+    
+            Logger.error(`${contextLogger.patchCourseController} | Successfully updated course`);
+            return JsonResponse(res, resMessage.success, 'success', { course });
+        } catch (error) {
+            const errorMessage = `${contextLogger.patchCourseController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
+
     static async deleteCourse(
         req: Request<queryCourseValidator, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const UserAuth = req.user as unknown as string;
-        const { roleId } = JSON.parse(UserAuth);
         const id: string = req.query.id as string;
         try {
-            if (roleId !== ROLE_ID.Admin) {
-                Logger.info(`${contextLogger.deleteCourseController} | Error: ${resMessage.emptyData}`);
-                return res.boom.forbidden(resMessage.validationRole)
-            }
-
             const { data: course }  = await CourseService.deleteCourseByID(id);
             if (!course || Object.keys(course).length === 0) {
                 Logger.info(`${contextLogger.deleteCourseController} | No rows affected`);
