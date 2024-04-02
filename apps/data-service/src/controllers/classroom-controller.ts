@@ -56,7 +56,7 @@ export class ClassroomController {
             }
     
             Logger.error(`${contextLogger.patchClassroomController} | Successfully updated classroom`);
-            return JsonResponse(res, resMessage.success, 'success', { classroom });
+            return JsonResponse(res, resMessage.success, 'success', classroom);
         } catch (error) {
             const errorMessage = `${contextLogger.patchClassroomController} | Error: ${error.message}`;
             Logger.error(errorMessage);
