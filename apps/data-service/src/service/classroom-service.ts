@@ -53,9 +53,9 @@ export class ClassroomService {
             classroom_id:id,
             classroom_name: classroom,
             faculty_id: facultyId,
-            faculty_name: facultyName,
-            course_id: courseId,
-            course_name: courseName
+            // faculty_name: facultyName,
+            // course_id: courseId,
+            // course_name: courseName
         };
 
         const condition = { classroom_id: id };
