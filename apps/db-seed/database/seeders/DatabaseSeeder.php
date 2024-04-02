@@ -18,7 +18,10 @@ class DatabaseSeeder extends Seeder
             ClassRoomSeeder::class,
             AnnouncementSeeder::class,
             StudyProgramSeeder::class,
-            KRSSeeder::class
+            KRSSeeder::class,
+            LectureSeeder::class,
+            ClassSeeder::class,
+            ScheduleSeeder::class,
         ]);
     }
 }
