@@ -67,7 +67,7 @@ export class CourseService {
                 .execute();
 
             // Find existing course
-            const existingCourse = await dbContext.User().findOne({ where: { user_id: id } });
+            const existingCourse = await dbContext.Course().findOne({ where: { course_id: id } });
             if (!existingCourse) {
                 Logger.info(`${contextLogger.patchCourseService} | course not found`);
                 return { data: [] };

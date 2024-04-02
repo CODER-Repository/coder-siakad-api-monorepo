@@ -43,15 +43,8 @@ export class LecturerController {
         req: Request<{}, {}, CreateLectureDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const UserAuth = req.user as unknown as string;
-        const { roleId } = JSON.parse(UserAuth);
         try {
             const payload = req.body;
-            if (roleId !== ROLE_ID.Lecturer || ROLE_ID.Admin) {
-                Logger.info(`${contextLogger.patchLecturerController} | Error: ${resMessage.validationRole}`);
-                return res.boom.forbidden(resMessage.validationRole)
-            }
-
             const { data: lecturer }  = await LecturerService.pacthLecurerByUserID(payload);
             if (!lecturer || Object.keys(lecturer).length === 0) {
                 Logger.info(`${contextLogger.patchLecturerController} | No rows affected`);
@@ -71,15 +64,8 @@ export class LecturerController {
         req: Request<queryLecturerValidator, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const UserAuth = req.user as unknown as string;
-        const { roleId } = JSON.parse(UserAuth);
         const id: string = req.query.id as string;
         try {
-            if (roleId !== ROLE_ID.Admin) {
-                Logger.info(`${contextLogger.deleteLecturerController} | Error: ${resMessage.emptyData}`);
-                return res.boom.forbidden(resMessage.validationRole)
-            }
-
             const { data: lecturer }  = await LecturerService.deleteLecturerByUserID(id);
             if (!lecturer || Object.keys(lecturer).length === 0) {
                 Logger.info(`${contextLogger.deleteLecturerController} | No rows affected`);
