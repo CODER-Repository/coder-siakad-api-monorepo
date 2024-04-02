@@ -1,4 +1,4 @@
-import { Classroom, dbContext } from '@siakad/express.database';
+import { AppDataSource, Classroom, Course, Faculty, dbContext } from '@siakad/express.database';
 import { Logger, queryInterface, buildWhereCondition, contextLogger } from '@siakad/express.utils';
 import { CreateClassroomDto, toCreateClassroomDto } from '../interface/classroom-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
@@ -46,30 +46,49 @@ export class ClassroomService {
     }
 
     static async patchClassroomByID(payload: CreateClassroomDto): Promise<CreateDTO> {
-        const { id, classroom, facultyId, facultyName, courseId, courseName} = payload;
-
-        // COURSE ENTITY
-        const updateData = {
-            classroom_id:id,
-            classroom_name: classroom,
-            faculty_id: facultyId,
-            // faculty_name: facultyName,
-            // course_id: courseId,
-            // course_name: courseName
-        };
-
-        const condition = { classroom_id: id };
+        const { id, classroom, facultyId, facultyName, courseId, courseName } = payload;
 
         try {
-            await dbContext.Course()
-                .createQueryBuilder('classroom')
-                .update(Classroom)
-                .set(updateData)
-                .where(condition)
-                .execute();
+            await AppDataSource.transaction(async (transaction) => {
+                const courseUpdate = await transaction.update(
+                    Course,
+                    { course_id: courseId },
+                    { course_name: courseName }
+                );
+                const classroomUpdate = await transaction.update(
+                    Classroom,
+                    { classroom_id: id },
+                    { classroom_name: classroom }
+                );
+                const facultyUpdate = await transaction.update(
+                    Faculty,
+                    { faculty_id: facultyId },
+                    { faculty_name: facultyName }
+                );
+                Promise.all([
+                    transaction.save(courseUpdate.raw),
+                    transaction.save(classroomUpdate.raw),
+                    transaction.save(facultyUpdate.raw)
+                ]);
+            }
+            )
 
-            // Find existing course
-            const existingCourse = await dbContext.Classroom().findOne({ where: { classroom_id: id } });
+
+            // MAKE QUERY
+            const classrooms = await dbContext
+                .Classroom()
+                .createQueryBuilder('classroom')
+                .innerJoinAndSelect('classroom.course', 'course')
+                .innerJoinAndSelect('classroom.faculty', 'faculty')
+                .where("classroom.classroom_id = :id", { id: id })
+                .andWhere("course.course_id =:courseId", { courseId: courseId })
+                .andWhere("faculty.faculty_id =:facultyId", { facultyId: facultyId })
+                .getMany();
+
+
+            // find existingData
+            const existingCourse = classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
+
             if (!existingCourse) {
                 Logger.info(`${contextLogger.patchClassroomService} | classroom not found`);
                 return { data: [] };
@@ -98,7 +117,7 @@ export class ClassroomService {
                 .delete()
                 .where('classroom.classroom_id = :classroom_id', { id })
                 .execute();
-    
+
             Logger.info(`${contextLogger.deleteClassroomService} | Classroom deleted successfully`);
             return { data: deleteResult };
         } catch (error) {
