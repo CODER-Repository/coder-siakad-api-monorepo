@@ -47,8 +47,19 @@ export class ClassroomService {
 
     static async patchClassroomByID(payload: CreateClassroomDto): Promise<CreateDTO> {
         const { id, classroom, facultyId, facultyName, courseId, courseName } = payload;
-
+    
         try {
+            const isDataExist = await Promise.all([
+                Course.findOne({ where: { course_id: courseId } }),
+                Classroom.findOne({ where: { classroom_id: id } }),
+                Faculty.findOne({ where: { faculty_id: facultyId } })
+            ]);
+    
+            if (!isDataExist[0] || !isDataExist[1] || !isDataExist[2]) {
+                Logger.info(`${contextLogger.patchClassroomService} | Data not found`);
+                return { data: [] };
+            }
+    
             await AppDataSource.transaction(async (transaction) => {
                 const courseUpdate = await transaction.update(
                     Course,
@@ -65,15 +76,14 @@ export class ClassroomService {
                     { faculty_id: facultyId },
                     { faculty_name: facultyName }
                 );
-                Promise.all([
+    
+                await Promise.all([
                     transaction.save(courseUpdate.raw),
                     transaction.save(classroomUpdate.raw),
                     transaction.save(facultyUpdate.raw)
                 ]);
-            }
-            )
-
-
+            });
+    
             // MAKE QUERY
             const classrooms = await dbContext
                 .Classroom()
@@ -84,24 +94,23 @@ export class ClassroomService {
                 .andWhere("course.course_id =:courseId", { courseId: courseId })
                 .andWhere("faculty.faculty_id =:facultyId", { facultyId: facultyId })
                 .getMany();
-
-
-            // find existingData
-            const existingCourse = classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
-
-            if (!existingCourse) {
-                Logger.info(`${contextLogger.patchClassroomService} | classroom not found`);
+    
+            // Retrivied data updated
+            const updateClassroom = classrooms.map((classroom: Classroom) => toCreateClassroomDto(classroom));
+    
+            if (!updateClassroom || updateClassroom.length === 0) {
+                Logger.info(`${contextLogger.patchClassroomService} | Classroom not found`);
                 return { data: [] };
             }
-
-            Logger.info(`${contextLogger.patchClassroomService} | classroom updated successfully`);
-            return { data: existingCourse };
-
+    
+            Logger.info(`${contextLogger.patchClassroomService} | Classroom updated successfully`);
+            return { data: updateClassroom };
         } catch (error) {
             Logger.error(`${contextLogger.patchClassroomService} | Error: ${error.message}`);
             return { data: [] };
         }
     }
+    
 
     static async deleteClassroomByID(id: string): Promise<CreateDTO> {
         try {
