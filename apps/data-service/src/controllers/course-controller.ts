@@ -9,7 +9,7 @@ import { CreateCourseDto } from '../interface/course-dto';
 
 export class CourseController {
     static async getCourse(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryCourseValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
@@ -60,7 +60,7 @@ export class CourseController {
     }
 
     static async deleteCourse(
-        req: Request<queryCourseValidator, {}, {}>,
+        req: Request,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const id: string = req.query.id as string;

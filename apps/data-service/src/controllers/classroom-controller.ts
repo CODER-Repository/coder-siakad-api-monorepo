@@ -5,12 +5,12 @@ import { ToSeqWhereClassroom } from '../params/classroom-params';
 import { ClassroomService } from '../service/classroom-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { CreateClassroomDto } from '../interface/classroom-dto';
-import { queryClassroomValidator, queryCourseValidator } from '../utils/queryValidator';
+import { queryClassroomValidator } from '../utils/queryValidator';
 
 
 export class ClassroomController {
     static async getClassroom(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryClassroomValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
@@ -65,7 +65,7 @@ export class ClassroomController {
     }
 
     static async deleteClassroom(
-        req: Request<queryClassroomValidator, {}, {}>,
+        req: Request,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const id: string = req.query.id as string;

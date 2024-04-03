@@ -3,6 +3,7 @@ import lecturerRoute from './lecturer-route';
 import studentRoute from './student-route';
 import classroomRoute from './classroom-route';
 import courseRoute from './course-route';
+import facultyRoute from './faculty-route';
 
 const basePath = '/api/v1/data';
 
@@ -11,6 +12,7 @@ export const routes = [
     { path: `${basePath}/lecturer`, router: lecturerRoute },
     { path: `${basePath}/student`, router: studentRoute },
     { path: `${basePath}/course`, router: courseRoute },
-    { path: `${basePath}/classroom`, router: classroomRoute }
+    { path: `${basePath}/classroom`, router: classroomRoute },
+    { path: `${basePath}/faculty`, router: facultyRoute }
 ];
 
