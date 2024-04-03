@@ -20,8 +20,7 @@ export class FacultyController {
 
             if (!listFaculty) {
                 Logger.error(
-                    `${contextLogger.getFacultyController} 
-                    | Error: ${resMessage.emptyData}`
+                    `${contextLogger.getFacultyController} | Error: ${resMessage.emptyData}`
                 );
                 return JsonResponse(res, resMessage.emptyData, 'success', { faculty: [] });
             }
@@ -30,8 +29,7 @@ export class FacultyController {
             JsonResponse(res, resMessage.success, 'success', { listFaculty, pagination });
         } catch (error) {
             Logger.error(
-                `${contextLogger.getFacultyController} 
-                | Error: ${error.message}`
+                `${contextLogger.getFacultyController} | Error: ${error.message}`
             );
             return res.boom.badImplementation();
         }

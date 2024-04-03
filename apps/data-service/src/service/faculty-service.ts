@@ -13,10 +13,13 @@ export class FacultyService {
             const queryBuilder = dbContext
                 .Faculty()
                 .createQueryBuilder('faculty')
+                .innerJoinAndSelect('faculty.classroom', 'classroom')
+                .addSelect('classroom.classroom_name')
                 .orderBy('faculty.faculty_id', 'ASC')
                 .where(condition, parameters)
                 .skip(offset)
-                .take(limit)
+                .take(limit);
+        
 
             // GET DATA AND COUNT
             const faculties = await queryBuilder.getMany();

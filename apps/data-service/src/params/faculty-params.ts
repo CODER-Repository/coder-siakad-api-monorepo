@@ -7,6 +7,8 @@ export const ToSeqWhereFaculty = (q: QueryParamsDto) => {
     const mapKeys = {
         id: 'faculty.faculty_id',
         name: 'faculty.faculty_name',
+        classroomId: 'classroom.classroom_id',
+        classroomName: 'classroom.classroom_name'
     };
 
     for (const key in q) {

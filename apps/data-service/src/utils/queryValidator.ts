@@ -27,6 +27,8 @@ export interface queryCourseValidator {
 export interface queryFacultyValidator {
     id: string;
     name: string;
+    classroomId: string;
+    classroomName: string;
 }
 
 export interface queryClassroomValidator {
