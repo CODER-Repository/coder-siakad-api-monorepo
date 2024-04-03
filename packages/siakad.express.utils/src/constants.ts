@@ -47,7 +47,8 @@ export const PORT_SERVICE = {
   paymentService: 5004,
   scheduleService: 5005,
   krsService: 5008,
-  dataService: 5009
+  dataService: 5009,
+  dashboardService: 5010
   // add more
 };
 
@@ -67,17 +68,46 @@ export const contextLogger = {
   userRegister: '[AuthController.registerUser]',
   userLogin: '[AuthController.login]',
 
-  //Schedule Service
+  // Data Service
   getClassController: '[ClassController.getClass]',
+  patchClassController: '[ClassController.patchClass]',
+  deleteClassController: '[ClassController.deleteClass]',
+  getClassroomController: '[ClassroomController.getClassroom]',
+  patchClassroomController: '[ClassroomController.patchClassroom]',
+  deleteClassroomController: '[ClassroomController.deleteClassroom]',
   getLecturerController: '[LecturerController.getLecturer]',
+  patchLecturerController: '[LecturerController.updatedLecturer]',
+  deleteLecturerController: '[LecturerController.deleteLecturer]',
+  getStudentController: '[StudentController.getStudent]',
+  patchStudentController: '[StudentController.updateStudent]',
+  deleteStudentController: '[StudentController.deleteStudent]',
+  getCourseController: '[CourseController.getCourse]',
+  patchCourseController: '[CourseController.updateCourse]',
+  deleteCourseController: '[CourseController.deleteCourse]',
+
+  getCourseService: '[CourseService.getListCourse]',
+  patchCourseService: '[CourseService.updateCourse]',
+  deleteCourseService: '[CourseService.deleteCourse]',
+  getClassService: '[ScheduleService.getListClass]',
+  patchClassService: '[ScheduleService.patchClass]',
+  deleteClassService: '[ScheduleService.deleteClass]',
+  getClassroomService: '[ClassroomService.getListClassroom]',
+  patchClassroomService: '[ClassroomService.patchClassroom]',
+  deleteClassroomService: '[ClassroomService.deleteClassroom]',
+  getLecturerService: '[LecrurerService.getListLecturer]',
+  patchLecturerService: '[LecrurerService.updateLecturer]',
+  deleteLecturerService: '[LecrurerService.deleteLecturer]',
+  getStudentService: '[StudentService.getListStudent]',
+  patchStudentService: '[StudentService.updateStudent]',
+  deleteStudentService: '[StudentService.deleteStudent]',
+
+  //Schedule Service
   getTodayScheduleController: '[ScheduleController.getTodayScheduleController]',
   getCurrentScheduleController:
     '[ScheduleController.getCurrentScheduleController]',
   getScheduleListController:
     '[ScheduleController.getScheduleListController]',
 
-  getClassService: '[ScheduleService.getListClass]',
-  getLecturerService: '[LecrurerService.getListLecturer]',
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
   getScheduleListService: '[ScheduleService.getListSchedule]',

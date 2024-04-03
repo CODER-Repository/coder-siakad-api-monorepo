@@ -9,7 +9,7 @@ export const HttpLogger = (
     const start = process.hrtime();
 
     Logger.http({
-        message: `Request | Method: ${req.method} | URL: ${req.originalUrl}`
+        message: `Request | Method: ${req.method} | Headers: ${req.headers}  | URL: ${req.originalUrl}`
     });
 
     res.on('finish', () => {

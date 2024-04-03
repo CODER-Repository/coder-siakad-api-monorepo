@@ -1,24 +1,20 @@
 package server
 
 import (
-	"github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
-	"payment-service/internal/config"
 )
 
-func VerifyAuth() fiber.Handler {
-	return jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte(config.JWTSecret)},
-		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			if err != nil {
-				return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-					"status":     false,
-					"statusCode": fiber.StatusUnauthorized,
-					"message":    "Unauthorized",
-				})
-			}
-			return c.Next()
-		},
-		ContextKey: "user",
-	})
+func GetUserProfile() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		profile := c.Get("X-User-Profile")
+		if profile == "" {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"status":     false,
+				"statusCode": fiber.StatusUnauthorized,
+				"message":    "Unauthorized",
+			})
+		}
+		c.Locals("user", profile)
+		return c.Next()
+	}
 }

@@ -10,11 +10,11 @@ func (s *FiberServer) RegisterFiberRoutes() {
 		TimeZone: "Asia/Jakarta",
 	}))
 
-	verifyAuth := VerifyAuth()
+	verifyProfile := GetUserProfile()
 
 	s.App.Get("/", s.HealthCheck)
-	s.App.Post("/api/v1/payment", verifyAuth, s.AddPayment)
-	s.App.Get("/api/v1/payment/history", verifyAuth, s.ShowPaymentHistory)
+	s.App.Post("/api/v1/payment", verifyProfile, s.AddPayment)
+	s.App.Get("/api/v1/payment/history", verifyProfile, s.ShowPaymentHistory)
 }
 
 func (s *FiberServer) HealthCheck(c *fiber.Ctx) error {

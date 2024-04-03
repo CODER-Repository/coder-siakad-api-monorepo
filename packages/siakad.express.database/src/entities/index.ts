@@ -18,3 +18,4 @@ export { Classroom } from './classroom.entity';
 export { Faculty } from './faculty.entity';
 export { Course } from './course.entity';
 export { Lecturer } from './lecture.entity';
+export { PaymentHistory } from './payment_history.entity';

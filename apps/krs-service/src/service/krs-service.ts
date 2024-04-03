@@ -1,10 +1,11 @@
-import { AppDataSource, KRS } from '@siakad/express.database';
+import { KRS, dbContext } from '@siakad/express.database';
 import { Logger } from '@siakad/express.utils';
 
 export class KRSService {
     static async showKRS(): Promise<KRS[]> {
         try {
-            return await AppDataSource.createQueryBuilder(KRS, 'krs')
+            return await dbContext.KRS()
+                .createQueryBuilder('krs')
                 .select('krs.krs_id', 'krs_id')
                 .addSelect('student.nim')
                 .addSelect('course.course_name')

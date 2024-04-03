@@ -19,7 +19,7 @@ spec:
             - name: JWT_SECRET
               value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
             - name: PORT
-              value: "5010"
+              value: "5009"
             - name: DB_HOST
               value: ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
             - name: DB_PORT
@@ -43,6 +43,6 @@ spec:
   selector:
     app: siakad-data-api
   ports:
-    - port: 5010
-      targetPort: 5010
+    - port: 5009
+      targetPort: 5009
 

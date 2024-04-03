@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { ClassController } from '../controllers/class-controller';
+import { CourseController } from '../controllers/course-controller';
+import isAdmin from '../middleware';
 
 const classRoute = Router();
 
-classRoute.route('/').get(ClassController.getClass);
+classRoute.route('/').get(CourseController.getCourse);
+classRoute.route('/').patch(isAdmin,CourseController.patchCourse);
+classRoute.route('/').delete(isAdmin,CourseController.deleteCourse);
 
 export default classRoute;

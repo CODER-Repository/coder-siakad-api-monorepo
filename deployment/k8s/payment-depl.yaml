@@ -14,10 +14,8 @@ spec:
     spec:
       containers:
         - name: siakad-payment-api
-          image: ghcr.io/coder-repository/payment-service:202403171329
+          image: ghcr.io/coder-repository/payment-service:20240328092639
           env:
-            - name: JWT_SECRET
-              value: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
             - name: PORT
               value: "5004"
             - name: DB_HOST
