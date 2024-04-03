@@ -50,41 +50,45 @@ export class ClassService {
     }
 
     static async updateDetailClass(payload: CreateClassDto): Promise<CreateDTO> {
-        const { id, course, classroom, lecturer, day, startTime, endTime } = payload;
+        const { id, course, courseId, classroom, classroomId, nip, lecturer, day, scheduleId, startTime, endTime } = payload;
     
         try {
             // Find existing class
-            const existingClass = await Class.findOne({ where: { class_id: id } });
+            const isDataExist = await Promise.all([
+                Class.findOne({ where: { class_id: id } }),
+                Course.findOne({ where: { course_id: courseId } }),
+                Classroom.findOne({ where: { classroom_id: classroomId } }),
+                Schedule.findOne({ where: { schedule_id: scheduleId } })
+            ]);
     
-            if (!existingClass) {
-                Logger.info(`${contextLogger.patchClassService} | Class not found`);
+            if (!isDataExist.some(data => !data)) {
+                Logger.info(`${contextLogger.patchClassService} | Data not found`);
                 return { data: [] };
             }
     
             await AppDataSource.transaction(async (transaction) => {
-                await transaction
-                .createQueryBuilder()
-                .update(Classroom)
-                .set({ classroom_name: classroom })
-                .execute();
-            
-                await transaction
-                    .createQueryBuilder()
-                    .update(Course)
-                    .set({ course_name: course })
-                    .execute();
-    
-                await transaction
-                    .createQueryBuilder()
-                    .update(Lecturer)
-                    .set({ name: lecturer })
-                    .execute();
-    
-                await transaction
-                    .createQueryBuilder()
-                    .update(Schedule)
-                    .set({ type: Day[day], start_time: startTime, end_time: endTime })
-                    .execute();
+                await transaction.update(
+                    Classroom,
+                    { classroom_id: classroomId },
+                    { classroom_name: classroom }
+                );
+                await transaction.update(
+                    Course,
+                    { course_id: courseId },
+                    { course_name: course }
+                );
+
+                await transaction.update(
+                    Lecturer,
+                    { nip: nip },
+                    { name: lecturer }
+                );
+                await transaction.update(
+                    Schedule,
+                    { schedule_id: scheduleId },
+                    { type: Day[day], start_time: startTime, end_time: endTime }
+                );
+        
             });
     
             // Retrieve updated data
