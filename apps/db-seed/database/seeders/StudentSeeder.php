@@ -26,7 +26,17 @@ class StudentSeeder extends Seeder
 
             $userId = $user->user_id;
 
-            $studyProgram = DB::table('study_program')->select('faculty_id')->inRandomOrder()->first()->faculty_id;
+            // Periksa apakah tabel study_program tidak kosong
+            $studyProgramCount = DB::table('study_program')->count();
+
+            if ($studyProgramCount > 0) {
+                $studyProgram = DB::table('study_program')->select('faculty_id')->inRandomOrder()->first()->faculty_id;
+            } else {
+                // Handle case when study_program table is empty
+                // Contoh: throw new Exception("Tidak ada program studi yang tersedia");
+                // Atau, jika Anda ingin melanjutkan, Anda bisa mengisi dengan nilai default atau mengabaikan seeding student ini
+                continue;
+            }
 
             $studentId = strtoupper($faker->randomLetter) . $faker->unique()->numberBetween($min = 10000000, $max = 99999999);
 

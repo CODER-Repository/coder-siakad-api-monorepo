@@ -19,7 +19,7 @@ class KRSSeeder extends Seeder
         $courseIds = DB::table('course')->pluck('course_id');
 
         // Menghasilkan 50 entri palsu untuk tabel krs
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i <= 50; $i++) {
             // Generate random year between 2018 and 2025
             $year = $faker->numberBetween(2018, 2025);
             // Generate random semester character ('A' for odd, 'B' for even)

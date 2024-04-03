@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             StudyProgramSeeder::class,
             LectureSeeder::class,
-            ClassSeeder::class,
-            ScheduleSeeder::class,
-            StudentSeeder::class,
             CourseSeeder::class,
+            ClassSeeder::class,
+            StudentSeeder::class,
             KRSSeeder::class,
+            ScheduleSeeder::class,
         ]);
     }
 }
