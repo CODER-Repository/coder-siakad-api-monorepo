@@ -18,7 +18,6 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
       - DB_SSL=false
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     networks:
       - siakad-network
 
@@ -30,16 +29,15 @@ services:
       dockerfile: ./apps/schedule-service/Dockerfile
     container_name: schedule-service
     ports:
-      - "5005:5005"
+      - "5010:5010"
     environment:
-      - PORT=5005
+      - PORT=5010
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
       - DB_SSL=false
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     depends_on:
       - postgres
     networks:
@@ -106,7 +104,6 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
       - DB_SSL=false
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     networks:
       - siakad-network
     depends_on:
@@ -129,7 +126,6 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
       - DB_SSL=false
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
     networks:
       - siakad-network
     depends_on:
@@ -163,7 +159,6 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - DB_DATABASE=coder-siakad
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
       - CLOUDINARY_CLOUD_NAME=dsgv7kpmq
       - CLOUDINARY_API_KEY=211669514833157
       - CLOUDINARY_API_SECRET=0w1ckZHtqg8Uyp9zfOwmVZJv4w8
@@ -263,23 +258,6 @@ services:
     networks:
       - siakad-network
 
-  nginx:
-    image: nginx:latest
-    container_name: siakad-nginx
-    ports:
-      - "8500:80"
-    volumes:
-      - ./deployment/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      #      - sample-service
-      #      - auth-service
-      - mock-service
-    #      - postgres
-    #      - migrate
-    #      - redis
-    networks:
-      - siakad-network
-
   kong:
     image: ghcr.io/coder-repository/kong-siakad-service:latest
     build:
@@ -320,7 +298,6 @@ services:
 
 volumes:
   postgres_siakad:
-
 
 networks:
   siakad-network:

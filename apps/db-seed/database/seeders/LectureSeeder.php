@@ -17,15 +17,16 @@ class LectureSeeder extends Seeder
         $faker = Faker::create();
 
         $userIds = DB::table('user')->pluck('user_id')->toArray();
+        $email = DB::table('user')->pluck('email')->toArray();
 
         for ($i = 0; $i < 25; $i++) {
             DB::table('lecturer')->insert([
-                'nip' => $faker->unique()->randomNumber(9), 
-                'user_id' => $userIds[$i % count($userIds)], 
+                'nip' => $faker->unique()->randomNumber(9),
+                'user_id' => $userIds[$i % count($userIds)],
                 'name' => $faker->name,
                 'type' => $faker->randomElement(['male', 'female']),
-                'phone_number' => $faker->numerify('+##########'), 
-                'email' => $faker->unique()->safeEmail,
+                'phone_number' => $faker->numerify('+##########'),
+                'email' => $email[$i % count($email)],
             ]);
         }
     }
