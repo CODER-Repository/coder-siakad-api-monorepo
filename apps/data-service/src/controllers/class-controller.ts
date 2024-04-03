@@ -59,5 +59,26 @@ export class ClassController {
             return res.boom.badImplementation();
         }
     }
+
+    static async deleteClass(
+        req: Request,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        const id: string = req.query.id as string;
+        try {
+            const { data: result }  = await ClassService.deleteClassByID(id);
+            if (!result || Object.keys(result).length === 0) {
+                Logger.info(`${contextLogger.deleteClassController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { data: [] });
+            }
+    
+            Logger.info(`${contextLogger.deleteClassController} | Successfully deleted class`);
+            return JsonResponse(res, resMessage.success, 'success', { result });
+        } catch (error) {
+            const errorMessage = `${contextLogger.deleteClassController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
 }
 

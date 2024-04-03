@@ -106,5 +106,30 @@ export class ClassService {
             return null;
         }
     }
+
+    static async deleteClassByID(id: string): Promise<CreateDTO> {
+        try {
+            const existingClass = await dbContext.Class().findOne({ where: { class_id: id } });
+            if (!existingClass) {
+                Logger.info(`${contextLogger.deleteCourseService} | Class not found`);
+                return { data: [] };
+            }
+
+            const deleteResult = await dbContext
+                .Class()
+                .createQueryBuilder('class')
+                .delete()
+                .where('class.class_id = :id', { id })
+                .execute();
+    
+            Logger.info(`${contextLogger.deleteClassService} | Class deleted successfully`);
+            return { data: deleteResult };
+        } catch (error) {
+            Logger.error(
+                `${contextLogger.deleteClassService} | Error: ${error.message}`
+            );
+            throw error;
+        }
+    }
     
 }
