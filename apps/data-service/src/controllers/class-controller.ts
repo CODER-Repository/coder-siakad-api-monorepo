@@ -5,10 +5,11 @@ import { ClassService } from '../service/class-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereClass } from '../params/class-params';
 import { CreateClassDto } from '../interface/class-dto';
+import { queryClassValidator } from '../utils/queryValidator';
 
 export class ClassController {
     static async getClass(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryClassValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;

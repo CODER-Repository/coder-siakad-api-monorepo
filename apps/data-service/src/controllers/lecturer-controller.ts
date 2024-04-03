@@ -9,7 +9,7 @@ import { queryLecturerValidator } from '../utils/queryValidator';
 
 export class LecturerController {
     static async getLecturer(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryLecturerValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         try {
@@ -61,7 +61,7 @@ export class LecturerController {
     }
 
     static async deleteLecturer(
-        req: Request<queryLecturerValidator, {}, {}>,
+        req: Request,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const id: string = req.query.id as string;

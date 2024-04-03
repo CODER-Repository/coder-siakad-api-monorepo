@@ -1,10 +1,10 @@
 export interface queryLecturerValidator {
-    id: String
-    nip: String
-    name: String
-    email: String
-    gender: String
-    phone: String
+    id: string;
+    nip: string;
+    name: string;
+    gender: string;
+    phone: string;
+    email: string;
 };
 
 export interface queryStudentValidator {
@@ -26,6 +26,23 @@ export interface queryCourseValidator {
 
 export interface queryClassroomValidator {
     id: string;
+    classroom: string;
+    facultyId: number;
+    facultyName: string;
+    courseId: string;
+    courseName: string;
+}
+
+export interface queryClassValidator {
+    id: string;
+    courseId: string;
     course: string;
-    faculty: number;
+    classroomId: string;
+    classroom: string;
+    nip: string;
+    lecturer: string;
+    scheduleId: string;
+    day: string;
+    startTime: string,
+    endTime: string,
 }

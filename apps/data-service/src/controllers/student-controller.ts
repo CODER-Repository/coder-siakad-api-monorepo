@@ -9,7 +9,7 @@ import { CreateStudentDto } from '../interface/student-dto';
 
 export class StudentController {
     static async getStudent(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryStudentValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
@@ -60,7 +60,7 @@ export class StudentController {
     }
     
     static async deleteStudent(
-        req: Request<queryStudentValidator, {}, {}>,
+        req: Request,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const id: string = req.query.id as string;
