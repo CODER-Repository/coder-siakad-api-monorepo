@@ -1,11 +1,12 @@
 import { Class } from '@siakad/express.database';
+import { Day } from '@siakad/express.utils';
 
 export interface CreateClassDto {
     id: string;
     course: string;
     classroom: string;
     lecturer: string;
-    day: string;
+    day: Day;
     startTime: string,
     endTime: string,
 

@@ -1,7 +1,7 @@
-import { Class, dbContext } from '@siakad/express.database';
-import { Logger, contextLogger, buildWhereCondition, queryInterface } from '@siakad/express.utils';
+import { AppDataSource, Class, Classroom, Course, Lecturer, Schedule, dbContext } from '@siakad/express.database';
+import { Logger, contextLogger, buildWhereCondition, queryInterface, Day } from '@siakad/express.utils';
 import { CreateClassDto, toCreateClassDto } from '../interface/class-dto';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class ClassService {
     static async getListClass(query: queryInterface): Promise<DTO> {
@@ -21,7 +21,7 @@ export class ClassService {
                 .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-            
+
             // GET DATA AND COUNT
             const classes = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
@@ -48,4 +48,63 @@ export class ClassService {
             throw error;
         }
     }
+
+    static async updateDetailClass(payload: CreateClassDto): Promise<CreateDTO> {
+        const { id, course, classroom, lecturer, day, startTime, endTime } = payload;
+    
+        try {
+            // Find existing class
+            const existingClass = await Class.findOne({ where: { class_id: id } });
+    
+            if (!existingClass) {
+                Logger.info(`${contextLogger.patchClassService} | Class not found`);
+                return { data: [] };
+            }
+    
+            await AppDataSource.transaction(async (transaction) => {
+                await transaction
+                .createQueryBuilder()
+                .update(Classroom)
+                .set({ classroom_name: classroom })
+                .execute();
+            
+                await transaction
+                    .createQueryBuilder()
+                    .update(Course)
+                    .set({ course_name: course })
+                    .execute();
+    
+                await transaction
+                    .createQueryBuilder()
+                    .update(Lecturer)
+                    .set({ name: lecturer })
+                    .execute();
+    
+                await transaction
+                    .createQueryBuilder()
+                    .update(Schedule)
+                    .set({ type: Day[day], start_time: startTime, end_time: endTime })
+                    .execute();
+            });
+    
+            // Retrieve updated data
+            const resultData = await dbContext
+                .Class()
+                .createQueryBuilder('class')
+                .innerJoinAndSelect('class.course', 'course')
+                .innerJoinAndSelect('class.lecturer', 'lecturer')
+                .innerJoinAndSelect('class.classroom', 'classroom')
+                .innerJoinAndSelect('class.schedule', 'schedule')
+                .where('class.class_id = :id', { id })
+                .getMany();
+    
+
+            const classDetail = resultData.map((classEntity: Class) => toCreateClassDto(classEntity));
+            return { data: classDetail };
+        } catch (error) {
+            Logger.error(`${contextLogger.patchClassService} | Error: ${error.message}`);
+            return null;
+        }
+    }
+    
 }

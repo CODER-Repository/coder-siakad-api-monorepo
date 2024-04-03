@@ -4,6 +4,7 @@ import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.
 import { ClassService } from '../service/class-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereClass } from '../params/class-params';
+import { CreateClassDto } from '../interface/class-dto';
 
 export class ClassController {
     static async getClass(
@@ -37,4 +38,26 @@ export class ClassController {
             return res.boom.badImplementation();
         }
     }
+
+    static async patchClass(
+        req: Request<{}, {}, CreateClassDto>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const payload = req.body;
+            const { data: classDetail }  = await ClassService.updateDetailClass(payload);
+            if (!classDetail || Object.keys(classDetail).length === 0) {
+                Logger.info(`${contextLogger.patchClassController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { class: [] });
+            }
+    
+            Logger.error(`${contextLogger.patchClassController} | Successfully updated class`);
+            return JsonResponse(res, resMessage.success, 'success', classDetail);
+        } catch (error) {
+            const errorMessage = `${contextLogger.patchClassController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
 }
+
