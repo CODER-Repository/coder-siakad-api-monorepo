@@ -116,7 +116,7 @@ export class AuthService {
                 where: { user_id: user.user_id }
             });
 
-            let jwtPayload : JwtPayloadInterface = {
+            let jwtPayload: JwtPayloadInterface = {
                 userId: userPayload.user_id,
                 email: userPayload.email,
                 username: userPayload.username,
@@ -139,7 +139,10 @@ export class AuthService {
             }
 
             return jwt.sign(jwtPayload, JWT_SECRET, {
-                expiresIn: '1h'
+                issuer: 'siakad-service',
+                algorithm: 'HS256',
+                expiresIn: '8h',
+                audience: 'siakad-client'
             });
         } catch (error) {
             Logger.error(`[AuthService.generateJWTPayload] Error: ${error.message}`);

@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToMany, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { Lecturer } from './lecture.entity';
 import { Schedule } from './schedule.entity';
 import { Classroom, Course } from '.';
@@ -8,8 +8,8 @@ export class Class extends BaseEntity {
     @PrimaryColumn({ type: 'varchar', length: 15 })
     class_id!: string;
 
-    @Column({ type: 'int' })
-    course_id!: number;
+    @Column({ type: 'varchar', length: 15 })
+    course_id!: string;
 
     @Column({ type: 'varchar', length: 15 })
     lecturer_id!: string;
@@ -21,14 +21,17 @@ export class Class extends BaseEntity {
     classroom_id!: string;
 
     @OneToOne(() => Schedule, schedule => schedule.class_id)
+    @JoinColumn({ name: 'class_id' })
     schedule!: Schedule;
 
-    @ManyToMany(() => Lecturer, lecturer => lecturer.class)
+    @ManyToOne(() => Lecturer, lecturer => lecturer.class)
+    @JoinColumn({ name: 'lecturer_id' })
     lecturer!: Lecturer;
 
-    @OneToMany(() => Classroom, entityClassroom => entityClassroom.class)
+    @ManyToOne(() => Classroom, classroom => classroom.classes)
+    @JoinColumn({ name: 'classroom_id' })
     classroom!: Classroom;
 
-    @OneToMany(() => Course, course => course.class)
+    @OneToMany(() => Course, course => course.classes)
     course!: Course;
 }

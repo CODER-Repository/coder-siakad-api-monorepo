@@ -1,9 +1,9 @@
 package server
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 type User struct {
@@ -16,27 +16,13 @@ type User struct {
 }
 
 func getUserFromContext(c *fiber.Ctx) (*User, error) {
-	userToken := c.Locals("user").(*jwt.Token)
-	claims, ok := userToken.Claims.(jwt.MapClaims)
+	userProfile := c.Locals("user")
 
-	if !ok {
-		return nil, errors.New("failed to get user from context")
+	var user User
+	err := json.Unmarshal([]byte(userProfile.(string)), &user)
+	if err != nil {
+		return nil, errors.New("error parsing user profile")
 	}
 
-	user := &User{
-		ID:     claims["userId"].(string),
-		Email:  claims["email"].(string),
-		Role:   claims["role"].(string),
-		RoleID: claims["roleId"].(string),
-	}
-
-	if nim, ok := claims["nim"].(string); ok {
-		user.NIM = &nim
-	}
-
-	if nip, ok := claims["nip"].(string); ok {
-		user.NIP = &nip
-	}
-
-	return user, nil
+	return &user, nil
 }

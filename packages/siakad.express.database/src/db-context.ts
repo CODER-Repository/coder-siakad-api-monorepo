@@ -7,6 +7,7 @@ import {
   EvaluationReportLecturer,
   GradeCategory,
   KRS,
+  PaymentHistory,
   Report,
   Semester,
   Student,
@@ -39,6 +40,7 @@ interface DbContext {
   RoleUser: () => typeof RoleUser;
   Semester: () => typeof Semester;
   UKT: () => typeof UKT;
+  PaymentHistory: () => typeof PaymentHistory;
   Schedule: () => typeof Schedule;
   Classroom: () => typeof Classroom;
   Faculty: () => typeof Faculty;
@@ -64,6 +66,7 @@ export class DbContextClass implements DbContext {
   RoleUser = () => RoleUser;
   Semester = () => Semester;
   UKT = () => UKT;
+  PaymentHistory = () => PaymentHistory;
   Schedule = () => Schedule;
   Classroom = () => Classroom;
   Faculty = () => Faculty;
