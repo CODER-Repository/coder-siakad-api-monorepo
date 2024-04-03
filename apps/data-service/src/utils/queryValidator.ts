@@ -24,6 +24,11 @@ export interface queryCourseValidator {
     sks: number;
 }
 
+export interface queryFacultyValidator {
+    id: string;
+    name: string;
+}
+
 export interface queryClassroomValidator {
     id: string;
     classroom: string;
