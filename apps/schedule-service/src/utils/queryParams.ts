@@ -10,7 +10,17 @@ export class PaginateOption {
 
 export class QueryParamsDto {
     page: number;
-    size: number;
+    page_size: number;
     limit: number;
     offset: number;
+    where?: string;
 };
+
+export interface DTO {
+    data: object
+    pagination: object
+}
+
+export interface CreateDTO {
+    data: object  
+}

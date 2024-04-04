@@ -37,7 +37,7 @@ export class Schedule extends BaseEntity {
   semester_id!: string;
 
   @Column({ type: 'enum', enum: Day, default: Day.Sunday })
-  type!: Day;
+  day!: Day;
 
   @Column({ type: 'time' })
   start_time!: string;

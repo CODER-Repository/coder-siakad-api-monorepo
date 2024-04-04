@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { ScheduleController } from '../controllers/schedule-controller';
+import { AuthContext } from '@siakad/express.server';
 
 const scheduleRoute = Router();
 
-scheduleRoute.route('/current').get(ScheduleController.getCurrentSchedule);
-scheduleRoute.route('/today').get(ScheduleController.getTodaySchedule);
-scheduleRoute.route('/').get(ScheduleController.getScheduleList);
+scheduleRoute.route('/current').get(AuthContext,ScheduleController.getCurrentSchedule);
+scheduleRoute.route('/today').get(AuthContext,ScheduleController.getTodaySchedule);
+scheduleRoute.route('/list').get(ScheduleController.getScheduleList);
 
 export default scheduleRoute;
