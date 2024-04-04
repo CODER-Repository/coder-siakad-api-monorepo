@@ -13,6 +13,7 @@ export class ScheduleController {
     ): Promise<void | Express.BoomError<null>> {
         const UserAuth = req.user as unknown as string;
         const { nim } = JSON.parse(UserAuth);
+
         try {
             const schedules = await ScheduleService.getCurrentSchedule(nim);
             if (!schedules) {
@@ -38,11 +39,13 @@ export class ScheduleController {
         req: Request<{}, {}, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
+        const UserAuth = req.user as unknown as string;
+        const { nim } = JSON.parse(UserAuth);
         const today: Day = new Date()
                 .toLocaleString('en-US', { weekday: 'long' })
                 .toLocaleLowerCase() as Day;
         try {
-            const todaySchedule = await ScheduleService.getTodaySchedule();
+            const todaySchedule = await ScheduleService.getTodaySchedule(nim);
 
             if (!todaySchedule) {
                 Logger.error(
@@ -70,10 +73,10 @@ export class ScheduleController {
     }
 
     static async getScheduleList(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<{}, {}, {}, {}>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const q: QueryParamsDto = req.query;
+        const q = req.query as QueryParamsDto;
         const paginate = new PaginateOption();
         const pageOptions = {
             page: (q.page < 0 ? 0 : q.page) || 0,

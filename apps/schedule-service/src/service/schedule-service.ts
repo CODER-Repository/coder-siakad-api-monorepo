@@ -59,7 +59,7 @@ export class ScheduleService {
         }
     }
 
-    static async getTodaySchedule(): Promise<Object | Error> {
+    static async getTodaySchedule(nim:string): Promise<Object | Error> {
         try {
             const now = new Date();
             const today: Day = new Date()
@@ -83,7 +83,8 @@ export class ScheduleService {
                     'schedule.end_time AS time_end',
                     'schedule.class_id AS class_id'
                 ])
-                .where('schedule.day = :day', { day: today })
+                .where('schedule.nim = :nim', { nim: nim })
+                .andWhere('schedule.day = :day', { day: today })
                 .getRawMany();
 
             const todaySchedule = schedules.map((schedule) => {
