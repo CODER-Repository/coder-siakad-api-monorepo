@@ -68,11 +68,11 @@ export class LecturerController {
         try {
             const { data: lecturer }  = await LecturerService.deleteLecturerByUserID(id);
             if (!lecturer || Object.keys(lecturer).length === 0) {
-                Logger.info(`${contextLogger.deleteLecturerController} | No rows affected`);
-                return JsonResponse(res, resMessage.emptyData, 'success', { lecturer: [] });
+                Logger.error(`${contextLogger.deleteLecturerController} | Successfully deleted lecturer`);
+                return JsonResponse(res, resMessage.deleted, 'success', { lecturer: [] });
             }
     
-            Logger.error(`${contextLogger.deleteLecturerController} | Successfully deleted lecturer`);
+            Logger.info(`${contextLogger.deleteLecturerController} | No rows affected`);
             return JsonResponse(res, resMessage.success, 'success', { lecturer });
         } catch (error) {
             const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;

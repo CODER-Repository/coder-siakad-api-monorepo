@@ -67,12 +67,12 @@ export class CourseController {
         try {
             const { data: course }  = await CourseService.deleteCourseByID(id);
             if (!course || Object.keys(course).length === 0) {
-                Logger.info(`${contextLogger.deleteCourseController} | No rows affected`);
-                return JsonResponse(res, resMessage.emptyData, 'success', { course: [] });
+                Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted course`);
+                return JsonResponse(res, resMessage.deleted, 'success', course);
             }
     
-            Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted course`);
-            return JsonResponse(res, resMessage.success, 'success', { course });
+            Logger.info(`${contextLogger.deleteCourseController} | No row affected`);
+            return JsonResponse(res, resMessage.success, 'success', course);
         } catch (error) {
             const errorMessage = `${contextLogger.deleteCourseController} | Error: ${error.message}`;
             Logger.error(errorMessage);

@@ -36,7 +36,7 @@ export class FacultyController {
         }
     }
 
-    static async patchCourse(
+    static async patchFaculty(
         req: Request<{}, {}, CreateFacultyDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
@@ -48,8 +48,8 @@ export class FacultyController {
                 return JsonResponse(res, resMessage.emptyData, 'success', { faculty: [] });
             }
     
-            Logger.error(`${contextLogger.patchFacultyController} | Successfully updated faculty`);
-            return JsonResponse(res, resMessage.success, 'success', { faculty });
+            Logger.info(`${contextLogger.patchFacultyController} | Successfully updated faculty`);
+            return JsonResponse(res, resMessage.updated, 'success', faculty);
         } catch (error) {
             const errorMessage = `${contextLogger.patchFacultyController} | Error: ${error.message}`;
             Logger.error(errorMessage);
@@ -57,7 +57,7 @@ export class FacultyController {
         }
     }
 
-    static async deleteCourse(
+    static async deleteFaculty(
         req: Request,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
@@ -65,12 +65,11 @@ export class FacultyController {
         try {
             const { data: faculty }  = await FacultyService.deleteFacultyByID(id);
             if (!faculty || Object.keys(faculty).length === 0) {
-                Logger.info(`${contextLogger.deleteCourseController} | No rows affected`);
-                return JsonResponse(res, resMessage.emptyData, 'success', { faculty: [] });
+                Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted faculty`);
+                return JsonResponse(res, resMessage.deleted, 'success', { faculty: [] });
             }
     
-            Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted course`);
-            return JsonResponse(res, resMessage.success, 'success', { faculty });
+            return JsonResponse(res, resMessage.success, 'success', faculty);
         } catch (error) {
             const errorMessage = `${contextLogger.deleteCourseController} | Error: ${error.message}`;
             Logger.error(errorMessage);

@@ -106,7 +106,7 @@ export class FacultyService {
                 .Faculty()
                 .createQueryBuilder('faculty')
                 .delete()
-                .where('faculty.faculty_id = :faculty_id', { id })
+                .where('faculty.faculty_id = :id', { id })
                 .execute();
     
             // Find existing faculty
