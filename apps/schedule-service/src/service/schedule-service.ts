@@ -21,7 +21,7 @@ export class ScheduleService {
                     'course.course_name AS course_name',
                     'classroom.classroom_name AS room',
                     'faculty.faculty_name AS faculty',
-                    'schedule.type AS day'
+                    'schedule.day AS day'
                 ])
                 .getRawMany();
 
@@ -36,7 +36,7 @@ export class ScheduleService {
             };
 
             schedules.forEach((schedule) => {
-                const day = schedule.type.toLowerCase();
+                const day = schedule.day.toLowerCase();
                 result[day].push({
                     schedule_id: schedule.schedule_id,
                     course_id: schedule.course_id,
@@ -83,7 +83,7 @@ export class ScheduleService {
                     'schedule.end_time AS time_end',
                     'schedule.class_id AS class_id'
                 ])
-                .where('schedule.type = :type', { type: today })
+                .where('schedule.day = :day', { day: today })
                 .getRawMany();
 
             const todaySchedule = schedules.map((schedule) => {
