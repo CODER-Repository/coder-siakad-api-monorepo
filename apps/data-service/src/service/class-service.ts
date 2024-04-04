@@ -86,7 +86,7 @@ export class ClassService {
                 await transaction.update(
                     Schedule,
                     { schedule_id: scheduleId },
-                    { type: Day[day], start_time: startTime, end_time: endTime }
+                    { day: Day[day], start_time: startTime, end_time: endTime }
                 );
         
             });

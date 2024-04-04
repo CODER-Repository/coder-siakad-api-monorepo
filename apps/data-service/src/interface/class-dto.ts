@@ -24,7 +24,7 @@ export const toCreateClassDto = (e: Class): CreateClassDto => ({
     nip: e?.lecturer.nip,
     lecturer: e?.lecturer.name,
     scheduleId: e?.schedule.schedule_id,
-    day: e?.schedule.type,
+    day: e?.schedule.day,
     startTime: e?.schedule.start_time,
     endTime: e?.schedule.end_time,
 });
