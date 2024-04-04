@@ -59,7 +59,10 @@ export const resMessage = {
   emptyData: 'Data is empty',
   success: 'Successfully',
   validationRole: 'Role is not allowed',
-  forbidden: 'Cannot access this API'
+  forbidden: 'Cannot access this API',
+  created: 'Successfully created data',
+  updated: 'Successfully updated data',
+  deleted: 'Successfully deleted data'
   // add more
 };
 
@@ -70,8 +73,8 @@ export const contextLogger = {
 
   // Data Service
   getFacultyController: '[FacultyController.getFaculty]',
-  deleteFacultyController: '[FacultyController.patchClass]',
-  patchFacultyController: '[FacultyController.deleteClass]',
+  deleteFacultyController: '[FacultyController.patchFaculty]',
+  patchFacultyController: '[FacultyController.deleteFaculty]',
   getClassController: '[ClassController.getClass]',
   patchClassController: '[ClassController.patchClass]',
   deleteClassController: '[ClassController.deleteClass]',
