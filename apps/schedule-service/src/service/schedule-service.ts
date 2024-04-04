@@ -128,6 +128,7 @@ export class ScheduleService {
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+                .innerJoin('schedule.lecturer', 'lecturer', 'schedule.lecturer_id = lecturer.nip')
                 .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
                 .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
                 .select([
@@ -137,6 +138,7 @@ export class ScheduleService {
                     'schedule.course_id AS course_id',
                     'classroom.classroom_name AS classroom_name',
                     'course.course_name AS course_name',
+                    'lecturer.name AS lecturer',
                     'schedule.start_time AS start_time',
                     'schedule.end_time AS end_time',
                     'faculty.faculty_name AS faculty',
