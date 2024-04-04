@@ -1,6 +1,6 @@
 import { AppDataSource, Class, Classroom, Course, Lecturer, Schedule, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger, buildWhereCondition, queryInterface, Day } from '@siakad/express.utils';
-import { CreateClassDto, toCreateClassDto } from '../interface/class-dto';
+import { CreateClassDto, toCreateClassDto, toCreateClassDtoBySchedule } from '../interface/class-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class ClassService {
@@ -11,12 +11,12 @@ export class ClassService {
 
             // MAKE QUERY
             const queryBuilder = dbContext
-                .Class()
-                .createQueryBuilder('class')
-                .innerJoinAndSelect('class.course', 'course')
-                .innerJoinAndSelect('class.lecturer', 'lecturer')
-                .innerJoinAndSelect('class.classroom', 'classroom')
-                .innerJoinAndSelect('class.schedule', 'schedule')
+                .Schedule()
+                .createQueryBuilder('schedule')
+                .innerJoinAndSelect('schedule.class', 'class', 'class.class_id = schedule.class_id')
+                .innerJoinAndSelect('class.classroom', 'classroom', 'class.classroom_id = classroom.classroom_id')
+                .innerJoinAndSelect('class.lecturer', 'lecturer', 'class.lecturer_id = lecturer.nip')
+                .innerJoinAndSelect('schedule.course', 'course', 'schedule.course_id = course.course_id')
                 .orderBy('class.class_id', 'ASC')
                 .where(condition, parameters)
                 .skip(offset)
@@ -28,7 +28,7 @@ export class ClassService {
             const totalPages = Math.ceil(totalCount / limit);
 
             // RETRIVED DATA & PAGINATION
-            const listClass = classes.map((classroom: Class) => toCreateClassDto(classroom));
+            const listClass = classes.map((classroom: Schedule) => toCreateClassDtoBySchedule(classroom));
             const pagination = {
                 totalCount,
                 totalPage: totalPages,
