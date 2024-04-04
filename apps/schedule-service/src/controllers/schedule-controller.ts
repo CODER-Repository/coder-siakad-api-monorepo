@@ -78,22 +78,20 @@ export class ScheduleController {
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
-        console.log(q);
         const where = ToSeqWhereSchedule(q);
         const query = queryHelper(where, q.page, q.page_size)
-        console.log(query);
 
         try {
-            const { data: response, pagination} = await ScheduleService.getScheduleList(query);
+            const { data: scheduleList, pagination} = await ScheduleService.getScheduleList(query);
 
-            if (!response) {
+            if (!scheduleList) {
                 Logger.error(`${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { data: []});
             }
 
             Logger.info(`${contextLogger.getScheduleListController} | ${resMessage.success}`);
             return JsonResponse(res, resMessage.success, 'success', {
-                scheduleList: response,
+                scheduleList,
                 pagination
             });
         } catch (error) {

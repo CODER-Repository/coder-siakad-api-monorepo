@@ -132,13 +132,14 @@ export class ScheduleService {
                 .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
                 .select([
                     'schedule.schedule_id AS schedule_id',
+                    'schedule.class_id AS class_id',
+                    'classroom.classroom_id AS classroom_id',
                     'schedule.course_id AS course_id',
+                    'classroom.classroom_name AS classroom_name',
                     'course.course_name AS course_name',
-                    'classroom.classroom_name AS course_room',
+                    'schedule.start_time AS start_time',
+                    'schedule.end_time AS end_time',
                     'faculty.faculty_name AS faculty',
-                    'schedule.start_time AS time_start',
-                    'schedule.end_time AS time_end',
-                    'schedule.class_id AS class_id'
                 ])
                 .where(condition, parameters)
                 .skip(offset)
