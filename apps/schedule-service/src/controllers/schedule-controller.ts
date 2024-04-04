@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { JsonResponse } from '@siakad/express.server';
-import { Logger, resMessage, contextLogger } from '@siakad/express.utils';
+import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.utils';
 import { ScheduleService } from '../service/schedule-service';
-import { PaginateOption, QueryParamsDto } from '../utils/queryParams';
-import { ToSqlWhere } from '../params/scheduler-params';
+import { QueryParamsDto } from '../utils/queryParams';
 import { Day } from '@siakad/express.database/dist/entities/schedule.entity';
+import { ToSeqWhereSchedule } from '../params/scheduler-params';
 
 export class ScheduleController {
     static async getCurrentSchedule(
@@ -73,45 +73,22 @@ export class ScheduleController {
     }
 
     static async getScheduleList(
-        req: Request<{}, {}, {}, {}>,
+        req: Request<{}, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
-        const q = req.query as QueryParamsDto;
-        const paginate = new PaginateOption();
-        const pageOptions = {
-            page: (q.page < 0 ? 0 : q.page) || 0,
-            size: (q.size < 0 || q.size > paginate.MaxSize ? paginate.MaxSize : q.size) || paginate.MaxSize
-        };
-
-        const pagination = {
-            totalCount: 0,
-            totalPage: 0,
-            page: pageOptions.page,
-            size: pageOptions.size
-        };
-
-        const where = ToSqlWhere(q);
-        const query = {
-            where,
-            limit: pageOptions.size,
-            offset: (pageOptions.page - 1) * pageOptions.size
-        };
+        const q: QueryParamsDto = req.query;
+        const where = ToSeqWhereSchedule(q);
+        const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const response = await ScheduleService.getScheduleList(query);
+            const { data: response, pagination} = await ScheduleService.getScheduleList(query);
 
             if (!response) {
-                Logger.error(
-                    `${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`
-                );
-                return JsonResponse(res, resMessage.emptyData, 'success', {
-                    data: []
-                });
+                Logger.error(`${contextLogger.getScheduleListController} | Error: ${resMessage.emptyData}`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { data: []});
             }
 
-            Logger.info(
-                `${contextLogger.getScheduleListController} | ${resMessage.success}`
-            );
+            Logger.info(`${contextLogger.getScheduleListController} | ${resMessage.success}`);
             return JsonResponse(res, resMessage.success, 'success', {
                 scheduleList: response,
                 pagination

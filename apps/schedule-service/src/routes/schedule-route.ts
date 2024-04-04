@@ -6,6 +6,6 @@ const scheduleRoute = Router();
 
 scheduleRoute.route('/current').get(AuthContext,ScheduleController.getCurrentSchedule);
 scheduleRoute.route('/today').get(AuthContext,ScheduleController.getTodaySchedule);
-scheduleRoute.route('/').get(AuthContext,ScheduleController.getScheduleList);
+scheduleRoute.route('/').get(ScheduleController.getScheduleList);
 
 export default scheduleRoute;

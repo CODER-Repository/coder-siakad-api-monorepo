@@ -1,6 +1,7 @@
 import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
-import { Logger, contextLogger, Day, queryInterface } from '@siakad/express.utils';
+import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
+import { DTO } from '../utils/queryParams';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -59,7 +60,7 @@ export class ScheduleService {
         }
     }
 
-    static async getTodaySchedule(nim:string): Promise<Object | Error> {
+    static async getTodaySchedule(nim: string): Promise<Object | Error> {
         try {
             const now = new Date();
             const today: Day = new Date()
@@ -117,11 +118,14 @@ export class ScheduleService {
         }
     }
 
-    static async getScheduleList(query: queryInterface): Promise<Object> {
+    static async getScheduleList(query: queryInterface): Promise<DTO> {
         try {
 
             const { limit, offset, where } = query;
-            const schedules = await dbContext.Schedule()
+            const { condition, parameters } = buildWhereCondition(where);
+            console.log(limit);
+
+            const queryBuilder = await dbContext.Schedule()
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
@@ -137,12 +141,21 @@ export class ScheduleService {
                     'schedule.end_time AS time_end',
                     'schedule.class_id AS class_id'
                 ])
-                .where(where)
+                .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-                .getRawMany();
 
-            return schedules;
+            const schedules = await queryBuilder.getRawMany();
+            const totalCount = await queryBuilder.getCount();
+            const totalPages = Math.ceil(totalCount / limit);
+            const pagination = {
+                totalCount,
+                totalPage: totalPages,
+                page: Math.floor(offset / limit) + 1,
+                size: limit
+            };
+
+            return { data:schedules, pagination };
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
             throw error;
