@@ -52,7 +52,7 @@ export class LecturerController {
             }
     
             Logger.error(`${contextLogger.patchLecturerController} | Successfully updated lecturer`);
-            return JsonResponse(res, resMessage.success, 'success', { lecturer });
+            return JsonResponse(res, resMessage.updated, 'success', { lecturer });
         } catch (error) {
             const errorMessage = `${contextLogger.getLecturerController} | Error: ${error.message}`;
             Logger.error(errorMessage);
