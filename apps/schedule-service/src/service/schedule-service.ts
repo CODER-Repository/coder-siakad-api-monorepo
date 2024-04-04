@@ -141,17 +141,7 @@ export class ScheduleService {
                 .take(limit)
                 .getRawMany();
 
-            const listSchedule = schedules.map((schedule) => ({
-                schedule_id: schedule.schedule_id,
-                course_id: schedule.course_id,
-                course_name: schedule.course.course_name,
-                course_room: schedule.course.classroom.classroom_name,
-                faculty: schedule.course.classroom.faculty,
-                time_start: schedule.start_time,
-                time_end: schedule.end_time
-            }));
-
-            return listSchedule;
+            return schedules;
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
             throw error;
