@@ -123,9 +123,8 @@ export class ScheduleService {
 
             const { limit, offset, where } = query;
             const { condition, parameters } = buildWhereCondition(where);
-            console.log(limit);
 
-            const queryBuilder = await dbContext.Schedule()
+            const queryBuilder = dbContext.Schedule()
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')

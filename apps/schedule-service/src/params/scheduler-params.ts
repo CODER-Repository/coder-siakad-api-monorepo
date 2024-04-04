@@ -5,9 +5,9 @@ export const ToSeqWhereSchedule = (q: QueryParamsDto) => {
     
     // KEY MAP entity.column
     const mapKeys = {
-        id: 'schedule_id',
-        class: 'class.class_id',
-        clssroom: 'class.classroom.classroom_name',
+        schedule_id: 'schedule.schedule_id',
+        class_id: 'class.class_id',
+        course_room: 'class.classroom.classroom_name',
     };
 
     for (const key in q) {

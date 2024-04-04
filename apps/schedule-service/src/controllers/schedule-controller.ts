@@ -5,6 +5,7 @@ import { ScheduleService } from '../service/schedule-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { Day } from '@siakad/express.database/dist/entities/schedule.entity';
 import { ToSeqWhereSchedule } from '../params/scheduler-params';
+import { queryValidator } from '../utils/queryValidator';
 
 export class ScheduleController {
     static async getCurrentSchedule(
@@ -73,12 +74,14 @@ export class ScheduleController {
     }
 
     static async getScheduleList(
-        req: Request<{}, {}, {}, QueryParamsDto>,
+        req: Request<queryValidator, {}, {}, QueryParamsDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         const q: QueryParamsDto = req.query;
+        console.log(q);
         const where = ToSeqWhereSchedule(q);
         const query = queryHelper(where, q.page, q.page_size)
+        console.log(query);
 
         try {
             const { data: response, pagination} = await ScheduleService.getScheduleList(query);
