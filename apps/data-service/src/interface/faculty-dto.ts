@@ -6,6 +6,11 @@ export interface CreateFacultyDto {
     classroom: object; 
 }
 
+export interface UpdateFacultyDto {
+    id: number;
+    name: string;
+}
+
 export const toCreateFacultyDTO = (e: Faculty): CreateFacultyDto => ({
     id: e?.faculty_id,
     name: e?.faculty_name,

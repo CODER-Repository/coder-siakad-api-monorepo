@@ -5,6 +5,7 @@ import { QueryParamsDto } from '../utils/queryParams';
 import { queryFacultyValidator } from '../utils/queryValidator';
 import { ToSeqWhereFaculty } from '../params/faculty-params';
 import { FacultyService } from '../service/faculty-service';
+import { CreateFacultyDto } from '../interface/faculty-dto';
 
 export class FacultyController {
     static async getFaculty(
@@ -31,6 +32,48 @@ export class FacultyController {
             Logger.error(
                 `${contextLogger.getFacultyController} | Error: ${error.message}`
             );
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async patchCourse(
+        req: Request<{}, {}, CreateFacultyDto>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const payload = req.body;
+            const { data: faculty }  = await FacultyService.patchFacultyByID(payload);
+            if (!faculty || Object.keys(faculty).length === 0) {
+                Logger.info(`${contextLogger.patchFacultyController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { faculty: [] });
+            }
+    
+            Logger.error(`${contextLogger.patchFacultyController} | Successfully updated faculty`);
+            return JsonResponse(res, resMessage.success, 'success', { faculty });
+        } catch (error) {
+            const errorMessage = `${contextLogger.patchFacultyController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async deleteCourse(
+        req: Request,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        const id: string = req.query.id as string;
+        try {
+            const { data: faculty }  = await FacultyService.deleteFacultyByID(id);
+            if (!faculty || Object.keys(faculty).length === 0) {
+                Logger.info(`${contextLogger.deleteCourseController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { faculty: [] });
+            }
+    
+            Logger.info(`${contextLogger.deleteCourseController} | Successfully deleted course`);
+            return JsonResponse(res, resMessage.success, 'success', { faculty });
+        } catch (error) {
+            const errorMessage = `${contextLogger.deleteCourseController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
             return res.boom.badImplementation();
         }
     }
