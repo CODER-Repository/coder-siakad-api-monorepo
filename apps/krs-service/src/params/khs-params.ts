@@ -5,10 +5,11 @@ export const ToSeqWhereKHS = (q: QueryParamsDto) => {
     
     // KEY MAP entity.column
     const mapKeys = {
+        course_name: 'course.course_name',
         nim: 'krs.student.nim',
-        nip: 'class.lecturer.nip',
         student: 'krs.student.full_name',
         lecturer: 'class.lecturer.name',
+        semester: 'semester.semester_id',
     };
 
     for (const key in q) {

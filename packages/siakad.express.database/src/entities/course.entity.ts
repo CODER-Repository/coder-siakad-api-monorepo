@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryColumn, JoinCo
 import { Schedule } from './schedule.entity';
 import { Classroom } from './classroom.entity';
 import { Class } from './class.entity';
+import { KRS } from './krs.entity';
 
 @Entity({ name: 'course' })
 export class Course extends BaseEntity {
@@ -27,4 +28,7 @@ export class Course extends BaseEntity {
     @ManyToOne(() => Class, entityClass => entityClass.course)
     @JoinColumn({ name: 'course_id' })
     classes!: Class;
+
+    @OneToMany(() => KRS, krs => krs.course)
+    krs!: KRS;
 }

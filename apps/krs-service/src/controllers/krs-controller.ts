@@ -30,18 +30,18 @@ export class KRSController {
         const query = queryHelper(where, q.page, q.page_size)
 
         try {
-            const { data: listCourses, pagination} = await KRSService.getListKHS(query);
+            const { data: listKHS, pagination} = await KRSService.getListKHS(query);
 
-            if (!listCourses) {
+            if (!listKHS) {
                 Logger.error(
                     `${contextLogger.getCourseController} 
                     | Error: ${resMessage.emptyData}`
                 );
-                return JsonResponse(res, resMessage.emptyData, 'success', { course: [] });
+                return JsonResponse(res, resMessage.emptyData, 'success', { khs: [] });
             }
 
             Logger.info(`${contextLogger.getCourseController} | ${resMessage.success}`);
-            JsonResponse(res, resMessage.success, 'success', { listCourses, pagination });
+            JsonResponse(res, resMessage.success, 'success', { listKHS, pagination });
         } catch (error) {
             Logger.error(
                 `${contextLogger.getCourseController} 

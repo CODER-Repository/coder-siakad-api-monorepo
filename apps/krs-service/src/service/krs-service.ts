@@ -33,16 +33,18 @@ export class KRSService {
 
             // MAKE QUERY
             const queryBuilder = dbContext
-                .Course()
-                .createQueryBuilder('course')
-                .innerJoinAndSelect('course.krs', 'krs', 'krs.course_id = course.course_id')
-                .innerJoinAndSelect('krs.nim', 'student', 'student.nim = krs.nim')
-                .innerJoinAndSelect('course.class', 'class', 'class.course_id = course.course_id')
-                .innerJoinAndSelect('class.lecturer', 'lecturer', 'lecturer.nip = class.lecturer_id')
-                .orderBy('krs.semester_id', 'ASC')
-                .where(condition, parameters)
-                .skip(offset)
-                .take(limit)
+            .Course()
+            .createQueryBuilder('course')
+            .innerJoinAndSelect('course.krs', 'krs', 'krs.course_id = course.course_id')
+            .innerJoinAndSelect('krs.semester', 'semester', 'semester.semester_id = krs.semester_id')
+            .innerJoinAndSelect('course.schedule', 'schedule', 'schedule.course_id = course.course_id')
+            .innerJoinAndSelect('schedule.lecturer', 'lecturer', 'lecturer.nip = schedule.lecturer_id')
+            .innerJoinAndSelect('schedule.student', 'student', 'student.nim = schedule.nim')
+            .orderBy('krs.semester_id', 'ASC')
+            .where(condition, parameters)
+            .skip(offset)
+            .take(limit)
+        
 
             // GET DATA AND COUNT
             const courses = await queryBuilder.getMany();

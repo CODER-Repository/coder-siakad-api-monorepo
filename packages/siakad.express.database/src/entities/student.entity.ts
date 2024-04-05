@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryColumn, OneToMany } from 'typeorm';
 import { Schedule } from './schedule.entity';
+import { KRS } from './krs.entity';
 
 @Entity({ name: 'student' })
 export class Student extends BaseEntity {
@@ -32,4 +33,7 @@ export class Student extends BaseEntity {
 
   @OneToMany(() => Schedule, schedule => schedule.nim)
   schedule!: Schedule;
+
+  @OneToMany(() => KRS, krs => krs.nim)
+  krs!: KRS;
 }
