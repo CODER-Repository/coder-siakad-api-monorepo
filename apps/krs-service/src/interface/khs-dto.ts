@@ -4,6 +4,7 @@ import { Course } from '@siakad/express.database';
 export interface CreateCourseDto {
     lecturer: string
     course: string
+    course_id: string
     sks: number
     student: string
     nim: string
@@ -13,6 +14,7 @@ export interface CreateCourseDto {
 export const toCreateKHS = (e: Course): CreateCourseDto => ({
     nim: e.schedule[0].student.nim,
     student: e.schedule[0].student.full_name,
+    course_id: e.course_id,
     course: e.course_name,
     sks: e.credit_hours,
     lecturer: e.schedule[0].lecturer.name,
