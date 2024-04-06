@@ -6,8 +6,8 @@ export const ToSeqWhereKHS = (q: QueryParamsDto) => {
     // KEY MAP entity.column
     const mapKeys = {
         course_name: 'course.course_name',
-        nim: 'krs.student.nim',
-        student: 'krs.student.full_name',
+        nim: 'krs.nim',
+        student: 'student.full_name',
         lecturer: 'class.lecturer.name',
         semester: 'semester.semester_id',
         sks:'krs.credit_hours',
