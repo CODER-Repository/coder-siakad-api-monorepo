@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 
-import { BaseResponse } from '@siakad/express.server';
-import { Logger } from '@siakad/express.utils';
+import { BaseResponse, JsonResponse } from '@siakad/express.server';
+import { Logger, contextLogger, queryHelper, resMessage } from '@siakad/express.utils';
 import { KRSService } from '../service/krs-service';
+import { queryKhsValidator } from '../utils/queryValidator';
+import { QueryParamsDto } from '../utils/queryParams';
+import { ToSeqWhereKHS } from '../params/khs-params';
 
 export class KRSController {
     static async showKRS(req: Request, res: Response) {
@@ -14,6 +17,36 @@ export class KRSController {
             );
         } catch (error) {
             Logger.error(`${context} | Error: ${error.message}`);
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async showKHS(
+        req: Request<queryKhsValidator, {}, {}, QueryParamsDto>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        const q: QueryParamsDto = req.query;
+        const where = ToSeqWhereKHS(q);
+        const query = queryHelper(where, q.page, q.page_size)
+
+        try {
+            const { data: listKHS, pagination} = await KRSService.getListKHS(query);
+
+            if (!listKHS) {
+                Logger.error(
+                    `${contextLogger.getCourseController} 
+                    | Error: ${resMessage.emptyData}`
+                );
+                return JsonResponse(res, resMessage.emptyData, 'success', { khs: [] });
+            }
+
+            Logger.info(`${contextLogger.getCourseController} | ${resMessage.success}`);
+            JsonResponse(res, resMessage.success, 'success', { listKHS, pagination });
+        } catch (error) {
+            Logger.error(
+                `${contextLogger.getCourseController} 
+                | Error: ${error.message}`
+            );
             return res.boom.badImplementation();
         }
     }

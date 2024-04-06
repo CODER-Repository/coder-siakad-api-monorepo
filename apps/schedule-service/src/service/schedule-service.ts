@@ -72,17 +72,20 @@ export class ScheduleService {
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+                .innerJoin('schedule.lecturer', 'lecturer', 'schedule.lecturer_id = lecturer.nip')
                 .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
                 .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
                 .select([
                     'schedule.schedule_id AS schedule_id',
+                    'schedule.class_id AS class_id',
+                    'classroom.classroom_id AS classroom_id',
                     'schedule.course_id AS course_id',
+                    'classroom.classroom_name AS classroom_name',
                     'course.course_name AS course_name',
-                    'classroom.classroom_name AS classroom',
+                    'lecturer.name AS lecturer',
+                    'schedule.start_time AS start_time',
+                    'schedule.end_time AS end_time',
                     'faculty.faculty_name AS faculty',
-                    'schedule.start_time AS time_start',
-                    'schedule.end_time AS time_end',
-                    'schedule.class_id AS class_id'
                 ])
                 .where('schedule.nim = :nim', { nim: nim })
                 .andWhere('schedule.day = :day', { day: today })
@@ -99,15 +102,19 @@ export class ScheduleService {
                     status = Status.finished;
                 }
 
+                // TODO create DTO Today Schedule
                 return {
                     schedule_id: schedule.schedule_id,
+                    class_id: schedule.class_id,
+                    classroom_id: schedule.classroom_id,
                     course_id: schedule.course_id,
+                    classroom_name: schedule.classroom_name,
                     course_name: schedule.course_name,
-                    room: schedule.classroom,
-                    faculty: schedule.faculty,
+                    lecturer: schedule.lecturer,
                     time_start: schedule.start_time,
                     time_end: schedule.end_time,
-                    status: status
+                    status: status,
+                    faculty: schedule.faculty,
                 };
             });
 

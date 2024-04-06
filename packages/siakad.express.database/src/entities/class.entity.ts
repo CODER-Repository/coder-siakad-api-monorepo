@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { Lecturer } from './lecture.entity';
 import { Schedule } from './schedule.entity';
-import { Classroom, Course } from '.';
+import { Classroom, Course, Semester } from '.';
 
 @Entity({ name: 'class' })
 export class Class extends BaseEntity {
@@ -34,4 +34,8 @@ export class Class extends BaseEntity {
 
     @OneToMany(() => Course, course => course.classes)
     course!: Course;
+
+    @ManyToOne(() => Semester, semester => semester.classes)
+    @JoinColumn({ name: 'semester_id' })
+    semester!: Semester;
 }

@@ -1,4 +1,7 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from './course.entity';
+import { Student } from './student.entity';
+import { Semester } from './semester.entity';
 
 @Entity({ name: 'krs' })
 export class KRS extends BaseEntity {
@@ -17,4 +20,16 @@ export class KRS extends BaseEntity {
 
     @Column({ type: 'bigint' })
     grade!: string;
+
+    @ManyToOne(() => Course, course => course.krs)
+    @JoinColumn({ name: 'course_id' })
+    course!: Course;
+
+    @ManyToOne(() => Student, student => student.krs)
+    @JoinColumn({ name: 'nim' })
+    student!: Student;
+
+    @ManyToOne(() => Semester, semester => semester.krs)
+    @JoinColumn({ name: 'semester_id' })
+    semester!: Semester;
 }
