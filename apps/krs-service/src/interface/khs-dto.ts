@@ -1,6 +1,24 @@
 import { Course } from '@siakad/express.database';
 
-// TODO JOIN ENTITY
+const gradeCategories = {
+    0: 'E',
+    50: 'D',
+    61: 'C',
+    71: 'B',
+    81: 'A'
+};
+
+// Function to determine category based on grade
+const determineCategory = (grade: number): string => {
+    let category = 'E';
+    Object.keys(gradeCategories).forEach((threshold) => {
+        if (grade >= parseInt(threshold)) {
+            category = gradeCategories[parseInt(threshold)];
+        }
+    });
+    return category;
+};
+
 export interface CreateKHSDto {
     lecturer: string
     course: string
@@ -18,5 +36,10 @@ export const toCreateKHS = (e: Course): CreateKHSDto => ({
     course: e.course_name,
     sks: e.credit_hours,
     lecturer: e.schedule[0].lecturer.name,
-    historyGrades: Array.isArray(e.krs) ? e.krs.map(i => ({ krs_id:i.krs_id, semester_id: i.semester_id, grade: i.grade })) : [],
+    historyGrades: Array.isArray(e.krs) ? e.krs.map(i => ({
+        krs_id: i.krs_id,
+        semester_id: i.semester_id,
+        grade: i.grade,
+        category: determineCategory(i.grade)
+    })) : [],
 });
