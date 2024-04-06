@@ -47,12 +47,12 @@ export class KRSService {
         
 
             // GET DATA AND COUNT
-            const courses = await queryBuilder.getMany();
+            const result = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
             const totalPages = Math.ceil(totalCount / limit);
 
             // RETRIVED DATA & PAGINATION
-            const listKHS = courses.map((item: Course) => toCreateKHS(item));
+            const listKHS = result.map((item: Course) => toCreateKHS(item));
             const pagination = {
                 totalCount,
                 totalPage: totalPages,

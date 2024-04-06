@@ -1,7 +1,7 @@
 import { Course } from '@siakad/express.database';
 
 // TODO JOIN ENTITY
-export interface CreateCourseDto {
+export interface CreateKHSDto {
     lecturer: string
     course: string
     course_id: string
@@ -11,7 +11,7 @@ export interface CreateCourseDto {
     historyGrades: { krs_id: string, semester_id: string, grade: number }[]
 }
 
-export const toCreateKHS = (e: Course): CreateCourseDto => ({
+export const toCreateKHS = (e: Course): CreateKHSDto => ({
     nim: e.schedule[0].student.nim,
     student: e.schedule[0].student.full_name,
     course_id: e.course_id,

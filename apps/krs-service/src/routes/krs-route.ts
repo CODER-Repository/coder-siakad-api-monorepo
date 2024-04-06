@@ -4,7 +4,7 @@ import { AuthContext } from '@siakad/express.server';
 
 const authRouter = Router();
 
-authRouter.route('/listKRS').get(AuthContext, KRSController.showKRS);
-authRouter.route('/listKHS').get(KRSController.showKHS);
+authRouter.route('/listKRS').get(AuthContext,KRSController.showKRS);
+authRouter.route('/listKHS').get(AuthContext,KRSController.showKHS);
 
 export default authRouter;

@@ -10,6 +10,7 @@ export const ToSeqWhereKHS = (q: QueryParamsDto) => {
         student: 'krs.student.full_name',
         lecturer: 'class.lecturer.name',
         semester: 'semester.semester_id',
+        sks:'krs.credit_hours',
     };
 
     for (const key in q) {

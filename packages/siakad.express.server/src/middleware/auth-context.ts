@@ -20,7 +20,7 @@ declare global {
     }
 }
 
-export const AuthContext = (req: Request, res: Response, next: NextFunction) => {
+export const AuthContext = (req: Request<{}, any, any, {}, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction) => {
     try {
         const profile = req.header('X-User-Profile');
         if (!profile) {
