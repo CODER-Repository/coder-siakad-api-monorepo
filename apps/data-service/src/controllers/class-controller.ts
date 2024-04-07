@@ -4,7 +4,7 @@ import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.
 import { ClassService } from '../service/class-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereClass } from '../params/class-params';
-import { CreateClassDto } from '../interface/class-dto';
+import { CreateClassDto, UpdateClassDto } from '../interface/class-dto';
 import { queryClassValidator } from '../utils/queryValidator';
 
 export class ClassController {
@@ -41,7 +41,7 @@ export class ClassController {
     }
 
     static async patchClass(
-        req: Request<{}, {}, CreateClassDto>,
+        req: Request<{}, {}, UpdateClassDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         try {

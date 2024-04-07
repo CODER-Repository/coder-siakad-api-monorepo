@@ -1,6 +1,6 @@
 import { AppDataSource, Class, Classroom, Course, Lecturer, Schedule, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger, buildWhereCondition, queryInterface, Day } from '@siakad/express.utils';
-import { CreateClassDto, toCreateClassDto, toCreateClassDtoBySchedule } from '../interface/class-dto';
+import { CreateClassDto, UpdateClassDto, toCreateClassDto } from '../interface/class-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class ClassService {
@@ -11,12 +11,12 @@ export class ClassService {
 
             // MAKE QUERY
             const queryBuilder = dbContext
-                .Schedule()
-                .createQueryBuilder('schedule')
-                .innerJoinAndSelect('schedule.class', 'class', 'class.class_id = schedule.class_id')
+                .Class()
+                .createQueryBuilder('class')
                 .innerJoinAndSelect('class.classroom', 'classroom', 'class.classroom_id = classroom.classroom_id')
                 .innerJoinAndSelect('class.lecturer', 'lecturer', 'class.lecturer_id = lecturer.nip')
-                .innerJoinAndSelect('schedule.course', 'course', 'schedule.course_id = course.course_id')
+                .innerJoinAndSelect('class.course', 'course', 'class.course_id = course.course_id')
+                .innerJoinAndSelect('class.schedules', 'schedule', 'class.class_id = schedule.class_id')
                 .orderBy('class.class_id', 'ASC')
                 .where(condition, parameters)
                 .skip(offset)
@@ -28,7 +28,7 @@ export class ClassService {
             const totalPages = Math.ceil(totalCount / limit);
 
             // RETRIVED DATA & PAGINATION
-            const listClass = classes.map((classroom: Schedule) => toCreateClassDtoBySchedule(classroom));
+            const listClass = classes.map((classData: Class) => toCreateClassDto(classData));
             const pagination = {
                 totalCount,
                 totalPage: totalPages,
@@ -49,7 +49,7 @@ export class ClassService {
         }
     }
 
-    static async updateDetailClass(payload: CreateClassDto): Promise<CreateDTO> {
+    static async updateDetailClass(payload: UpdateClassDto): Promise<CreateDTO> {
         const { id, course, courseId, classroom, classroomId, nip, lecturer, day, scheduleId, startTime, endTime } = payload;
     
         try {
