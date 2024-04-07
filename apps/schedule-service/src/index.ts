@@ -11,7 +11,7 @@ import { routes } from './routes';
 import { AuthContext } from '@siakad/express.server';
 
 const app: Express = express();
-const port = PORT_SERVICE.scheduleService;
+const port = PORT_SERVICE.scheduleService || 5010;
 
 // Middleware
 app.use(boom());

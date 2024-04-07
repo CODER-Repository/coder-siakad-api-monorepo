@@ -117,9 +117,9 @@ services:
       dockerfile: ./apps/dashboard-service/Dockerfile
     container_name: dashboard-service
     ports:
-      - "5010:5010"
+      - "5006:5006"
     environment:
-      - PORT=5010
+      - PORT=5006
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
