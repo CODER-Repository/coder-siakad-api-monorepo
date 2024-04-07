@@ -45,11 +45,13 @@ export const PORT_SERVICE = {
   mockService: 5002,
   userService: 5003,
   paymentService: 5004,
+  trasncriptService: 5005,
   dashboardService: 5006,
   announceService: 5007,
   krsService: 5008,
   dataService: 5009,
   scheduleService: 5010,
+  attendanceService: 5011,
   // add more
 };
 
