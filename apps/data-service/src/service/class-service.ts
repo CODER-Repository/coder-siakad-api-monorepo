@@ -54,14 +54,14 @@ export class ClassService {
     
         try {
             // Find existing class
-            const isDataExist = await Promise.all([
+            const [existingClass, existingCourse, existingClassroom, existingSchedule] = await Promise.all([
                 Class.findOne({ where: { class_id: id } }),
                 Course.findOne({ where: { course_id: courseId } }),
                 Classroom.findOne({ where: { classroom_id: classroomId } }),
-                Schedule.findOne({ where: { schedule_id: scheduleId } })
+                Schedule.findOne({ where: { schedule_id: scheduleId }})
             ]);
-    
-            if (!isDataExist.some(data => !data)) {
+        
+            if (!existingClass) {
                 Logger.info(`${contextLogger.patchClassService} | Data not found`);
                 return { data: [] };
             }
@@ -98,7 +98,7 @@ export class ClassService {
                 .innerJoinAndSelect('class.course', 'course')
                 .innerJoinAndSelect('class.lecturer', 'lecturer')
                 .innerJoinAndSelect('class.classroom', 'classroom')
-                .innerJoinAndSelect('class.schedule', 'schedule')
+                .innerJoinAndSelect('class.schedules', 'schedule')
                 .where('class.class_id = :id', { id })
                 .getMany();
     
