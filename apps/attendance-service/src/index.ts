@@ -10,7 +10,7 @@ import { DatabaseConnection } from '@siakad/express.database';
 import router from './routes/attendance-route';
 
 const app: Express = express();
-const port = process.env.PORT || PORT_SERVICE.attendanceService;
+const port = process.env.PORT || PORT_SERVICE.attendanceService || 5011;
 
 // Middleware
 app.use(boom());
