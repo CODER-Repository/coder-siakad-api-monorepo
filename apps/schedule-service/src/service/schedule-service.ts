@@ -1,6 +1,7 @@
 import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
-import { Logger, contextLogger, Day, queryInterface } from '@siakad/express.utils';
+import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
+import { DTO } from '../utils/queryParams';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -21,7 +22,7 @@ export class ScheduleService {
                     'course.course_name AS course_name',
                     'classroom.classroom_name AS room',
                     'faculty.faculty_name AS faculty',
-                    'schedule.type AS day'
+                    'schedule.day AS day'
                 ])
                 .getRawMany();
 
@@ -36,7 +37,7 @@ export class ScheduleService {
             };
 
             schedules.forEach((schedule) => {
-                const day = schedule.type.toLowerCase();
+                const day = schedule.day.toLowerCase();
                 result[day].push({
                     schedule_id: schedule.schedule_id,
                     course_id: schedule.course_id,
@@ -59,7 +60,7 @@ export class ScheduleService {
         }
     }
 
-    static async getTodaySchedule(): Promise<Object | Error> {
+    static async getTodaySchedule(nim: string): Promise<Object | Error> {
         try {
             const now = new Date();
             const today: Day = new Date()
@@ -71,19 +72,23 @@ export class ScheduleService {
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+                .innerJoin('schedule.lecturer', 'lecturer', 'schedule.lecturer_id = lecturer.nip')
                 .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
                 .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
                 .select([
                     'schedule.schedule_id AS schedule_id',
+                    'schedule.class_id AS class_id',
+                    'classroom.classroom_id AS classroom_id',
                     'schedule.course_id AS course_id',
+                    'classroom.classroom_name AS classroom_name',
                     'course.course_name AS course_name',
-                    'classroom.classroom_name AS classroom',
+                    'lecturer.name AS lecturer',
+                    'schedule.start_time AS start_time',
+                    'schedule.end_time AS end_time',
                     'faculty.faculty_name AS faculty',
-                    'schedule.start_time AS time_start',
-                    'schedule.end_time AS time_end',
-                    'schedule.class_id AS class_id'
                 ])
-                .where('schedule.type = :type', { type: today })
+                .where('schedule.nim = :nim', { nim: nim })
+                .andWhere('schedule.day = :day', { day: today })
                 .getRawMany();
 
             const todaySchedule = schedules.map((schedule) => {
@@ -97,15 +102,19 @@ export class ScheduleService {
                     status = Status.finished;
                 }
 
+                // TODO create DTO Today Schedule
                 return {
                     schedule_id: schedule.schedule_id,
+                    class_id: schedule.class_id,
+                    classroom_id: schedule.classroom_id,
                     course_id: schedule.course_id,
+                    classroom_name: schedule.classroom_name,
                     course_name: schedule.course_name,
-                    room: schedule.classroom,
-                    faculty: schedule.faculty,
+                    lecturer: schedule.lecturer,
                     time_start: schedule.start_time,
                     time_end: schedule.end_time,
-                    status: status
+                    status: status,
+                    faculty: schedule.faculty,
                 };
             });
 
@@ -116,42 +125,46 @@ export class ScheduleService {
         }
     }
 
-    static async getScheduleList(query: queryInterface): Promise<Object> {
+    static async getScheduleList(query: queryInterface): Promise<DTO> {
         try {
 
             const { limit, offset, where } = query;
-            const schedules = await dbContext.Schedule()
+            const { condition, parameters } = buildWhereCondition(where);
+
+            const queryBuilder = dbContext.Schedule()
                 .createQueryBuilder('schedule')
                 .innerJoin('schedule.student', 'student', 'schedule.nim = student.nim')
                 .innerJoin('schedule.course', 'course', 'schedule.course_id = course.course_id')
+                .innerJoin('schedule.lecturer', 'lecturer', 'schedule.lecturer_id = lecturer.nip')
                 .innerJoin('course.classroom', 'classroom', 'course.classroom_id = classroom.classroom_id')
                 .innerJoin('classroom.faculty', 'faculty', 'classroom.faculty_id = faculty.faculty_id')
                 .select([
                     'schedule.schedule_id AS schedule_id',
+                    'schedule.class_id AS class_id',
+                    'classroom.classroom_id AS classroom_id',
                     'schedule.course_id AS course_id',
+                    'classroom.classroom_name AS classroom_name',
                     'course.course_name AS course_name',
-                    'classroom.classroom_name AS course_room',
+                    'lecturer.name AS lecturer',
+                    'schedule.start_time AS start_time',
+                    'schedule.end_time AS end_time',
                     'faculty.faculty_name AS faculty',
-                    'schedule.start_time AS time_start',
-                    'schedule.end_time AS time_end',
-                    'schedule.class_id AS class_id'
                 ])
-                .where(where)
+                .where(condition, parameters)
                 .skip(offset)
                 .take(limit)
-                .getRawMany();
 
-            const listSchedule = schedules.map((schedule) => ({
-                schedule_id: schedule.schedule_id,
-                course_id: schedule.course_id,
-                course_name: schedule.course.course_name,
-                course_room: schedule.course.classroom.classroom_name,
-                faculty: schedule.course.classroom.faculty,
-                time_start: schedule.start_time,
-                time_end: schedule.end_time
-            }));
+            const schedules = await queryBuilder.getRawMany();
+            const totalCount = await queryBuilder.getCount();
+            const totalPages = Math.ceil(totalCount / limit);
+            const pagination = {
+                totalCount,
+                totalPage: totalPages,
+                page: Math.floor(offset / limit) + 1,
+                size: limit
+            };
 
-            return listSchedule;
+            return { data:schedules, pagination };
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
             throw error;

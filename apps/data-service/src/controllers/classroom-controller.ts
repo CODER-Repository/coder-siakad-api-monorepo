@@ -56,7 +56,7 @@ export class ClassroomController {
             }
     
             Logger.error(`${contextLogger.patchClassroomController} | Successfully updated classroom`);
-            return JsonResponse(res, resMessage.success, 'success', classroom);
+            return JsonResponse(res, resMessage.updated, 'success', classroom);
         } catch (error) {
             const errorMessage = `${contextLogger.patchClassroomController} | Error: ${error.message}`;
             Logger.error(errorMessage);
@@ -72,11 +72,11 @@ export class ClassroomController {
         try {
             const { data: classroom }  = await ClassroomService.deleteClassroomByID(id);
             if (!classroom || Object.keys(classroom).length === 0) {
-                Logger.info(`${contextLogger.deleteClassroomController} | No rows affected`);
-                return JsonResponse(res, resMessage.emptyData, 'success', { classroom: [] });
+                Logger.info(`${contextLogger.deleteClassroomController} | Successfully deleted classroom`);
+                return JsonResponse(res, resMessage.deleted, 'success', { classroom: [] });
             }
     
-            Logger.info(`${contextLogger.deleteClassroomController} | Successfully deleted classroom`);
+            Logger.info(`${contextLogger.deleteClassroomController} | No rows affected`);
             return JsonResponse(res, resMessage.success, 'success', { classroom });
         } catch (error) {
             const errorMessage = `${contextLogger.deleteClassroomController} | Error: ${error.message}`;

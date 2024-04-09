@@ -1,6 +1,6 @@
 import { AppDataSource, Class, Classroom, Course, Lecturer, Schedule, dbContext } from '@siakad/express.database';
 import { Logger, contextLogger, buildWhereCondition, queryInterface, Day } from '@siakad/express.utils';
-import { CreateClassDto, toCreateClassDto } from '../interface/class-dto';
+import { CreateClassDto, UpdateClassDto, toCreateClassDto } from '../interface/class-dto';
 import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class ClassService {
@@ -13,10 +13,10 @@ export class ClassService {
             const queryBuilder = dbContext
                 .Class()
                 .createQueryBuilder('class')
-                .innerJoinAndSelect('class.course', 'course')
-                .innerJoinAndSelect('class.lecturer', 'lecturer')
-                .innerJoinAndSelect('class.classroom', 'classroom')
-                .innerJoinAndSelect('class.schedule', 'schedule')
+                .innerJoinAndSelect('class.classroom', 'classroom', 'class.classroom_id = classroom.classroom_id')
+                .innerJoinAndSelect('class.lecturer', 'lecturer', 'class.lecturer_id = lecturer.nip')
+                .innerJoinAndSelect('class.course', 'course', 'class.course_id = course.course_id')
+                .innerJoinAndSelect('class.schedules', 'schedule', 'class.class_id = schedule.class_id')
                 .orderBy('class.class_id', 'ASC')
                 .where(condition, parameters)
                 .skip(offset)
@@ -28,7 +28,7 @@ export class ClassService {
             const totalPages = Math.ceil(totalCount / limit);
 
             // RETRIVED DATA & PAGINATION
-            const listClass = classes.map((classroom: Class) => toCreateClassDto(classroom));
+            const listClass = classes.map((classData: Class) => toCreateClassDto(classData));
             const pagination = {
                 totalCount,
                 totalPage: totalPages,
@@ -49,19 +49,19 @@ export class ClassService {
         }
     }
 
-    static async updateDetailClass(payload: CreateClassDto): Promise<CreateDTO> {
+    static async updateDetailClass(payload: UpdateClassDto): Promise<CreateDTO> {
         const { id, course, courseId, classroom, classroomId, nip, lecturer, day, scheduleId, startTime, endTime } = payload;
     
         try {
             // Find existing class
-            const isDataExist = await Promise.all([
+            const [existingClass, existingCourse, existingClassroom, existingSchedule] = await Promise.all([
                 Class.findOne({ where: { class_id: id } }),
                 Course.findOne({ where: { course_id: courseId } }),
                 Classroom.findOne({ where: { classroom_id: classroomId } }),
-                Schedule.findOne({ where: { schedule_id: scheduleId } })
+                Schedule.findOne({ where: { schedule_id: scheduleId }})
             ]);
-    
-            if (!isDataExist.some(data => !data)) {
+        
+            if (!existingClass) {
                 Logger.info(`${contextLogger.patchClassService} | Data not found`);
                 return { data: [] };
             }
@@ -86,7 +86,7 @@ export class ClassService {
                 await transaction.update(
                     Schedule,
                     { schedule_id: scheduleId },
-                    { type: Day[day], start_time: startTime, end_time: endTime }
+                    { day: Day[day], start_time: startTime, end_time: endTime }
                 );
         
             });
@@ -98,7 +98,7 @@ export class ClassService {
                 .innerJoinAndSelect('class.course', 'course')
                 .innerJoinAndSelect('class.lecturer', 'lecturer')
                 .innerJoinAndSelect('class.classroom', 'classroom')
-                .innerJoinAndSelect('class.schedule', 'schedule')
+                .innerJoinAndSelect('class.schedules', 'schedule')
                 .where('class.class_id = :id', { id })
                 .getMany();
     

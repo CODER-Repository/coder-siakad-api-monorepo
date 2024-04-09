@@ -23,12 +23,26 @@ spec:
                 port:
                   number: 5001
           - pathType: ImplementationSpecific
+            path: /api/v1/user
+            backend:
+              service:
+                name: siakad-user-api
+                port:
+                  number: 5003
+          - pathType: ImplementationSpecific
             path: /api/v1/payment
             backend:
               service:
                 name: siakad-payment-api
                 port:
                   number: 5004
+          - pathType: ImplementationSpecific
+            path: /api/v1/dashboard
+            backend:
+              service:
+                name: siakad-dashboard-api
+                port:
+                  number: 5006
           - pathType: ImplementationSpecific
             path: /api/v1/announcement
             backend:

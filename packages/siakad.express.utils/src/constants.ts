@@ -45,10 +45,13 @@ export const PORT_SERVICE = {
   mockService: 5002,
   userService: 5003,
   paymentService: 5004,
-  scheduleService: 5005,
+  trasncriptService: 5005,
+  dashboardService: 5006,
+  announceService: 5007,
   krsService: 5008,
   dataService: 5009,
-  dashboardService: 5010
+  scheduleService: 5010,
+  attendanceService: 5011,
   // add more
 };
 
@@ -59,7 +62,10 @@ export const resMessage = {
   emptyData: 'Data is empty',
   success: 'Successfully',
   validationRole: 'Role is not allowed',
-  forbidden: 'Cannot access this API'
+  forbidden: 'Cannot access this API',
+  created: 'Successfully created data',
+  updated: 'Successfully updated data',
+  deleted: 'Successfully deleted data'
   // add more
 };
 
@@ -70,8 +76,8 @@ export const contextLogger = {
 
   // Data Service
   getFacultyController: '[FacultyController.getFaculty]',
-  deleteFacultyController: '[FacultyController.patchClass]',
-  patchFacultyController: '[FacultyController.deleteClass]',
+  deleteFacultyController: '[FacultyController.patchFaculty]',
+  patchFacultyController: '[FacultyController.deleteFaculty]',
   getClassController: '[ClassController.getClass]',
   patchClassController: '[ClassController.patchClass]',
   deleteClassController: '[ClassController.deleteClass]',

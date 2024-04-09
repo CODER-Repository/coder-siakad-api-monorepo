@@ -1,7 +1,7 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Lecturer } from './lecture.entity';
 import { Schedule } from './schedule.entity';
-import { Classroom, Course } from '.';
+import { Classroom, Course, Semester } from '.';
 
 @Entity({ name: 'class' })
 export class Class extends BaseEntity {
@@ -20,9 +20,8 @@ export class Class extends BaseEntity {
     @Column({ type: 'varchar', length: 15 })
     classroom_id!: string;
 
-    @OneToOne(() => Schedule, schedule => schedule.class_id)
-    @JoinColumn({ name: 'class_id' })
-    schedule!: Schedule;
+    @Column({ type: 'varchar', length: 15 })
+    schedule!: string;
 
     @ManyToOne(() => Lecturer, lecturer => lecturer.class)
     @JoinColumn({ name: 'lecturer_id' })
@@ -31,7 +30,15 @@ export class Class extends BaseEntity {
     @ManyToOne(() => Classroom, classroom => classroom.classes)
     @JoinColumn({ name: 'classroom_id' })
     classroom!: Classroom;
+    
+    @OneToMany(() => Schedule, schedules => schedules.class)
+    schedules!: Schedule;
 
-    @OneToMany(() => Course, course => course.classes)
+    @ManyToOne(() => Course, course => course.classes)
+    @JoinColumn({ name: 'course_id' })
     course!: Course;
+
+    @ManyToOne(() => Semester, semester => semester.classes)
+    @JoinColumn({ name: 'semester_id' })
+    semester!: Semester;
 }

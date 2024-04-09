@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Schedule } from '.';
+import { Class, KRS, Schedule } from '.';
 
 @Entity({ name: 'semester' })
 export class Semester extends BaseEntity {
@@ -17,4 +17,10 @@ export class Semester extends BaseEntity {
 
     @OneToMany(() => Schedule, schedule => schedule.schedule_id)
     schedule!: Schedule;
+
+    @OneToMany(() => KRS, krs => krs.semester_id)
+    krs!: KRS;
+
+    @OneToMany(() => Class, classes => classes.semester_id)
+    classes!: Class;
 }

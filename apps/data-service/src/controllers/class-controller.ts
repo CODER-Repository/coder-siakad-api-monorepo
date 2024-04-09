@@ -4,7 +4,7 @@ import { Logger, resMessage, contextLogger, queryHelper } from '@siakad/express.
 import { ClassService } from '../service/class-service';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereClass } from '../params/class-params';
-import { CreateClassDto } from '../interface/class-dto';
+import { CreateClassDto, UpdateClassDto } from '../interface/class-dto';
 import { queryClassValidator } from '../utils/queryValidator';
 
 export class ClassController {
@@ -41,7 +41,7 @@ export class ClassController {
     }
 
     static async patchClass(
-        req: Request<{}, {}, CreateClassDto>,
+        req: Request<{}, {}, UpdateClassDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         try {
@@ -53,7 +53,7 @@ export class ClassController {
             }
     
             Logger.error(`${contextLogger.patchClassController} | Successfully updated class`);
-            return JsonResponse(res, resMessage.success, 'success', classDetail);
+            return JsonResponse(res, resMessage.updated, 'success', classDetail);
         } catch (error) {
             const errorMessage = `${contextLogger.patchClassController} | Error: ${error.message}`;
             Logger.error(errorMessage);
@@ -69,11 +69,11 @@ export class ClassController {
         try {
             const { data: result }  = await ClassService.deleteClassByID(id);
             if (!result || Object.keys(result).length === 0) {
-                Logger.info(`${contextLogger.deleteClassController} | No rows affected`);
-                return JsonResponse(res, resMessage.emptyData, 'success', { data: [] });
+                Logger.info(`${contextLogger.deleteClassController} | Successfully deleted class`);
+                return JsonResponse(res, resMessage.deleted, 'success', { data: [] });
             }
     
-            Logger.info(`${contextLogger.deleteClassController} | Successfully deleted class`);
+            Logger.info(`${contextLogger.deleteClassController} | No rows affected`);
             return JsonResponse(res, resMessage.success, 'success', { result });
         } catch (error) {
             const errorMessage = `${contextLogger.deleteClassController} | Error: ${error.message}`;
