@@ -283,7 +283,7 @@ services:
       SECRET: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
       ISSUER: "siakad-service"
       # Allow plugins to be used. The plugin name is your JS file name e.g. hello.js
-      KONG_PLUGINS: bundled,auth
+      KONG_PLUGINS: bundled,auth,cors
       KONG_RESPONSE_TRANSFORMER_REMOVE_HEADERS: false
     ports:
       - "8000:8000/tcp"
