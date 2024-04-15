@@ -9,7 +9,7 @@ export const ToSeqWhereClass = (q: QueryParamsDto) => {
         class: 'class.class_name',
         courseId: 'course.course_id',
         courseName: 'course.course_name',
-        scheduleId: 'schedule.scheduleId',
+        scheduleId: 'schedule.schedule_id',
         day: 'schedule.day',
         startTime: 'schedule.start_time',
         endTime: 'schedule.end_time'
