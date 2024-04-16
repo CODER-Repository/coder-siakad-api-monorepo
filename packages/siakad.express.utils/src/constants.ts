@@ -125,7 +125,16 @@ export const contextLogger = {
   getScheduleListService: '[ScheduleService.getListSchedule]',
 
   //User Servicie
-  updateUser: '[UserController.updateUser]'
+  updateUser: '[UserController.updateUser]',
+
+  //krs service
+  getKHSController: '[KHSController.getKHSList]',
+  getKRSController: '[KRSController.getKRSList]',
+  patchKHSGradeController: '[KHSController.updateGrade]',
+
+  getKHSService: '[KHSService.getKHSList]',
+  getKRSService: '[KRSService.getKRSList]',
+  patchKHSGradeService: '[KHSService.updateGrade]'
 
   // add more
 };

@@ -6,6 +6,7 @@ import { KRSService } from '../service/krs-service';
 import { queryKhsValidator } from '../utils/queryValidator';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereKHS } from '../params/khs-params';
+import { UpdateGradeDto } from '../interface/khs-dto';
 
 export class KRSController {
     static async showKRS(req: Request, res: Response) {
@@ -33,20 +34,37 @@ export class KRSController {
             const { data: listKHS, pagination} = await KRSService.getListKHS(query);
 
             if (!listKHS) {
-                Logger.error(
-                    `${contextLogger.getCourseController} 
-                    | Error: ${resMessage.emptyData}`
+                Logger.error(`${contextLogger.getKHSController} | Error: ${resMessage.emptyData}`
                 );
                 return JsonResponse(res, resMessage.emptyData, 'success', { khs: [] });
             }
 
-            Logger.info(`${contextLogger.getCourseController} | ${resMessage.success}`);
+            Logger.info(`${contextLogger.getKHSController} | ${resMessage.success}`);
             JsonResponse(res, resMessage.success, 'success', { listKHS, pagination });
         } catch (error) {
-            Logger.error(
-                `${contextLogger.getCourseController} 
-                | Error: ${error.message}`
+            Logger.error(`${contextLogger.getKHSController} | Error: ${error.message}`
             );
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async patchKHSGrade(
+        req: Request<{}, {}, UpdateGradeDto>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const payload = req.body;
+            const { data: grades }  = await KRSService.updateGradeByID(payload);
+            if (!grades || Object.keys(grades).length === 0) {
+                Logger.info(`${contextLogger.patchKHSGradeController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { grades: [] });
+            }
+    
+            Logger.info(`${contextLogger.patchKHSGradeController} | Successfully updated listKHS`);
+            return JsonResponse(res, resMessage.updated, 'success', grades );
+        } catch (error) {
+            const errorMessage = `${contextLogger.patchKHSGradeController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
             return res.boom.badImplementation();
         }
     }
