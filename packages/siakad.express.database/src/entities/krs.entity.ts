@@ -19,7 +19,7 @@ export class KRS extends BaseEntity {
     semester_id!: string;
 
     @Column({ type: 'bigint' })
-    grade!: string;
+    grade!: number;
 
     @ManyToOne(() => Course, course => course.krs)
     @JoinColumn({ name: 'course_id' })

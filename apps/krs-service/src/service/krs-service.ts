@@ -99,7 +99,8 @@ export class KRSService {
                 .execute();
 
             Logger.info(`${contextLogger.patchKHSGradeService} | data updated successfully`);
-            return { data: existingData };
+            const updatedData = await dbContext.KRS().findOne({ where: condition });
+            return { data: updatedData };
 
         } catch (error) {
             Logger.error(`${contextLogger.patchKHSGradeService} | Error: ${error.message}`);

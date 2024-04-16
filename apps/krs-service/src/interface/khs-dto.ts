@@ -31,7 +31,7 @@ export interface CreateKHSDto {
 
 export interface UpdateGradeDto {
     nim: string
-    grade: string
+    grade: number
     semesterID: string
     courseID: string,
 }
