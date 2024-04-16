@@ -1,7 +1,7 @@
 import { Course, KRS, dbContext } from '@siakad/express.database';
 import { Logger, buildWhereCondition, contextLogger, queryInterface } from '@siakad/express.utils';
 import { CreateDTO, DTO } from '../utils/queryParams';
-import { toCreateKHS } from '../interface/khs-dto';
+import { UpdateGradeDto, toCreateKHS } from '../interface/khs-dto';
 
 export class KRSService {
     static async showKRS(): Promise<KRS[]> {
@@ -67,19 +67,19 @@ export class KRSService {
         }
     }
 
-    static async updateGradeByID(payload: any): Promise<CreateDTO> {
-        const { grade, courseID, smesterID, nim } = payload;
+    static async updateGradeByID(payload: UpdateGradeDto): Promise<CreateDTO> {
+        const { grade, courseID, semesterID, nim } = payload;
 
         // KRS ENTITY
         const updateData = {
             grade: grade,
             course_id: courseID,
-            semester_id: smesterID,
+            semester_id: semesterID,
         };
 
         const condition = {
             course_id: courseID,
-            semester_id: smesterID,
+            semester_id: semesterID,
             nim: nim,
         };
 

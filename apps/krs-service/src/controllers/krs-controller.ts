@@ -6,6 +6,7 @@ import { KRSService } from '../service/krs-service';
 import { queryKhsValidator } from '../utils/queryValidator';
 import { QueryParamsDto } from '../utils/queryParams';
 import { ToSeqWhereKHS } from '../params/khs-params';
+import { UpdateGradeDto } from '../interface/khs-dto';
 
 export class KRSController {
     static async showKRS(req: Request, res: Response) {
@@ -48,7 +49,7 @@ export class KRSController {
     }
 
     static async patchKHSGrade(
-        req: Request<{}, {}, {}>,
+        req: Request<{}, {}, UpdateGradeDto>,
         res: Response
     ): Promise<void | Express.BoomError<null>> {
         try {

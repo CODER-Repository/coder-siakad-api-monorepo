@@ -29,6 +29,13 @@ export interface CreateKHSDto {
     historyGrades: { krs_id: string, semester_id: string, grade: number }[]
 }
 
+export interface UpdateGradeDto {
+    nim: string
+    grade: string
+    semesterID: string
+    courseID: string,
+}
+
 export const toCreateKHS = (e: Course): CreateKHSDto => ({
     nim: e.schedule[0].student.nim,
     student: e.schedule[0].student.full_name,
