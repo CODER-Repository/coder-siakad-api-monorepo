@@ -18,4 +18,27 @@ export class AttendanceController {
             return res.boom.badImplementation();
         }
     }
+    static async createAttendance(req: Request, res: Response) {
+        const context = '[AttendanceController.createAttendance]';
+        try {
+            const attendances = req.body;
+            if (!Array.isArray(attendances)) {
+                return res.boom.badRequest('Invalid input, array of attendance data required');
+            }
+            console.log(attendances);
+            const createdAttendances = await AttendanceService.createAttendance(attendances);
+    
+            if (createdAttendances && createdAttendances.length) {
+                return res.json(
+                    BaseResponse.successResponse(createdAttendances, 'Attendance created successfully')
+                );
+            } else {
+                return res.boom.badRequest('No attendance records were created, check input data');
+            }
+        } catch (error) {
+            Logger.error(`${context} | Error: ${error.message}`);
+            return res.boom.badImplementation('Failed to create attendance records');
+        }
+    }
+    
 }

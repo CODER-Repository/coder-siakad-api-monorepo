@@ -23,6 +23,7 @@ declare global {
 export const AuthContext = (req: Request<{}, {}, {}, {}, Record<string, {}>>, res: Response<{}, Record<string, {}>>, next: NextFunction): Response<{}, Record<string, {}>> | void => {
     try {
         const profileString: string| null = req.header('X-User-Profile') || null;
+        console.log('Tes'+profileString?.toString());
         if (!profileString) {
             return res.status(401).json(BaseResponse.unauthorizedResponse('Unauthorized'));
         }

@@ -6,4 +6,6 @@ const authRouter = Router();
 
 authRouter.route('/').get( AuthContext, AttendanceController.showAttendance);
 
+authRouter.route('/').post( AttendanceController.createAttendance);
+
 export default authRouter;
