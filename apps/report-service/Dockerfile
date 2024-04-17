@@ -7,7 +7,7 @@ RUN apk update
 WORKDIR /app
 RUN npm i -g turbo
 COPY . .
-RUN turbo prune --scope=attendance-service --docker
+RUN turbo prune --scope=report-service --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -25,7 +25,7 @@ RUN npm install
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN npx turbo build --filter=attendance-service...
+RUN npx turbo build --filter=report-service...
 
 FROM base AS runner
 WORKDIR /app
@@ -36,4 +36,4 @@ RUN adduser --system --uid 1001 expressjs
 USER expressjs
 COPY --from=installer /app .
 
-CMD node apps/attendance-service/dist/index.js
+CMD node apps/report-service/dist/index.js
