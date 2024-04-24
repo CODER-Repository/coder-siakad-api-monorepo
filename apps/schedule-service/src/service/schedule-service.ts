@@ -1,7 +1,7 @@
 import { dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -167,6 +167,31 @@ export class ScheduleService {
             return { data:schedules, pagination };
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
+            throw error;
+        }
+    }
+
+    static async deleteScheduleByID(id: string): Promise<CreateDTO> {
+        try {
+            const existingSchedule = await dbContext.Schedule().findOne({ where: { schedule_id: id } });
+            if (!existingSchedule) {
+                Logger.info(`${contextLogger.deleteScheduleService} | Schedule not found`);
+                return { data: [] };
+            }
+
+            const deleteResult = await dbContext
+                .Schedule()
+                .createQueryBuilder('schedule')
+                .delete()
+                .where('schedule.schedule_id = :id', { id })
+                .execute();
+    
+            Logger.info(`${contextLogger.deleteScheduleService} | Schedule deleted successfully`);
+            return { data: deleteResult };
+        } catch (error) {
+            Logger.error(
+                `${contextLogger.deleteScheduleService} | Error: ${error.message}`
+            );
             throw error;
         }
     }

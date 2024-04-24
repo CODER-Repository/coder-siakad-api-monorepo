@@ -119,10 +119,18 @@ export const contextLogger = {
     '[ScheduleController.getCurrentScheduleController]',
   getScheduleListController:
     '[ScheduleController.getScheduleListController]',
+  patchScheduleController:
+    '[ScheduleController.patchScheduleController]',
+  deleteScheduleController:
+    '[ScheduleController.deleteScheduleController]',
 
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
   getScheduleListService: '[ScheduleService.getListSchedule]',
+  patchScheduleService:
+    '[ScheduleService.patchScheduleService]',
+  deleteScheduleService:
+    '[ScheduleService.deleteScheduleService]',
 
   //User Servicie
   updateUser: '[UserController.updateUser]',

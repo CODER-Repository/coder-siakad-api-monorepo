@@ -101,4 +101,25 @@ export class ScheduleController {
             return res.boom.badImplementation();
         }
     }
+
+    static async deleteSchedule(
+        req: Request,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        const id: string = req.query.id as string;
+        try {
+            const { data: schedule }  = await ScheduleService.deleteScheduleByID(id);
+            if (!schedule || Object.keys(schedule).length === 0) {
+                Logger.info(`${contextLogger.deleteScheduleController} | Successfully deleted schedule`);
+                return JsonResponse(res, resMessage.deleted, 'success', schedule);
+            }
+    
+            Logger.info(`${contextLogger.deleteCourseController} | No row affected`);
+            return JsonResponse(res, resMessage.success, 'success', schedule);
+        } catch (error) {
+            const errorMessage = `${contextLogger.deleteScheduleController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
 }
