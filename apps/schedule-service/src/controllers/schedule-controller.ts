@@ -6,6 +6,7 @@ import { QueryParamsDto } from '../utils/queryParams';
 import { Day } from '@siakad/express.database/dist/entities/schedule.entity';
 import { ToSeqWhereSchedule } from '../params/scheduler-params';
 import { queryValidator } from '../utils/queryValidator';
+import { CreateScheduleDTO } from '../interface/schedule-dto';
 
 export class ScheduleController {
     static async getCurrentSchedule(
@@ -118,6 +119,27 @@ export class ScheduleController {
             return JsonResponse(res, resMessage.success, 'success', schedule);
         } catch (error) {
             const errorMessage = `${contextLogger.deleteScheduleController} | Error: ${error.message}`;
+            Logger.error(errorMessage);
+            return res.boom.badImplementation();
+        }
+    }
+
+    static async patchSchedule(
+        req: Request<{}, {}, CreateScheduleDTO>,
+        res: Response
+    ): Promise<void | Express.BoomError<null>> {
+        try {
+            const payload = req.body;
+            const { data: schedule }  = await ScheduleService.patchCourseByID(payload);
+            if (!schedule || Object.keys(schedule).length === 0) {
+                Logger.info(`${contextLogger.patchScheduleController} | No rows affected`);
+                return JsonResponse(res, resMessage.emptyData, 'success', { schedule: [] });
+            }
+    
+            Logger.error(`${contextLogger.patchScheduleController} | Successfully updated schedule`);
+            return JsonResponse(res, resMessage.updated, 'success', { schedule });
+        } catch (error) {
+            const errorMessage = `${contextLogger.patchScheduleController} | Error: ${error.message}`;
             Logger.error(errorMessage);
             return res.boom.badImplementation();
         }

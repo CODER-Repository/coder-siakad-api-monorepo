@@ -1,7 +1,8 @@
-import { dbContext } from '@siakad/express.database';
+import { Schedule, dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
 import { CreateDTO, DTO } from '../utils/queryParams';
+import { CreateScheduleDTO } from '../interface/schedule-dto';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -189,10 +190,43 @@ export class ScheduleService {
             Logger.info(`${contextLogger.deleteScheduleService} | Schedule deleted successfully`);
             return { data: deleteResult };
         } catch (error) {
-            Logger.error(
-                `${contextLogger.deleteScheduleService} | Error: ${error.message}`
-            );
+            Logger.error(`${contextLogger.deleteScheduleService} | Error: ${error.message}`);
             throw error;
+        }
+    }
+
+    static async patchCourseByID(payload: CreateScheduleDTO): Promise<CreateDTO> {
+        const { id, startTime, endTime, } = payload;
+
+        // COURSE ENTITY
+        const updateData = {
+            start_time: startTime,
+            end_time: endTime,
+        };
+
+        const condition = { schedule_id: id };
+
+        try {
+            await dbContext.Schedule()
+                .createQueryBuilder('schedule')
+                .update(Schedule)
+                .set(updateData)
+                .where(condition)
+                .execute();
+
+            // Find existing schedule
+            const existingSchedule = await dbContext.Schedule().findOne({ where: { schedule_id: id } });
+            if (!existingSchedule) {
+                Logger.info(`${contextLogger.patchScheduleService} | schedule not found`);
+                return { data: [] };
+            }
+
+            Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
+            return { data: existingSchedule };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchScheduleService} | Error: ${error.message}`);
+            return { data: [] };
         }
     }
 }
