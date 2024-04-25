@@ -4,6 +4,8 @@ import { AuthContext } from '@siakad/express.server';
 
 const authRouter = Router();
 
-authRouter.route('/').get( AuthContext, AttendanceController.showAttendance);
+authRouter.route('/')
+    .get( AuthContext, AttendanceController.showAttendance)
+    .post( AuthContext, AttendanceController.createAttendance);
 
 export default authRouter;
