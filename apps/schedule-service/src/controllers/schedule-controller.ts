@@ -130,7 +130,7 @@ export class ScheduleController {
     ): Promise<void | Express.BoomError<null>> {
         try {
             const payload = req.body;
-            const { data: schedule }  = await ScheduleService.patchCourseByID(payload);
+            const { data: schedule }  = await ScheduleService.patchScheduleByID(payload);
             if (!schedule || Object.keys(schedule).length === 0) {
                 Logger.info(`${contextLogger.patchScheduleController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { schedule: [] });

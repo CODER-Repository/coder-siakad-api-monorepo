@@ -195,7 +195,7 @@ export class ScheduleService {
         }
     }
 
-    static async patchCourseByID(payload: CreateScheduleDTO): Promise<CreateDTO> {
+    static async patchScheduleByID(payload: CreateScheduleDTO): Promise<CreateDTO> {
         const { id, startTime, endTime, } = payload;
 
         // COURSE ENTITY
