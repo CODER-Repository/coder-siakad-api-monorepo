@@ -51,7 +51,7 @@ export const PORT_SERVICE = {
   krsService: 5008,
   dataService: 5009,
   scheduleService: 5010,
-  attendanceService: 5011,
+  reportService: 5011,
   // add more
 };
 
@@ -119,10 +119,22 @@ export const contextLogger = {
     '[ScheduleController.getCurrentScheduleController]',
   getScheduleListController:
     '[ScheduleController.getScheduleListController]',
+  postScheduleController:
+    '[ScheduleController.postScheduleController]',
+  patchScheduleController:
+    '[ScheduleController.patchScheduleController]',
+  deleteScheduleController:
+    '[ScheduleController.deleteScheduleController]',
 
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
   getScheduleListService: '[ScheduleService.getListSchedule]',
+  postScheduleService:
+  '[ScheduleService.postScheduleService]',
+  patchScheduleService:
+    '[ScheduleService.patchScheduleService]',
+  deleteScheduleService:
+    '[ScheduleService.deleteScheduleService]',
 
   //User Servicie
   updateUser: '[UserController.updateUser]',

@@ -1,7 +1,9 @@
-import { dbContext } from '@siakad/express.database';
+import { Schedule, dbContext } from '@siakad/express.database';
 import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
-import { DTO } from '../utils/queryParams';
+import { CreateDTO, DTO } from '../utils/queryParams';
+import { CreateScheduleDTO } from '../interface/schedule-dto';
+import { EntityManager } from 'typeorm';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -168,6 +170,90 @@ export class ScheduleService {
         } catch (error) {
             Logger.error(`Error: ${error.message}`);
             throw error;
+        }
+    }
+
+    static async deleteScheduleByID(id: string): Promise<CreateDTO> {
+        try {
+            const existingSchedule = await dbContext.Schedule().findOne({ where: { schedule_id: id } });
+            if (!existingSchedule) {
+                Logger.info(`${contextLogger.deleteScheduleService} | Schedule not found`);
+                return { data: [] };
+            }
+
+            const deleteResult = await dbContext
+                .Schedule()
+                .createQueryBuilder('schedule')
+                .delete()
+                .where('schedule.schedule_id = :id', { id })
+                .execute();
+    
+            Logger.info(`${contextLogger.deleteScheduleService} | Schedule deleted successfully`);
+            return { data: deleteResult };
+        } catch (error) {
+            Logger.error(`${contextLogger.deleteScheduleService} | Error: ${error.message}`);
+            throw error;
+        }
+    }
+
+    static async patchScheduleByID(payload: CreateScheduleDTO): Promise<CreateDTO> {
+        const { id, startTime, endTime, } = payload;
+
+        // COURSE ENTITY
+        const updateData = {
+            start_time: startTime,
+            end_time: endTime,
+        };
+
+        const condition = { schedule_id: id };
+
+        try {
+            await dbContext.Schedule()
+                .createQueryBuilder('schedule')
+                .update(Schedule)
+                .set(updateData)
+                .where(condition)
+                .execute();
+
+            // Find existing schedule
+            const existingSchedule = await dbContext.Schedule().findOne({ where: { schedule_id: id } });
+            if (!existingSchedule) {
+                Logger.info(`${contextLogger.patchScheduleService} | schedule not found`);
+                return { data: [] };
+            }
+
+            Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
+            return { data: existingSchedule };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchScheduleService} | Error: ${error.message}`);
+            return { data: [] };
+        }
+    }
+
+    static async createScheduleByClass( transaction: EntityManager,payload: CreateScheduleDTO): Promise<CreateDTO> {
+        const { classID, nip, courseID, nim, day, startTime, endTime, semesterID } = payload;
+        try {
+            //POST HERE
+            const schedule = dbContext.Schedule().create({
+                class_id: classID,
+                lecturer_id: nip,
+                course_id: courseID,
+                nim: nim,
+                day: Day[day],
+                start_time: startTime,
+                end_time: endTime,
+                semester_id: semesterID
+            });
+    
+            await transaction.save(schedule);
+
+            Logger.info(`${contextLogger.postScheduleService} | schedule create successfully`);
+            return { data: schedule };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.postScheduleService} | Error: ${error.message}`);
+            return { data: [] };
         }
     }
 }
