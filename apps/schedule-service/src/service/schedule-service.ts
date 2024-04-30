@@ -232,18 +232,21 @@ export class ScheduleService {
     }
 
     static async createScheduleByClass( transaction: EntityManager,payload: CreateScheduleDTO): Promise<CreateDTO> {
+        const { classID, nip, courseID, nim, day, startTime, endTime, semesterID } = payload;
         try {
             //POST HERE
-            const schedule = dbContext.Schedule().create();
-            schedule.class_id = payload.classID;
-            schedule.lecturer_id = payload.nip;
-            schedule.course_id = payload.courseID;
-            schedule.nim = payload.nim;
-            schedule.day = Day[payload.day];
-            schedule.start_time = payload.startTime;
-            schedule.end_time = payload.endTime;
-            schedule.semester_id = payload.semesterID;
-            transaction.save(schedule);
+            const schedule = dbContext.Schedule().create({
+                class_id: classID,
+                lecturer_id: nip,
+                course_id: courseID,
+                nim: nim,
+                day: Day[day],
+                start_time: startTime,
+                end_time: endTime,
+                semester_id: semesterID
+            });
+    
+            await transaction.save(schedule);
 
             Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
             return { data: schedule };
