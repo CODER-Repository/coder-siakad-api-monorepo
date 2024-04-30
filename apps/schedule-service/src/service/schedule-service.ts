@@ -248,11 +248,11 @@ export class ScheduleService {
     
             await transaction.save(schedule);
 
-            Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
+            Logger.info(`${contextLogger.postScheduleService} | schedule create successfully`);
             return { data: schedule };
 
         } catch (error) {
-            Logger.error(`${contextLogger.patchScheduleService} | Error: ${error.message}`);
+            Logger.error(`${contextLogger.postScheduleService} | Error: ${error.message}`);
             return { data: [] };
         }
     }

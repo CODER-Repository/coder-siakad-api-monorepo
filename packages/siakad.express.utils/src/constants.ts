@@ -119,6 +119,8 @@ export const contextLogger = {
     '[ScheduleController.getCurrentScheduleController]',
   getScheduleListController:
     '[ScheduleController.getScheduleListController]',
+  postScheduleController:
+    '[ScheduleController.postScheduleController]',
   patchScheduleController:
     '[ScheduleController.patchScheduleController]',
   deleteScheduleController:
@@ -127,6 +129,8 @@ export const contextLogger = {
   getTodayScheduleService: '[ScheduleService.getTodaySchedule]',
   getCurrentScheduleService: '[ScheduleService.getCurrentSchedule]',
   getScheduleListService: '[ScheduleService.getListSchedule]',
+  postScheduleService:
+  '[ScheduleService.postScheduleService]',
   patchScheduleService:
     '[ScheduleService.patchScheduleService]',
   deleteScheduleService:

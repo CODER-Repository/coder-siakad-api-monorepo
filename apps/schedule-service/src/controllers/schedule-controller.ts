@@ -163,14 +163,14 @@ export class ScheduleController {
             });
 
             if (!schedule || Object.keys(schedule).length === 0) {
-                Logger.info(`${contextLogger.patchScheduleController} | No rows affected`);
+                Logger.info(`${contextLogger.postScheduleController} | No rows affected`);
                 return JsonResponse(res, resMessage.emptyData, 'success', { schedule: [] });
             }
     
-            Logger.error(`${contextLogger.patchScheduleController} | Successfully created schedule`);
+            Logger.error(`${contextLogger.postScheduleController} | Successfully created schedule`);
             return JsonResponse(res, resMessage.updated, 'success', { schedule });
         } catch (error) {
-            const errorMessage = `${contextLogger.patchScheduleController} | Error: ${error.message}`;
+            const errorMessage = `${contextLogger.postScheduleController} | Error: ${error.message}`;
             Logger.error(errorMessage);
             return res.boom.badImplementation();
         }
