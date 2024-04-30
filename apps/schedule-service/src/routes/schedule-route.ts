@@ -9,5 +9,6 @@ scheduleRoute.route('/today').get(AuthContext,ScheduleController.getTodaySchedul
 scheduleRoute.route('/list').get(AuthContext, ScheduleController.getScheduleList);
 scheduleRoute.route('/delete').delete(AuthContext,ScheduleController.deleteSchedule);
 scheduleRoute.route('/update').patch(AuthContext,ScheduleController.patchSchedule);
+scheduleRoute.route('/create').post(AuthContext,ScheduleController.createSchedule);
 
 export default scheduleRoute;

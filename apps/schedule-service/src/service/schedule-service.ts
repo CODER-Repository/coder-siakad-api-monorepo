@@ -3,6 +3,7 @@ import { CurrentSchedule, Status } from '../interface/schedule-interface';
 import { Logger, contextLogger, Day, queryInterface, buildWhereCondition } from '@siakad/express.utils';
 import { CreateDTO, DTO } from '../utils/queryParams';
 import { CreateScheduleDTO } from '../interface/schedule-dto';
+import { EntityManager } from 'typeorm';
 
 export class ScheduleService {
     static async getCurrentSchedule(nim: string): Promise<CurrentSchedule> {
@@ -223,6 +224,29 @@ export class ScheduleService {
 
             Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
             return { data: existingSchedule };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchScheduleService} | Error: ${error.message}`);
+            return { data: [] };
+        }
+    }
+
+    static async createScheduleByClass( transaction: EntityManager,payload: CreateScheduleDTO): Promise<CreateDTO> {
+        try {
+            //POST HERE
+            const schedule = dbContext.Schedule().create();
+            schedule.class_id = payload.classID;
+            schedule.lecturer_id = payload.nip;
+            schedule.course_id = payload.courseID;
+            schedule.nim = payload.nim;
+            schedule.day = Day[payload.day];
+            schedule.start_time = payload.startTime;
+            schedule.end_time = payload.endTime;
+            schedule.semester_id = payload.semesterID;
+            transaction.save(schedule);
+
+            Logger.info(`${contextLogger.patchScheduleService} | schedule updated successfully`);
+            return { data: schedule };
 
         } catch (error) {
             Logger.error(`${contextLogger.patchScheduleService} | Error: ${error.message}`);
