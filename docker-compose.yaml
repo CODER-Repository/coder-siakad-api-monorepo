@@ -81,7 +81,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=coder-siakad
       - DB_SSL=false
-      - JWT_SECRET=c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad
+      - JWT_SECRET=example-secret
     networks:
       - siakad-network
     depends_on:
@@ -159,9 +159,9 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - DB_DATABASE=coder-siakad
-      - CLOUDINARY_CLOUD_NAME=dsgv7kpmq
-      - CLOUDINARY_API_KEY=211669514833157
-      - CLOUDINARY_API_SECRET=0w1ckZHtqg8Uyp9zfOwmVZJv4w8
+      - CLOUDINARY_CLOUD_NAME=
+      - CLOUDINARY_API_KEY=
+      - CLOUDINARY_API_SECRET=
     ports:
       - "5004:5004"
     networks:
@@ -180,12 +180,9 @@ services:
       - PORT=5007
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
-      #      - DB_HOST=ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
       - DB_PORT=5432
       - DB_DATABASE=coder-siakad
-      #      - DB_USERNAME=oktariorifqi
       - DB_USERNAME=postgres
-      #      - DB_PASSWORD=WbVHOqg0m6Gw
       - DB_PASSWORD=postgres
     ports:
       - "5007:5007"
@@ -266,23 +263,19 @@ services:
     volumes:
       - ./apps/kong-gateway-service/config:/etc/kong/declarative
     environment:
-      # Use the config defined in config/kong.yml
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /etc/kong/declarative/kong.yml
-      # Show all output in the terminal when running with Docker
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
-      # Enable the JS plugin server
       KONG_PLUGINSERVER_NAMES: js
       KONG_PLUGINSERVER_JS_SOCKET: /usr/local/kong/js_pluginserver.sock
       KONG_PLUGINSERVER_JS_START_CMD: /usr/local/bin/kong-js-pluginserver -v --plugins-directory /usr/local/kong/js-plugins
       KONG_PLUGINSERVER_JS_QUERY_CMD: /usr/local/bin/kong-js-pluginserver --plugins-directory /usr/local/kong/js-plugins --dump-all-plugins
       KONG_LOG_LEVEL: debug
-      SECRET: "c70012035ab511e9c577c63366878648546aa5361537063306161537177330ad"
+      SECRET: "example-secret"
       ISSUER: "siakad-service"
-      # Allow plugins to be used. The plugin name is your JS file name e.g. hello.js
       KONG_PLUGINS: bundled,auth,cors
       KONG_RESPONSE_TRANSFORMER_REMOVE_HEADERS: false
     ports:

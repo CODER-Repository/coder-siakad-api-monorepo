@@ -19,23 +19,23 @@ spec:
             - name: PORT
               value: "5004"
             - name: DB_HOST
-              value: "ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech"
+              value: ""
             - name: DB_PORT
-              value: "5432"
+              value: ""
             - name: DB_USERNAME
-              value: oktariorifqi
+              value: ""
             - name: DB_PASSWORD
-              value: WbVHOqg0m6Gw
+              value: ""
             - name: DB_DATABASE
-              value: coder-siakad
+              value: ""
             - name: DB_SSL_MODE
               value: "require"
             - name: CLOUDINARY_CLOUD_NAME
-              value: dsgv7kpmq
+              value: ""
             - name: CLOUDINARY_API_KEY
-              value: "211669514833157"
+              value: ""
             - name: CLOUDINARY_API_SECRET
-              value: 0w1ckZHtqg8Uyp9zfOwmVZJv4w8
+              value: ""
       imagePullSecrets:
         - name: ghcr-secret
 

@@ -19,15 +19,15 @@ spec:
           - name: PORT
             value: "5005"
           - name: DB_HOST
-            value: ep-raspy-glitter-a1fuh4un-pooler.ap-southeast-1.aws.neon.tech
+            value: ""
           - name: DB_PORT
             value: "5432"
           - name: DB_USER
-            value: oktariorifqi
+            value: ""
           - name: DB_PASSWORD
-            value: WbVHOqg0m6Gw
+            value: ""
           - name: DB_NAME
-            value: coder-siakad
+            value: ""
           - name: DB_SSL
             value: "true"
       imagePullSecrets:

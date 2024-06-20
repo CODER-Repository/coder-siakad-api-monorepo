@@ -22,7 +22,7 @@ jobs:
         with:
           registry: ghcr.io
           username: coder-automation
-          password: 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
+          password: ${{ secrets.GH_TOKEN }}
 
       - name: Checkout Repository
         uses: actions/checkout@v3
