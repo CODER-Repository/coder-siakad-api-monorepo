@@ -2,6 +2,7 @@ import {
   Address,
   Administrator,
   Announcement,
+  Attendance,
   Class,
   EvaluationLecturer,
   EvaluationReportLecturer,
@@ -30,6 +31,7 @@ interface DbContext {
   Address: () => typeof Address;
   Administrator: () => typeof Administrator;
   Announcement: () => typeof Announcement;
+  Attendance: () => typeof Attendance;  
   Class: () => typeof Class;
   EvaluationLecturer: () => typeof EvaluationLecturer;
   EvaluationReportLecturer: () => typeof EvaluationReportLecturer;
@@ -56,6 +58,7 @@ export class DbContextClass implements DbContext {
   Address = () => Address;
   Administrator = () => Administrator;
   Announcement = () => Announcement;
+  Attendance = () => Attendance;
   Class = () => Class;
   EvaluationLecturer = () => EvaluationLecturer;
   EvaluationReportLecturer = () => EvaluationReportLecturer;

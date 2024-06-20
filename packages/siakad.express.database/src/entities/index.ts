@@ -1,6 +1,7 @@
 export { Address } from './address.entity';
 export { Administrator } from './administrator.entity';
 export { Announcement } from './announcement.entity';
+export { Attendance } from './attendance.entity';
 export { Class } from './class.entity';
 export { EvaluationLecturer } from './evaluation_lecturer.entity';
 export { EvaluationReportLecturer } from './evaluation_report_lecturer.entity';

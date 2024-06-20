@@ -20,13 +20,15 @@ declare global {
     }
 }
 
-export const AuthContext = (req: Request<{}, any, any, {}, Record<string, any>>, res: Response<any, Record<string, any>>, next: NextFunction) => {
+export const AuthContext = (req: Request<{}, {}, {}, {}, Record<string, {}>>, res: Response<{}, Record<string, {}>>, next: NextFunction): Response<{}, Record<string, {}>> | void => {
     try {
-        const profile = req.header('X-User-Profile');
-        if (!profile) {
+        const profileString: string| null = req.header('X-User-Profile') || null;
+        console.log('Tes'+profileString?.toString());
+        if (!profileString) {
             return res.status(401).json(BaseResponse.unauthorizedResponse('Unauthorized'));
         }
-        req.user = profile as unknown as UserPayload;
+        const profile: UserPayload = JSON.parse(profileString);
+        req.user = profile;
         next();
     } catch (error: any) {
         Logger.error(`[AuthContext] Error: ${error.message}`);

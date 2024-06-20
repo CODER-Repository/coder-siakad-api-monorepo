@@ -1,7 +1,7 @@
 import { Course, KRS, dbContext } from '@siakad/express.database';
 import { Logger, buildWhereCondition, contextLogger, queryInterface } from '@siakad/express.utils';
-import { DTO } from '../utils/queryParams';
-import { toCreateKHS } from '../interface/khs-dto';
+import { CreateDTO, DTO } from '../utils/queryParams';
+import { UpdateGradeDto, toCreateKHS } from '../interface/khs-dto';
 
 export class KRSService {
     static async showKRS(): Promise<KRS[]> {
@@ -45,7 +45,6 @@ export class KRSService {
             .skip(offset)
             .take(limit)
         
-
             // GET DATA AND COUNT
             const result = await queryBuilder.getMany();
             const totalCount = await queryBuilder.getCount();
@@ -60,16 +59,52 @@ export class KRSService {
                 size: limit
             };
 
-            return {
-                data: listKHS,
-                pagination
-            };
+            return { data: listKHS, pagination };
 
         } catch (error) {
-            Logger.error(
-                `${contextLogger.getClassService} | Error: ${error.message}`
-            );
+            Logger.error(`${contextLogger.getKHSService} | Error: ${error.message}`);
             throw error;
+        }
+    }
+
+    static async updateGradeByID(payload: UpdateGradeDto): Promise<CreateDTO> {
+        const { grade, courseID, semesterID, nim } = payload;
+
+        // KRS ENTITY
+        const updateData = {
+            grade: grade,
+            course_id: courseID,
+            semester_id: semesterID,
+        };
+
+        const condition = {
+            course_id: courseID,
+            semester_id: semesterID,
+            nim: nim,
+        };
+
+        // Find existing KHS
+        const existingData = await dbContext.KRS().findOne({ where: condition });
+        if (!existingData) {
+            Logger.info(`${contextLogger.patchKHSGradeService} | data not found`);
+            return { data: [] };
+        }
+
+        try {
+            await dbContext.KRS()
+                .createQueryBuilder('krs')
+                .update(KRS)
+                .set(updateData)
+                .where(condition)
+                .execute();
+
+            Logger.info(`${contextLogger.patchKHSGradeService} | data updated successfully`);
+            const updatedData = await dbContext.KRS().findOne({ where: condition });
+            return { data: updatedData };
+
+        } catch (error) {
+            Logger.error(`${contextLogger.patchKHSGradeService} | Error: ${error.message}`);
+            return { data: [] };
         }
     }
 }

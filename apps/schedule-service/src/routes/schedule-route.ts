@@ -6,6 +6,9 @@ const scheduleRoute = Router();
 
 scheduleRoute.route('/current').get(AuthContext,ScheduleController.getCurrentSchedule);
 scheduleRoute.route('/today').get(AuthContext,ScheduleController.getTodaySchedule);
-scheduleRoute.route('/list').get(ScheduleController.getScheduleList);
+scheduleRoute.route('/list').get(AuthContext, ScheduleController.getScheduleList);
+scheduleRoute.route('/delete').delete(AuthContext,ScheduleController.deleteSchedule);
+scheduleRoute.route('/update').patch(AuthContext,ScheduleController.patchSchedule);
+scheduleRoute.route('/create').post(AuthContext,ScheduleController.createSchedule);
 
 export default scheduleRoute;

@@ -6,5 +6,6 @@ const authRouter = Router();
 
 authRouter.route('/listKRS').get(AuthContext,KRSController.showKRS);
 authRouter.route('/listKHS').get(AuthContext,KRSController.showKHS);
+authRouter.route('/grade').patch(AuthContext,KRSController.patchKHSGrade);
 
 export default authRouter;
